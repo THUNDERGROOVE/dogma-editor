@@ -9,6 +9,10 @@
 
 #include "bulkdata.h"
 
+#include <list>
+
+#include "imgui.h"
+
 cacheShipTypes cacheShipTypes_load_by(bulkdata *b, uint32_t shipTypeID) {
     char *err_msg = NULL;
     sqlite3_stmt *res;
@@ -53,8 +57,14 @@ cacheStaOperations cacheStaOperations_load_by(bulkdata *b, uint32_t activityID) 
     if (step == SQLITE_ROW) {
         t.activityID = sqlite3_column_int(res, 0);
         t.operationID = sqlite3_column_int(res, 1);
-        t.operationName = strdup((char *)sqlite3_column_text(res, 2));
-        t.description = strdup((char *)sqlite3_column_text(res, 3));
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.operationName = strdup(_v2);
+        }
+        char *_v3 = (char *)sqlite3_column_text(res, 3);
+        if (_v3 != NULL) {
+            t.description = strdup(_v3);
+        }
         t.fringe = sqlite3_column_int(res, 4);
         t.corridor = sqlite3_column_int(res, 5);
         t.hub = sqlite3_column_int(res, 6);
@@ -94,7 +104,10 @@ cacheRamAssemblyLineTypesCategory cacheRamAssemblyLineTypesCategory_load_by(bulk
         t.categoryID = sqlite3_column_int(res, 1);
         t.timeMultiplier = sqlite3_column_double(res, 2);
         t.materialMultiplier = sqlite3_column_double(res, 3);
-        t.activityID = strdup((char *)sqlite3_column_text(res, 4));
+        char *_v4 = (char *)sqlite3_column_text(res, 4);
+        if (_v4 != NULL) {
+            t.activityID = strdup(_v4);
+        }
     }
 
     sqlite3_finalize(res);
@@ -118,8 +131,14 @@ cacheInvCategories cacheInvCategories_load_by(bulkdata *b, uint32_t categoryID) 
     int step = sqlite3_step(res);
     if (step == SQLITE_ROW) {
         t.categoryID = sqlite3_column_int(res, 0);
-        t.categoryName = strdup((char *)sqlite3_column_text(res, 1));
-        t.description = strdup((char *)sqlite3_column_text(res, 2));
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.categoryName = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.description = strdup(_v2);
+        }
         t.published = sqlite3_column_int(res, 3);
         t.iconID = sqlite3_column_int(res, 4);
         t.categoryNameID = sqlite3_column_int(res, 5);
@@ -147,12 +166,21 @@ cacheDogmaEffects cacheDogmaEffects_load_by(bulkdata *b, uint32_t effectID) {
     int step = sqlite3_step(res);
     if (step == SQLITE_ROW) {
         t.effectID = sqlite3_column_int(res, 0);
-        t.effectName = strdup((char *)sqlite3_column_text(res, 1));
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.effectName = strdup(_v1);
+        }
         t.effectCategory = sqlite3_column_int(res, 2);
         t.preExpression = sqlite3_column_int(res, 3);
         t.postExpression = sqlite3_column_int(res, 4);
-        t.description = strdup((char *)sqlite3_column_text(res, 5));
-        t.guid = strdup((char *)sqlite3_column_text(res, 6));
+        char *_v5 = (char *)sqlite3_column_text(res, 5);
+        if (_v5 != NULL) {
+            t.description = strdup(_v5);
+        }
+        char *_v6 = (char *)sqlite3_column_text(res, 6);
+        if (_v6 != NULL) {
+            t.guid = strdup(_v6);
+        }
         t.isOffensive = sqlite3_column_int(res, 7);
         t.isAssistance = sqlite3_column_int(res, 8);
         t.durationAttributeID = sqlite3_column_int(res, 9);
@@ -162,13 +190,19 @@ cacheDogmaEffects cacheDogmaEffects_load_by(bulkdata *b, uint32_t effectID) {
         t.falloffAttributeID = sqlite3_column_int(res, 13);
         t.disallowAutoRepeat = sqlite3_column_int(res, 14);
         t.published = sqlite3_column_int(res, 15);
-        t.displayName = strdup((char *)sqlite3_column_text(res, 16));
+        char *_v16 = (char *)sqlite3_column_text(res, 16);
+        if (_v16 != NULL) {
+            t.displayName = strdup(_v16);
+        }
         t.isWarpSafe = sqlite3_column_int(res, 17);
         t.rangeChance = sqlite3_column_int(res, 18);
         t.electronicChance = sqlite3_column_int(res, 19);
         t.propulsionChance = sqlite3_column_int(res, 20);
         t.distribution = sqlite3_column_int(res, 21);
-        t.sfxName = strdup((char *)sqlite3_column_text(res, 22));
+        char *_v22 = (char *)sqlite3_column_text(res, 22);
+        if (_v22 != NULL) {
+            t.sfxName = strdup(_v22);
+        }
         t.npcUsageChanceAttributeID = sqlite3_column_int(res, 23);
         t.npcActivationChanceAttributeID = sqlite3_column_int(res, 24);
         t.fittingUsageChanceAttributeID = sqlite3_column_int(res, 25);
@@ -199,8 +233,14 @@ cacheRamCompletedStatuses cacheRamCompletedStatuses_load_by(bulkdata *b, uint32_
     int step = sqlite3_step(res);
     if (step == SQLITE_ROW) {
         t.completedStatus = sqlite3_column_int(res, 0);
-        t.completedStatusText = strdup((char *)sqlite3_column_text(res, 1));
-        t.description = strdup((char *)sqlite3_column_text(res, 2));
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.completedStatusText = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.description = strdup(_v2);
+        }
         t.completedStatusTextID = sqlite3_column_int(res, 3);
     }
 
@@ -317,15 +357,24 @@ cacheDogmaAttributes cacheDogmaAttributes_load_by(bulkdata *b, uint32_t attribut
     int step = sqlite3_step(res);
     if (step == SQLITE_ROW) {
         t.attributeID = sqlite3_column_int(res, 0);
-        t.attributeName = strdup((char *)sqlite3_column_text(res, 1));
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.attributeName = strdup(_v1);
+        }
         t.attributeCategory = sqlite3_column_int(res, 2);
-        t.description = strdup((char *)sqlite3_column_text(res, 3));
+        char *_v3 = (char *)sqlite3_column_text(res, 3);
+        if (_v3 != NULL) {
+            t.description = strdup(_v3);
+        }
         t.maxAttributeID = sqlite3_column_int(res, 4);
         t.attributeIdx = sqlite3_column_int(res, 5);
         t.chargeRechargeTimeID = sqlite3_column_int(res, 6);
         t.defaultValue = sqlite3_column_double(res, 7);
         t.published = sqlite3_column_int(res, 8);
-        t.displayName = strdup((char *)sqlite3_column_text(res, 9));
+        char *_v9 = (char *)sqlite3_column_text(res, 9);
+        if (_v9 != NULL) {
+            t.displayName = strdup(_v9);
+        }
         t.unitID = sqlite3_column_int(res, 10);
         t.stackable = sqlite3_column_int(res, 11);
         t.highIsGood = sqlite3_column_int(res, 12);
@@ -356,8 +405,14 @@ cacheRamAssemblyLineTypes cacheRamAssemblyLineTypes_load_by(bulkdata *b, uint32_
     int step = sqlite3_step(res);
     if (step == SQLITE_ROW) {
         t.assemblyLineTypeID = sqlite3_column_int(res, 0);
-        t.assemblyLineTypeName = strdup((char *)sqlite3_column_text(res, 1));
-        t.description = strdup((char *)sqlite3_column_text(res, 2));
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.assemblyLineTypeName = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.description = strdup(_v2);
+        }
         t.baseTimeMultiplier = sqlite3_column_double(res, 3);
         t.baseMaterialMultiplier = sqlite3_column_double(res, 4);
         t.volume = sqlite3_column_double(res, 5);
@@ -386,7 +441,10 @@ cacheStaStationsStatic cacheStaStationsStatic_load_by(bulkdata *b, uint32_t stat
     int step = sqlite3_step(res);
     if (step == SQLITE_ROW) {
         t.stationID = sqlite3_column_int(res, 0);
-        t.stationName = strdup((char *)sqlite3_column_text(res, 1));
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.stationName = strdup(_v1);
+        }
         t.x = sqlite3_column_double(res, 2);
         t.y = sqlite3_column_double(res, 3);
         t.z = sqlite3_column_double(res, 4);
@@ -416,8 +474,14 @@ cacheInvGroups cacheInvGroups_load_by(bulkdata *b, uint32_t groupID) {
     if (step == SQLITE_ROW) {
         t.groupID = sqlite3_column_int(res, 0);
         t.categoryID = sqlite3_column_int(res, 1);
-        t.groupName = strdup((char *)sqlite3_column_text(res, 2));
-        t.description = strdup((char *)sqlite3_column_text(res, 3));
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.groupName = strdup(_v2);
+        }
+        char *_v3 = (char *)sqlite3_column_text(res, 3);
+        if (_v3 != NULL) {
+            t.description = strdup(_v3);
+        }
         t.useBasePrice = sqlite3_column_int(res, 4);
         t.allowManufacture = sqlite3_column_int(res, 5);
         t.allowRecycler = sqlite3_column_int(res, 6);
@@ -527,7 +591,10 @@ cachePlanetSchematics cachePlanetSchematics_load_by(bulkdata *b, uint32_t schema
     int step = sqlite3_step(res);
     if (step == SQLITE_ROW) {
         t.schematicID = sqlite3_column_int(res, 0);
-        t.schematicName = strdup((char *)sqlite3_column_text(res, 1));
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.schematicName = strdup(_v1);
+        }
         t.cycleTime = sqlite3_column_int(res, 2);
         t.schematicNameID = sqlite3_column_int(res, 3);
         t.dataID = sqlite3_column_int(res, 4);
@@ -554,9 +621,18 @@ cacheDogmaUnits cacheDogmaUnits_load_by(bulkdata *b, uint32_t unitID) {
     int step = sqlite3_step(res);
     if (step == SQLITE_ROW) {
         t.unitID = sqlite3_column_int(res, 0);
-        t.unitName = strdup((char *)sqlite3_column_text(res, 1));
-        t.displayName = strdup((char *)sqlite3_column_text(res, 2));
-        t.description = strdup((char *)sqlite3_column_text(res, 3));
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.unitName = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.displayName = strdup(_v2);
+        }
+        char *_v3 = (char *)sqlite3_column_text(res, 3);
+        if (_v3 != NULL) {
+            t.description = strdup(_v3);
+        }
         t.displayNameID = sqlite3_column_int(res, 4);
         t.descriptionID = sqlite3_column_int(res, 5);
         t.dataID = sqlite3_column_int(res, 6);
@@ -637,9 +713,18 @@ cacheDogmaExpressions cacheDogmaExpressions_load_by(bulkdata *b, uint32_t expres
         t.operandID = sqlite3_column_int(res, 1);
         t.arg1 = sqlite3_column_int(res, 2);
         t.arg2 = sqlite3_column_int(res, 3);
-        t.expressionValue = strdup((char *)sqlite3_column_text(res, 4));
-        t.description = strdup((char *)sqlite3_column_text(res, 5));
-        t.expressionName = strdup((char *)sqlite3_column_text(res, 6));
+        char *_v4 = (char *)sqlite3_column_text(res, 4);
+        if (_v4 != NULL) {
+            t.expressionValue = strdup(_v4);
+        }
+        char *_v5 = (char *)sqlite3_column_text(res, 5);
+        if (_v5 != NULL) {
+            t.description = strdup(_v5);
+        }
+        char *_v6 = (char *)sqlite3_column_text(res, 6);
+        if (_v6 != NULL) {
+            t.expressionName = strdup(_v6);
+        }
         t.expressionTypeID = sqlite3_column_int(res, 7);
         t.expressionGroupID = sqlite3_column_int(res, 8);
         t.expressionAttributeID = sqlite3_column_int(res, 9);
@@ -669,7 +754,10 @@ cacheRamAssemblyLineTypesGroup cacheRamAssemblyLineTypesGroup_load_by(bulkdata *
         t.groupID = sqlite3_column_int(res, 1);
         t.timeMultiplier = sqlite3_column_double(res, 2);
         t.materialMultiplier = sqlite3_column_double(res, 3);
-        t.activityID = strdup((char *)sqlite3_column_text(res, 4));
+        char *_v4 = (char *)sqlite3_column_text(res, 4);
+        if (_v4 != NULL) {
+            t.activityID = strdup(_v4);
+        }
     }
 
     sqlite3_finalize(res);
@@ -693,13 +781,31 @@ cacheResGraphics cacheResGraphics_load_by(bulkdata *b, uint32_t graphicID) {
     int step = sqlite3_step(res);
     if (step == SQLITE_ROW) {
         t.graphicID = sqlite3_column_int(res, 0);
-        t.graphicFile = strdup((char *)sqlite3_column_text(res, 1));
-        t.graphicName = strdup((char *)sqlite3_column_text(res, 2));
-        t.description = strdup((char *)sqlite3_column_text(res, 3));
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.graphicFile = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.graphicName = strdup(_v2);
+        }
+        char *_v3 = (char *)sqlite3_column_text(res, 3);
+        if (_v3 != NULL) {
+            t.description = strdup(_v3);
+        }
         t.obsolete = sqlite3_column_int(res, 4);
-        t.graphicType = strdup((char *)sqlite3_column_text(res, 5));
-        t.collisionFile = strdup((char *)sqlite3_column_text(res, 6));
-        t.paperdollFile = strdup((char *)sqlite3_column_text(res, 7));
+        char *_v5 = (char *)sqlite3_column_text(res, 5);
+        if (_v5 != NULL) {
+            t.graphicType = strdup(_v5);
+        }
+        char *_v6 = (char *)sqlite3_column_text(res, 6);
+        if (_v6 != NULL) {
+            t.collisionFile = strdup(_v6);
+        }
+        char *_v7 = (char *)sqlite3_column_text(res, 7);
+        if (_v7 != NULL) {
+            t.paperdollFile = strdup(_v7);
+        }
         t.animationTemplate = sqlite3_column_int(res, 8);
         t.collidable = sqlite3_column_int(res, 9);
         t.explosionID = sqlite3_column_int(res, 10);
@@ -735,8 +841,14 @@ cacheInvTypes cacheInvTypes_load_by(bulkdata *b, uint32_t typeID) {
     if (step == SQLITE_ROW) {
         t.typeID = sqlite3_column_int(res, 0);
         t.groupID = sqlite3_column_int(res, 1);
-        t.typeName = strdup((char *)sqlite3_column_text(res, 2));
-        t.description = strdup((char *)sqlite3_column_text(res, 3));
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.typeName = strdup(_v2);
+        }
+        char *_v3 = (char *)sqlite3_column_text(res, 3);
+        if (_v3 != NULL) {
+            t.description = strdup(_v3);
+        }
         t.graphicID = sqlite3_column_int(res, 4);
         t.radius = sqlite3_column_double(res, 5);
         t.mass = sqlite3_column_double(res, 6);
@@ -777,10 +889,19 @@ cacheResIcons cacheResIcons_load_by(bulkdata *b, uint32_t iconID) {
     int step = sqlite3_step(res);
     if (step == SQLITE_ROW) {
         t.iconID = sqlite3_column_int(res, 0);
-        t.iconFile = strdup((char *)sqlite3_column_text(res, 1));
-        t.description = strdup((char *)sqlite3_column_text(res, 2));
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.iconFile = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.description = strdup(_v2);
+        }
         t.obsolete = sqlite3_column_int(res, 3);
-        t.iconType = strdup((char *)sqlite3_column_text(res, 4));
+        char *_v4 = (char *)sqlite3_column_text(res, 4);
+        if (_v4 != NULL) {
+            t.iconType = strdup(_v4);
+        }
         t.directoryID = sqlite3_column_int(res, 5);
     }
 
@@ -805,8 +926,14 @@ cacheActBillTypes cacheActBillTypes_load_by(bulkdata *b, uint32_t billTypeID) {
     int step = sqlite3_step(res);
     if (step == SQLITE_ROW) {
         t.billTypeID = sqlite3_column_int(res, 0);
-        t.billTypeName = strdup((char *)sqlite3_column_text(res, 1));
-        t.description = strdup((char *)sqlite3_column_text(res, 2));
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.billTypeName = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.description = strdup(_v2);
+        }
         t.billTypeNameID = sqlite3_column_int(res, 3);
         t.dataID = sqlite3_column_int(res, 4);
     }
@@ -884,8 +1011,14 @@ cacheInvMetaGroups cacheInvMetaGroups_load_by(bulkdata *b, uint32_t metaGroupID)
     int step = sqlite3_step(res);
     if (step == SQLITE_ROW) {
         t.metaGroupID = sqlite3_column_int(res, 0);
-        t.metaGroupName = strdup((char *)sqlite3_column_text(res, 1));
-        t.description = strdup((char *)sqlite3_column_text(res, 2));
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.metaGroupName = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.description = strdup(_v2);
+        }
         t.iconID = sqlite3_column_int(res, 3);
         t.metaGroupNameID = sqlite3_column_int(res, 4);
         t.descriptionID = sqlite3_column_int(res, 5);
@@ -918,7 +1051,10 @@ cacheCertificates cacheCertificates_load_by(bulkdata *b, uint32_t certificateID)
         t.grade = sqlite3_column_int(res, 3);
         t.corpID = sqlite3_column_int(res, 4);
         t.iconID = sqlite3_column_int(res, 5);
-        t.description = strdup((char *)sqlite3_column_text(res, 6));
+        char *_v6 = (char *)sqlite3_column_text(res, 6);
+        if (_v6 != NULL) {
+            t.description = strdup(_v6);
+        }
         t.descriptionID = sqlite3_column_int(res, 7);
         t.dataID = sqlite3_column_int(res, 8);
     }
@@ -969,8 +1105,14 @@ cacheResSounds cacheResSounds_load_by(bulkdata *b, uint32_t soundID) {
     int step = sqlite3_step(res);
     if (step == SQLITE_ROW) {
         t.soundID = sqlite3_column_int(res, 0);
-        t.soundFile = strdup((char *)sqlite3_column_text(res, 1));
-        t.description = strdup((char *)sqlite3_column_text(res, 2));
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.soundFile = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.description = strdup(_v2);
+        }
         t.obsolete = sqlite3_column_int(res, 3);
     }
 
@@ -995,9 +1137,18 @@ cacheRamActivities cacheRamActivities_load_by(bulkdata *b, uint32_t activityID) 
     int step = sqlite3_step(res);
     if (step == SQLITE_ROW) {
         t.activityID = sqlite3_column_int(res, 0);
-        t.activityName = strdup((char *)sqlite3_column_text(res, 1));
-        t.iconNo = strdup((char *)sqlite3_column_text(res, 2));
-        t.description = strdup((char *)sqlite3_column_text(res, 3));
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.activityName = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.iconNo = strdup(_v2);
+        }
+        char *_v3 = (char *)sqlite3_column_text(res, 3);
+        if (_v3 != NULL) {
+            t.description = strdup(_v3);
+        }
         t.published = sqlite3_column_int(res, 4);
         t.activityNameID = sqlite3_column_int(res, 5);
         t.descriptionID = sqlite3_column_int(res, 6);
@@ -1005,5 +1156,2210 @@ cacheRamActivities cacheRamActivities_load_by(bulkdata *b, uint32_t activityID) 
 
     sqlite3_finalize(res);
     return t;
+}
+
+std::vector<cacheShipTypes> cacheShipTypes_load_all(bulkdata *b) {
+    printf("Loading cacheShipTypes\n");
+    std::vector<cacheShipTypes> out;
+    sqlite3_stmt *res;
+    cacheShipTypes t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheShipTypes";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.shipTypeID = sqlite3_column_int(res, 0);
+        t.weaponTypeID = sqlite3_column_int(res, 1);
+        t.miningTypeID = sqlite3_column_int(res, 2);
+        t.skillTypeID = sqlite3_column_int(res, 3);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheStaOperations> cacheStaOperations_load_all(bulkdata *b) {
+    printf("Loading cacheStaOperations\n");
+    std::vector<cacheStaOperations> out;
+    sqlite3_stmt *res;
+    cacheStaOperations t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheStaOperations";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.activityID = sqlite3_column_int(res, 0);
+        t.operationID = sqlite3_column_int(res, 1);
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.operationName = strdup(_v2);
+        }
+        char *_v3 = (char *)sqlite3_column_text(res, 3);
+        if (_v3 != NULL) {
+            t.description = strdup(_v3);
+        }
+        t.fringe = sqlite3_column_int(res, 4);
+        t.corridor = sqlite3_column_int(res, 5);
+        t.hub = sqlite3_column_int(res, 6);
+        t.border = sqlite3_column_int(res, 7);
+        t.ratio = sqlite3_column_int(res, 8);
+        t.caldariStationTypeID = sqlite3_column_int(res, 9);
+        t.minmatarStationTypeID = sqlite3_column_int(res, 10);
+        t.amarrStationTypeID = sqlite3_column_int(res, 11);
+        t.gallenteStationTypeID = sqlite3_column_int(res, 12);
+        t.joveStationTypeID = sqlite3_column_int(res, 13);
+        t.operationNameID = sqlite3_column_int(res, 14);
+        t.descriptionID = sqlite3_column_int(res, 15);
+        t.serviceMask = sqlite3_column_int(res, 16);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheRamAssemblyLineTypesCategory> cacheRamAssemblyLineTypesCategory_load_all(bulkdata *b) {
+    printf("Loading cacheRamAssemblyLineTypesCategory\n");
+    std::vector<cacheRamAssemblyLineTypesCategory> out;
+    sqlite3_stmt *res;
+    cacheRamAssemblyLineTypesCategory t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheRamAssemblyLineTypesCategory";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.assemblyLineTypeID = sqlite3_column_int(res, 0);
+        t.categoryID = sqlite3_column_int(res, 1);
+        t.timeMultiplier = sqlite3_column_double(res, 2);
+        t.materialMultiplier = sqlite3_column_double(res, 3);
+        char *_v4 = (char *)sqlite3_column_text(res, 4);
+        if (_v4 != NULL) {
+            t.activityID = strdup(_v4);
+        }
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheInvCategories> cacheInvCategories_load_all(bulkdata *b) {
+    printf("Loading cacheInvCategories\n");
+    std::vector<cacheInvCategories> out;
+    sqlite3_stmt *res;
+    cacheInvCategories t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheInvCategories";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.categoryID = sqlite3_column_int(res, 0);
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.categoryName = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.description = strdup(_v2);
+        }
+        t.published = sqlite3_column_int(res, 3);
+        t.iconID = sqlite3_column_int(res, 4);
+        t.categoryNameID = sqlite3_column_int(res, 5);
+        t.dataID = sqlite3_column_int(res, 6);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheDogmaEffects> cacheDogmaEffects_load_all(bulkdata *b) {
+    printf("Loading cacheDogmaEffects\n");
+    std::vector<cacheDogmaEffects> out;
+    sqlite3_stmt *res;
+    cacheDogmaEffects t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheDogmaEffects";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.effectID = sqlite3_column_int(res, 0);
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.effectName = strdup(_v1);
+        }
+        t.effectCategory = sqlite3_column_int(res, 2);
+        t.preExpression = sqlite3_column_int(res, 3);
+        t.postExpression = sqlite3_column_int(res, 4);
+        char *_v5 = (char *)sqlite3_column_text(res, 5);
+        if (_v5 != NULL) {
+            t.description = strdup(_v5);
+        }
+        char *_v6 = (char *)sqlite3_column_text(res, 6);
+        if (_v6 != NULL) {
+            t.guid = strdup(_v6);
+        }
+        t.isOffensive = sqlite3_column_int(res, 7);
+        t.isAssistance = sqlite3_column_int(res, 8);
+        t.durationAttributeID = sqlite3_column_int(res, 9);
+        t.trackingSpeedAttributeID = sqlite3_column_int(res, 10);
+        t.dischargeAttributeID = sqlite3_column_int(res, 11);
+        t.rangeAttributeID = sqlite3_column_int(res, 12);
+        t.falloffAttributeID = sqlite3_column_int(res, 13);
+        t.disallowAutoRepeat = sqlite3_column_int(res, 14);
+        t.published = sqlite3_column_int(res, 15);
+        char *_v16 = (char *)sqlite3_column_text(res, 16);
+        if (_v16 != NULL) {
+            t.displayName = strdup(_v16);
+        }
+        t.isWarpSafe = sqlite3_column_int(res, 17);
+        t.rangeChance = sqlite3_column_int(res, 18);
+        t.electronicChance = sqlite3_column_int(res, 19);
+        t.propulsionChance = sqlite3_column_int(res, 20);
+        t.distribution = sqlite3_column_int(res, 21);
+        char *_v22 = (char *)sqlite3_column_text(res, 22);
+        if (_v22 != NULL) {
+            t.sfxName = strdup(_v22);
+        }
+        t.npcUsageChanceAttributeID = sqlite3_column_int(res, 23);
+        t.npcActivationChanceAttributeID = sqlite3_column_int(res, 24);
+        t.fittingUsageChanceAttributeID = sqlite3_column_int(res, 25);
+        t.iconID = sqlite3_column_int(res, 26);
+        t.displayNameID = sqlite3_column_int(res, 27);
+        t.descriptionID = sqlite3_column_int(res, 28);
+        t.dataID = sqlite3_column_int(res, 29);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheRamCompletedStatuses> cacheRamCompletedStatuses_load_all(bulkdata *b) {
+    printf("Loading cacheRamCompletedStatuses\n");
+    std::vector<cacheRamCompletedStatuses> out;
+    sqlite3_stmt *res;
+    cacheRamCompletedStatuses t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheRamCompletedStatuses";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.completedStatus = sqlite3_column_int(res, 0);
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.completedStatusText = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.description = strdup(_v2);
+        }
+        t.completedStatusTextID = sqlite3_column_int(res, 3);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheInvBlueprintTypes> cacheInvBlueprintTypes_load_all(bulkdata *b) {
+    printf("Loading cacheInvBlueprintTypes\n");
+    std::vector<cacheInvBlueprintTypes> out;
+    sqlite3_stmt *res;
+    cacheInvBlueprintTypes t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheInvBlueprintTypes";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.blueprintTypeID = sqlite3_column_int(res, 0);
+        t.parentBlueprintTypeID = sqlite3_column_int(res, 1);
+        t.productTypeID = sqlite3_column_int(res, 2);
+        t.productionTime = sqlite3_column_int(res, 3);
+        t.techLevel = sqlite3_column_int(res, 4);
+        t.researchProductivityTime = sqlite3_column_int(res, 5);
+        t.researchMaterialTime = sqlite3_column_int(res, 6);
+        t.researchCopyTime = sqlite3_column_int(res, 7);
+        t.researchTechTime = sqlite3_column_int(res, 8);
+        t.productivityModifier = sqlite3_column_int(res, 9);
+        t.materialModifier = sqlite3_column_int(res, 10);
+        t.wasteFactor = sqlite3_column_int(res, 11);
+        t.chanceOfReverseEngineering = sqlite3_column_double(res, 12);
+        t.maxProductionLimit = sqlite3_column_int(res, 13);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheRamTypeRequirements> cacheRamTypeRequirements_load_all(bulkdata *b) {
+    printf("Loading cacheRamTypeRequirements\n");
+    std::vector<cacheRamTypeRequirements> out;
+    sqlite3_stmt *res;
+    cacheRamTypeRequirements t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheRamTypeRequirements";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.typeID = sqlite3_column_int(res, 0);
+        t.activityID = sqlite3_column_int(res, 1);
+        t.requiredTypeID = sqlite3_column_int(res, 2);
+        t.quantity = sqlite3_column_int(res, 3);
+        t.damagePerJob = sqlite3_column_double(res, 4);
+        t.recycle = sqlite3_column_int(res, 5);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheCertificateRelationships> cacheCertificateRelationships_load_all(bulkdata *b) {
+    printf("Loading cacheCertificateRelationships\n");
+    std::vector<cacheCertificateRelationships> out;
+    sqlite3_stmt *res;
+    cacheCertificateRelationships t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheCertificateRelationships";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.relationshipID = sqlite3_column_int(res, 0);
+        t.parentID = sqlite3_column_int(res, 1);
+        t.parentTypeID = sqlite3_column_int(res, 2);
+        t.parentLevel = sqlite3_column_int(res, 3);
+        t.childID = sqlite3_column_int(res, 4);
+        t.childTypeID = sqlite3_column_int(res, 5);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheDogmaAttributes> cacheDogmaAttributes_load_all(bulkdata *b) {
+    printf("Loading cacheDogmaAttributes\n");
+    std::vector<cacheDogmaAttributes> out;
+    sqlite3_stmt *res;
+    cacheDogmaAttributes t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheDogmaAttributes";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.attributeID = sqlite3_column_int(res, 0);
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.attributeName = strdup(_v1);
+        }
+        t.attributeCategory = sqlite3_column_int(res, 2);
+        char *_v3 = (char *)sqlite3_column_text(res, 3);
+        if (_v3 != NULL) {
+            t.description = strdup(_v3);
+        }
+        t.maxAttributeID = sqlite3_column_int(res, 4);
+        t.attributeIdx = sqlite3_column_int(res, 5);
+        t.chargeRechargeTimeID = sqlite3_column_int(res, 6);
+        t.defaultValue = sqlite3_column_double(res, 7);
+        t.published = sqlite3_column_int(res, 8);
+        char *_v9 = (char *)sqlite3_column_text(res, 9);
+        if (_v9 != NULL) {
+            t.displayName = strdup(_v9);
+        }
+        t.unitID = sqlite3_column_int(res, 10);
+        t.stackable = sqlite3_column_int(res, 11);
+        t.highIsGood = sqlite3_column_int(res, 12);
+        t.categoryID = sqlite3_column_int(res, 13);
+        t.iconID = sqlite3_column_int(res, 14);
+        t.displayNameID = sqlite3_column_int(res, 15);
+        t.dataID = sqlite3_column_int(res, 16);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheRamAssemblyLineTypes> cacheRamAssemblyLineTypes_load_all(bulkdata *b) {
+    printf("Loading cacheRamAssemblyLineTypes\n");
+    std::vector<cacheRamAssemblyLineTypes> out;
+    sqlite3_stmt *res;
+    cacheRamAssemblyLineTypes t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheRamAssemblyLineTypes";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.assemblyLineTypeID = sqlite3_column_int(res, 0);
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.assemblyLineTypeName = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.description = strdup(_v2);
+        }
+        t.baseTimeMultiplier = sqlite3_column_double(res, 3);
+        t.baseMaterialMultiplier = sqlite3_column_double(res, 4);
+        t.volume = sqlite3_column_double(res, 5);
+        t.activityID = sqlite3_column_int(res, 6);
+        t.minCostPerHour = sqlite3_column_double(res, 7);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheStaStationsStatic> cacheStaStationsStatic_load_all(bulkdata *b) {
+    printf("Loading cacheStaStationsStatic\n");
+    std::vector<cacheStaStationsStatic> out;
+    sqlite3_stmt *res;
+    cacheStaStationsStatic t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheStaStationsStatic";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.stationID = sqlite3_column_int(res, 0);
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.stationName = strdup(_v1);
+        }
+        t.x = sqlite3_column_double(res, 2);
+        t.y = sqlite3_column_double(res, 3);
+        t.z = sqlite3_column_double(res, 4);
+        t.stationTypeID = sqlite3_column_int(res, 5);
+        t.solarSystemID = sqlite3_column_int(res, 6);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheInvGroups> cacheInvGroups_load_all(bulkdata *b) {
+    printf("Loading cacheInvGroups\n");
+    std::vector<cacheInvGroups> out;
+    sqlite3_stmt *res;
+    cacheInvGroups t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheInvGroups";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.groupID = sqlite3_column_int(res, 0);
+        t.categoryID = sqlite3_column_int(res, 1);
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.groupName = strdup(_v2);
+        }
+        char *_v3 = (char *)sqlite3_column_text(res, 3);
+        if (_v3 != NULL) {
+            t.description = strdup(_v3);
+        }
+        t.useBasePrice = sqlite3_column_int(res, 4);
+        t.allowManufacture = sqlite3_column_int(res, 5);
+        t.allowRecycler = sqlite3_column_int(res, 6);
+        t.anchored = sqlite3_column_int(res, 7);
+        t.anchorable = sqlite3_column_int(res, 8);
+        t.fittableNonSingleton = sqlite3_column_int(res, 9);
+        t.published = sqlite3_column_int(res, 10);
+        t.iconID = sqlite3_column_int(res, 11);
+        t.groupNameID = sqlite3_column_int(res, 12);
+        t.dataID = sqlite3_column_int(res, 13);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheInvMetaTypes> cacheInvMetaTypes_load_all(bulkdata *b) {
+    printf("Loading cacheInvMetaTypes\n");
+    std::vector<cacheInvMetaTypes> out;
+    sqlite3_stmt *res;
+    cacheInvMetaTypes t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheInvMetaTypes";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.typeID = sqlite3_column_int(res, 0);
+        t.parentTypeID = sqlite3_column_int(res, 1);
+        t.metaGroupID = sqlite3_column_int(res, 2);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheInvTypeReactions> cacheInvTypeReactions_load_all(bulkdata *b) {
+    printf("Loading cacheInvTypeReactions\n");
+    std::vector<cacheInvTypeReactions> out;
+    sqlite3_stmt *res;
+    cacheInvTypeReactions t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheInvTypeReactions";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.reactionTypeID = sqlite3_column_int(res, 0);
+        t.input = sqlite3_column_int(res, 1);
+        t.typeID = sqlite3_column_int(res, 2);
+        t.quantity = sqlite3_column_int(res, 3);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheDogmaTypeEffects> cacheDogmaTypeEffects_load_all(bulkdata *b) {
+    printf("Loading cacheDogmaTypeEffects\n");
+    std::vector<cacheDogmaTypeEffects> out;
+    sqlite3_stmt *res;
+    cacheDogmaTypeEffects t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheDogmaTypeEffects";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.typeID = sqlite3_column_int(res, 0);
+        t.effectID = sqlite3_column_int(res, 1);
+        t.isDefault = sqlite3_column_int(res, 2);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cachePlanetSchematics> cachePlanetSchematics_load_all(bulkdata *b) {
+    printf("Loading cachePlanetSchematics\n");
+    std::vector<cachePlanetSchematics> out;
+    sqlite3_stmt *res;
+    cachePlanetSchematics t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cachePlanetSchematics";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.schematicID = sqlite3_column_int(res, 0);
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.schematicName = strdup(_v1);
+        }
+        t.cycleTime = sqlite3_column_int(res, 2);
+        t.schematicNameID = sqlite3_column_int(res, 3);
+        t.dataID = sqlite3_column_int(res, 4);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheDogmaUnits> cacheDogmaUnits_load_all(bulkdata *b) {
+    printf("Loading cacheDogmaUnits\n");
+    std::vector<cacheDogmaUnits> out;
+    sqlite3_stmt *res;
+    cacheDogmaUnits t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheDogmaUnits";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.unitID = sqlite3_column_int(res, 0);
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.unitName = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.displayName = strdup(_v2);
+        }
+        char *_v3 = (char *)sqlite3_column_text(res, 3);
+        if (_v3 != NULL) {
+            t.description = strdup(_v3);
+        }
+        t.displayNameID = sqlite3_column_int(res, 4);
+        t.descriptionID = sqlite3_column_int(res, 5);
+        t.dataID = sqlite3_column_int(res, 6);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cachePlanetSchematicsTypeMap> cachePlanetSchematicsTypeMap_load_all(bulkdata *b) {
+    printf("Loading cachePlanetSchematicsTypeMap\n");
+    std::vector<cachePlanetSchematicsTypeMap> out;
+    sqlite3_stmt *res;
+    cachePlanetSchematicsTypeMap t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cachePlanetSchematicsTypeMap";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.schematicID = sqlite3_column_int(res, 0);
+        t.typeID = sqlite3_column_int(res, 1);
+        t.isInput = sqlite3_column_int(res, 2);
+        t.quantity = sqlite3_column_int(res, 3);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheDogmaTypeAttributes> cacheDogmaTypeAttributes_load_all(bulkdata *b) {
+    printf("Loading cacheDogmaTypeAttributes\n");
+    std::vector<cacheDogmaTypeAttributes> out;
+    sqlite3_stmt *res;
+    cacheDogmaTypeAttributes t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheDogmaTypeAttributes";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.typeID = sqlite3_column_int(res, 0);
+        t.attributeID = sqlite3_column_int(res, 1);
+        t.value = sqlite3_column_double(res, 2);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheDogmaExpressions> cacheDogmaExpressions_load_all(bulkdata *b) {
+    printf("Loading cacheDogmaExpressions\n");
+    std::vector<cacheDogmaExpressions> out;
+    sqlite3_stmt *res;
+    cacheDogmaExpressions t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheDogmaExpressions";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.expressionID = sqlite3_column_int(res, 0);
+        t.operandID = sqlite3_column_int(res, 1);
+        t.arg1 = sqlite3_column_int(res, 2);
+        t.arg2 = sqlite3_column_int(res, 3);
+        char *_v4 = (char *)sqlite3_column_text(res, 4);
+        if (_v4 != NULL) {
+            t.expressionValue = strdup(_v4);
+        }
+        char *_v5 = (char *)sqlite3_column_text(res, 5);
+        if (_v5 != NULL) {
+            t.description = strdup(_v5);
+        }
+        char *_v6 = (char *)sqlite3_column_text(res, 6);
+        if (_v6 != NULL) {
+            t.expressionName = strdup(_v6);
+        }
+        t.expressionTypeID = sqlite3_column_int(res, 7);
+        t.expressionGroupID = sqlite3_column_int(res, 8);
+        t.expressionAttributeID = sqlite3_column_int(res, 9);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheRamAssemblyLineTypesGroup> cacheRamAssemblyLineTypesGroup_load_all(bulkdata *b) {
+    printf("Loading cacheRamAssemblyLineTypesGroup\n");
+    std::vector<cacheRamAssemblyLineTypesGroup> out;
+    sqlite3_stmt *res;
+    cacheRamAssemblyLineTypesGroup t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheRamAssemblyLineTypesGroup";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.assemblyLineTypeID = sqlite3_column_int(res, 0);
+        t.groupID = sqlite3_column_int(res, 1);
+        t.timeMultiplier = sqlite3_column_double(res, 2);
+        t.materialMultiplier = sqlite3_column_double(res, 3);
+        char *_v4 = (char *)sqlite3_column_text(res, 4);
+        if (_v4 != NULL) {
+            t.activityID = strdup(_v4);
+        }
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheResGraphics> cacheResGraphics_load_all(bulkdata *b) {
+    printf("Loading cacheResGraphics\n");
+    std::vector<cacheResGraphics> out;
+    sqlite3_stmt *res;
+    cacheResGraphics t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheResGraphics";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.graphicID = sqlite3_column_int(res, 0);
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.graphicFile = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.graphicName = strdup(_v2);
+        }
+        char *_v3 = (char *)sqlite3_column_text(res, 3);
+        if (_v3 != NULL) {
+            t.description = strdup(_v3);
+        }
+        t.obsolete = sqlite3_column_int(res, 4);
+        char *_v5 = (char *)sqlite3_column_text(res, 5);
+        if (_v5 != NULL) {
+            t.graphicType = strdup(_v5);
+        }
+        char *_v6 = (char *)sqlite3_column_text(res, 6);
+        if (_v6 != NULL) {
+            t.collisionFile = strdup(_v6);
+        }
+        char *_v7 = (char *)sqlite3_column_text(res, 7);
+        if (_v7 != NULL) {
+            t.paperdollFile = strdup(_v7);
+        }
+        t.animationTemplate = sqlite3_column_int(res, 8);
+        t.collidable = sqlite3_column_int(res, 9);
+        t.explosionID = sqlite3_column_int(res, 10);
+        t.directoryID = sqlite3_column_int(res, 11);
+        t.graphicMinX = sqlite3_column_double(res, 12);
+        t.graphicMinY = sqlite3_column_double(res, 13);
+        t.graphicMinZ = sqlite3_column_double(res, 14);
+        t.graphicMaxX = sqlite3_column_double(res, 15);
+        t.graphicMaxY = sqlite3_column_double(res, 16);
+        t.graphicMaxZ = sqlite3_column_double(res, 17);
+        t.isPrototype = sqlite3_column_int(res, 18);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheInvTypes> cacheInvTypes_load_all(bulkdata *b) {
+    printf("Loading cacheInvTypes\n");
+    std::vector<cacheInvTypes> out;
+    sqlite3_stmt *res;
+    cacheInvTypes t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheInvTypes";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.typeID = sqlite3_column_int(res, 0);
+        t.groupID = sqlite3_column_int(res, 1);
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.typeName = strdup(_v2);
+        }
+        char *_v3 = (char *)sqlite3_column_text(res, 3);
+        if (_v3 != NULL) {
+            t.description = strdup(_v3);
+        }
+        t.graphicID = sqlite3_column_int(res, 4);
+        t.radius = sqlite3_column_double(res, 5);
+        t.mass = sqlite3_column_double(res, 6);
+        t.volume = sqlite3_column_double(res, 7);
+        t.capacity = sqlite3_column_double(res, 8);
+        t.portionSize = sqlite3_column_int(res, 9);
+        t.raceID = sqlite3_column_int(res, 10);
+        t.basePrice = sqlite3_column_double(res, 11);
+        t.published = sqlite3_column_int(res, 12);
+        t.marketGroupID = sqlite3_column_int(res, 13);
+        t.chanceOfDuplicating = sqlite3_column_double(res, 14);
+        t.soundID = sqlite3_column_int(res, 15);
+        t.iconID = sqlite3_column_int(res, 16);
+        t.dataID = sqlite3_column_int(res, 17);
+        t.typeNameID = sqlite3_column_int(res, 18);
+        t.descriptionID = sqlite3_column_int(res, 19);
+        t.copyTypeID = sqlite3_column_int(res, 20);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheResIcons> cacheResIcons_load_all(bulkdata *b) {
+    printf("Loading cacheResIcons\n");
+    std::vector<cacheResIcons> out;
+    sqlite3_stmt *res;
+    cacheResIcons t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheResIcons";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.iconID = sqlite3_column_int(res, 0);
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.iconFile = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.description = strdup(_v2);
+        }
+        t.obsolete = sqlite3_column_int(res, 3);
+        char *_v4 = (char *)sqlite3_column_text(res, 4);
+        if (_v4 != NULL) {
+            t.iconType = strdup(_v4);
+        }
+        t.directoryID = sqlite3_column_int(res, 5);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheActBillTypes> cacheActBillTypes_load_all(bulkdata *b) {
+    printf("Loading cacheActBillTypes\n");
+    std::vector<cacheActBillTypes> out;
+    sqlite3_stmt *res;
+    cacheActBillTypes t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheActBillTypes";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.billTypeID = sqlite3_column_int(res, 0);
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.billTypeName = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.description = strdup(_v2);
+        }
+        t.billTypeNameID = sqlite3_column_int(res, 3);
+        t.dataID = sqlite3_column_int(res, 4);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cachePlanetSchematicsPinMap> cachePlanetSchematicsPinMap_load_all(bulkdata *b) {
+    printf("Loading cachePlanetSchematicsPinMap\n");
+    std::vector<cachePlanetSchematicsPinMap> out;
+    sqlite3_stmt *res;
+    cachePlanetSchematicsPinMap t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cachePlanetSchematicsPinMap";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.schematicID = sqlite3_column_int(res, 0);
+        t.pinTypeID = sqlite3_column_int(res, 1);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheInvContrabandTypes> cacheInvContrabandTypes_load_all(bulkdata *b) {
+    printf("Loading cacheInvContrabandTypes\n");
+    std::vector<cacheInvContrabandTypes> out;
+    sqlite3_stmt *res;
+    cacheInvContrabandTypes t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheInvContrabandTypes";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.factionID = sqlite3_column_int(res, 0);
+        t.typeID = sqlite3_column_int(res, 1);
+        t.standingLoss = sqlite3_column_double(res, 2);
+        t.confiscateMinSec = sqlite3_column_double(res, 3);
+        t.fineByValue = sqlite3_column_double(res, 4);
+        t.attackMinSec = sqlite3_column_double(res, 5);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheInvMetaGroups> cacheInvMetaGroups_load_all(bulkdata *b) {
+    printf("Loading cacheInvMetaGroups\n");
+    std::vector<cacheInvMetaGroups> out;
+    sqlite3_stmt *res;
+    cacheInvMetaGroups t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheInvMetaGroups";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.metaGroupID = sqlite3_column_int(res, 0);
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.metaGroupName = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.description = strdup(_v2);
+        }
+        t.iconID = sqlite3_column_int(res, 3);
+        t.metaGroupNameID = sqlite3_column_int(res, 4);
+        t.descriptionID = sqlite3_column_int(res, 5);
+        t.dataID = sqlite3_column_int(res, 6);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheCertificates> cacheCertificates_load_all(bulkdata *b) {
+    printf("Loading cacheCertificates\n");
+    std::vector<cacheCertificates> out;
+    sqlite3_stmt *res;
+    cacheCertificates t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheCertificates";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.certificateID = sqlite3_column_int(res, 0);
+        t.categoryID = sqlite3_column_int(res, 1);
+        t.classID = sqlite3_column_int(res, 2);
+        t.grade = sqlite3_column_int(res, 3);
+        t.corpID = sqlite3_column_int(res, 4);
+        t.iconID = sqlite3_column_int(res, 5);
+        char *_v6 = (char *)sqlite3_column_text(res, 6);
+        if (_v6 != NULL) {
+            t.description = strdup(_v6);
+        }
+        t.descriptionID = sqlite3_column_int(res, 7);
+        t.dataID = sqlite3_column_int(res, 8);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheInvTypeMaterials> cacheInvTypeMaterials_load_all(bulkdata *b) {
+    printf("Loading cacheInvTypeMaterials\n");
+    std::vector<cacheInvTypeMaterials> out;
+    sqlite3_stmt *res;
+    cacheInvTypeMaterials t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheInvTypeMaterials";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.typeID = sqlite3_column_int(res, 0);
+        t.materialTypeID = sqlite3_column_int(res, 1);
+        t.quantity = sqlite3_column_int(res, 2);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheResSounds> cacheResSounds_load_all(bulkdata *b) {
+    printf("Loading cacheResSounds\n");
+    std::vector<cacheResSounds> out;
+    sqlite3_stmt *res;
+    cacheResSounds t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheResSounds";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.soundID = sqlite3_column_int(res, 0);
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.soundFile = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.description = strdup(_v2);
+        }
+        t.obsolete = sqlite3_column_int(res, 3);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+std::vector<cacheRamActivities> cacheRamActivities_load_all(bulkdata *b) {
+    printf("Loading cacheRamActivities\n");
+    std::vector<cacheRamActivities> out;
+    sqlite3_stmt *res;
+    cacheRamActivities t;
+    memset(&t, 0, sizeof(t));
+    char *stmt = (char *)"SELECT * from cacheRamActivities";
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    }
+
+    int step = sqlite3_step(res);
+    while(step != SQLITE_DONE && step != SQLITE_OK) {
+        memset(&t, 0, sizeof(t));
+        t.dirty = false;
+        if (step == SQLITE_ROW) {
+        t.activityID = sqlite3_column_int(res, 0);
+        char *_v1 = (char *)sqlite3_column_text(res, 1);
+        if (_v1 != NULL) {
+            t.activityName = strdup(_v1);
+        }
+        char *_v2 = (char *)sqlite3_column_text(res, 2);
+        if (_v2 != NULL) {
+            t.iconNo = strdup(_v2);
+        }
+        char *_v3 = (char *)sqlite3_column_text(res, 3);
+        if (_v3 != NULL) {
+            t.description = strdup(_v3);
+        }
+        t.published = sqlite3_column_int(res, 4);
+        t.activityNameID = sqlite3_column_int(res, 5);
+        t.descriptionID = sqlite3_column_int(res, 6);
+        out.push_back(t);
+        }
+    step = sqlite3_step(res);
+    }
+
+    sqlite3_finalize(res);
+    return out;
+    }
+
+cache_collection cache_load_all(bulkdata *b){
+    cache_collection out;
+    out.cache_cacheShipTypes = cacheShipTypes_load_all(b);
+    out.cache_cacheStaOperations = cacheStaOperations_load_all(b);
+    out.cache_cacheRamAssemblyLineTypesCategory = cacheRamAssemblyLineTypesCategory_load_all(b);
+    out.cache_cacheInvCategories = cacheInvCategories_load_all(b);
+    out.cache_cacheDogmaEffects = cacheDogmaEffects_load_all(b);
+    out.cache_cacheRamCompletedStatuses = cacheRamCompletedStatuses_load_all(b);
+    out.cache_cacheInvBlueprintTypes = cacheInvBlueprintTypes_load_all(b);
+    out.cache_cacheRamTypeRequirements = cacheRamTypeRequirements_load_all(b);
+    out.cache_cacheCertificateRelationships = cacheCertificateRelationships_load_all(b);
+    out.cache_cacheDogmaAttributes = cacheDogmaAttributes_load_all(b);
+    out.cache_cacheRamAssemblyLineTypes = cacheRamAssemblyLineTypes_load_all(b);
+    out.cache_cacheStaStationsStatic = cacheStaStationsStatic_load_all(b);
+    out.cache_cacheInvGroups = cacheInvGroups_load_all(b);
+    out.cache_cacheInvMetaTypes = cacheInvMetaTypes_load_all(b);
+    out.cache_cacheInvTypeReactions = cacheInvTypeReactions_load_all(b);
+    out.cache_cacheDogmaTypeEffects = cacheDogmaTypeEffects_load_all(b);
+    out.cache_cachePlanetSchematics = cachePlanetSchematics_load_all(b);
+    out.cache_cacheDogmaUnits = cacheDogmaUnits_load_all(b);
+    out.cache_cachePlanetSchematicsTypeMap = cachePlanetSchematicsTypeMap_load_all(b);
+    out.cache_cacheDogmaTypeAttributes = cacheDogmaTypeAttributes_load_all(b);
+    out.cache_cacheDogmaExpressions = cacheDogmaExpressions_load_all(b);
+    out.cache_cacheRamAssemblyLineTypesGroup = cacheRamAssemblyLineTypesGroup_load_all(b);
+    out.cache_cacheResGraphics = cacheResGraphics_load_all(b);
+    out.cache_cacheInvTypes = cacheInvTypes_load_all(b);
+    out.cache_cacheResIcons = cacheResIcons_load_all(b);
+    out.cache_cacheActBillTypes = cacheActBillTypes_load_all(b);
+    out.cache_cachePlanetSchematicsPinMap = cachePlanetSchematicsPinMap_load_all(b);
+    out.cache_cacheInvContrabandTypes = cacheInvContrabandTypes_load_all(b);
+    out.cache_cacheInvMetaGroups = cacheInvMetaGroups_load_all(b);
+    out.cache_cacheCertificates = cacheCertificates_load_all(b);
+    out.cache_cacheInvTypeMaterials = cacheInvTypeMaterials_load_all(b);
+    out.cache_cacheResSounds = cacheResSounds_load_all(b);
+    out.cache_cacheRamActivities = cacheRamActivities_load_all(b);
+    return out;
+};
+
+void cacheShipTypes_draw_edit(edit_window *e) {
+    cacheShipTypes*d = (cacheShipTypes*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("shipTypeID", (int *)&d->shipTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("weaponTypeID", (int *)&d->weaponTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("miningTypeID", (int *)&d->miningTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("skillTypeID", (int *)&d->skillTypeID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheStaOperations_draw_edit(edit_window *e) {
+    cacheStaOperations*d = (cacheStaOperations*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("activityID", (int *)&d->activityID);
+    ImGui::Separator();
+    ImGui::InputInt("operationID", (int *)&d->operationID);
+    ImGui::Separator();
+    ImGui::Text("operationName:");
+    ImGui::Text(d->operationName);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::InputInt("fringe", (int *)&d->fringe);
+    ImGui::Separator();
+    ImGui::InputInt("corridor", (int *)&d->corridor);
+    ImGui::Separator();
+    ImGui::InputInt("hub", (int *)&d->hub);
+    ImGui::Separator();
+    ImGui::InputInt("border", (int *)&d->border);
+    ImGui::Separator();
+    ImGui::InputInt("ratio", (int *)&d->ratio);
+    ImGui::Separator();
+    ImGui::InputInt("caldariStationTypeID", (int *)&d->caldariStationTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("minmatarStationTypeID", (int *)&d->minmatarStationTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("amarrStationTypeID", (int *)&d->amarrStationTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("gallenteStationTypeID", (int *)&d->gallenteStationTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("joveStationTypeID", (int *)&d->joveStationTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("operationNameID", (int *)&d->operationNameID);
+    ImGui::Separator();
+    ImGui::InputInt("descriptionID", (int *)&d->descriptionID);
+    ImGui::Separator();
+    ImGui::InputInt("serviceMask", (int *)&d->serviceMask);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheRamAssemblyLineTypesCategory_draw_edit(edit_window *e) {
+    cacheRamAssemblyLineTypesCategory*d = (cacheRamAssemblyLineTypesCategory*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("assemblyLineTypeID", (int *)&d->assemblyLineTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("categoryID", (int *)&d->categoryID);
+    ImGui::Separator();
+    ImGui::InputFloat("timeMultiplier", &d->timeMultiplier);
+    ImGui::Separator();
+    ImGui::InputFloat("materialMultiplier", &d->materialMultiplier);
+    ImGui::Separator();
+    ImGui::Text("activityID:");
+    ImGui::Text(d->activityID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheInvCategories_draw_edit(edit_window *e) {
+    cacheInvCategories*d = (cacheInvCategories*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("categoryID", (int *)&d->categoryID);
+    ImGui::Separator();
+    ImGui::Text("categoryName:");
+    ImGui::Text(d->categoryName);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::InputInt("published", (int *)&d->published);
+    ImGui::Separator();
+    ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::Separator();
+    ImGui::InputInt("categoryNameID", (int *)&d->categoryNameID);
+    ImGui::Separator();
+    ImGui::InputInt("dataID", (int *)&d->dataID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheDogmaEffects_draw_edit(edit_window *e) {
+    cacheDogmaEffects*d = (cacheDogmaEffects*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("effectID", (int *)&d->effectID);
+    ImGui::Separator();
+    ImGui::Text("effectName:");
+    ImGui::Text(d->effectName);
+    ImGui::Separator();
+    ImGui::InputInt("effectCategory", (int *)&d->effectCategory);
+    ImGui::Separator();
+    ImGui::InputInt("preExpression", (int *)&d->preExpression);
+    ImGui::Separator();
+    ImGui::InputInt("postExpression", (int *)&d->postExpression);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::Text("guid:");
+    ImGui::Text(d->guid);
+    ImGui::Separator();
+    ImGui::InputInt("isOffensive", (int *)&d->isOffensive);
+    ImGui::Separator();
+    ImGui::InputInt("isAssistance", (int *)&d->isAssistance);
+    ImGui::Separator();
+    ImGui::InputInt("durationAttributeID", (int *)&d->durationAttributeID);
+    ImGui::Separator();
+    ImGui::InputInt("trackingSpeedAttributeID", (int *)&d->trackingSpeedAttributeID);
+    ImGui::Separator();
+    ImGui::InputInt("dischargeAttributeID", (int *)&d->dischargeAttributeID);
+    ImGui::Separator();
+    ImGui::InputInt("rangeAttributeID", (int *)&d->rangeAttributeID);
+    ImGui::Separator();
+    ImGui::InputInt("falloffAttributeID", (int *)&d->falloffAttributeID);
+    ImGui::Separator();
+    ImGui::InputInt("disallowAutoRepeat", (int *)&d->disallowAutoRepeat);
+    ImGui::Separator();
+    ImGui::InputInt("published", (int *)&d->published);
+    ImGui::Separator();
+    ImGui::Text("displayName:");
+    ImGui::Text(d->displayName);
+    ImGui::Separator();
+    ImGui::InputInt("isWarpSafe", (int *)&d->isWarpSafe);
+    ImGui::Separator();
+    ImGui::InputInt("rangeChance", (int *)&d->rangeChance);
+    ImGui::Separator();
+    ImGui::InputInt("electronicChance", (int *)&d->electronicChance);
+    ImGui::Separator();
+    ImGui::InputInt("propulsionChance", (int *)&d->propulsionChance);
+    ImGui::Separator();
+    ImGui::InputInt("distribution", (int *)&d->distribution);
+    ImGui::Separator();
+    ImGui::Text("sfxName:");
+    ImGui::Text(d->sfxName);
+    ImGui::Separator();
+    ImGui::InputInt("npcUsageChanceAttributeID", (int *)&d->npcUsageChanceAttributeID);
+    ImGui::Separator();
+    ImGui::InputInt("npcActivationChanceAttributeID", (int *)&d->npcActivationChanceAttributeID);
+    ImGui::Separator();
+    ImGui::InputInt("fittingUsageChanceAttributeID", (int *)&d->fittingUsageChanceAttributeID);
+    ImGui::Separator();
+    ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::Separator();
+    ImGui::InputInt("displayNameID", (int *)&d->displayNameID);
+    ImGui::Separator();
+    ImGui::InputInt("descriptionID", (int *)&d->descriptionID);
+    ImGui::Separator();
+    ImGui::InputInt("dataID", (int *)&d->dataID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheRamCompletedStatuses_draw_edit(edit_window *e) {
+    cacheRamCompletedStatuses*d = (cacheRamCompletedStatuses*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("completedStatus", (int *)&d->completedStatus);
+    ImGui::Separator();
+    ImGui::Text("completedStatusText:");
+    ImGui::Text(d->completedStatusText);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::InputInt("completedStatusTextID", (int *)&d->completedStatusTextID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheInvBlueprintTypes_draw_edit(edit_window *e) {
+    cacheInvBlueprintTypes*d = (cacheInvBlueprintTypes*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("blueprintTypeID", (int *)&d->blueprintTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("parentBlueprintTypeID", (int *)&d->parentBlueprintTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("productTypeID", (int *)&d->productTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("productionTime", (int *)&d->productionTime);
+    ImGui::Separator();
+    ImGui::InputInt("techLevel", (int *)&d->techLevel);
+    ImGui::Separator();
+    ImGui::InputInt("researchProductivityTime", (int *)&d->researchProductivityTime);
+    ImGui::Separator();
+    ImGui::InputInt("researchMaterialTime", (int *)&d->researchMaterialTime);
+    ImGui::Separator();
+    ImGui::InputInt("researchCopyTime", (int *)&d->researchCopyTime);
+    ImGui::Separator();
+    ImGui::InputInt("researchTechTime", (int *)&d->researchTechTime);
+    ImGui::Separator();
+    ImGui::InputInt("productivityModifier", (int *)&d->productivityModifier);
+    ImGui::Separator();
+    ImGui::InputInt("materialModifier", (int *)&d->materialModifier);
+    ImGui::Separator();
+    ImGui::InputInt("wasteFactor", (int *)&d->wasteFactor);
+    ImGui::Separator();
+    ImGui::InputFloat("chanceOfReverseEngineering", &d->chanceOfReverseEngineering);
+    ImGui::Separator();
+    ImGui::InputInt("maxProductionLimit", (int *)&d->maxProductionLimit);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheRamTypeRequirements_draw_edit(edit_window *e) {
+    cacheRamTypeRequirements*d = (cacheRamTypeRequirements*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("typeID", (int *)&d->typeID);
+    ImGui::Separator();
+    ImGui::InputInt("activityID", (int *)&d->activityID);
+    ImGui::Separator();
+    ImGui::InputInt("requiredTypeID", (int *)&d->requiredTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("quantity", (int *)&d->quantity);
+    ImGui::Separator();
+    ImGui::InputFloat("damagePerJob", &d->damagePerJob);
+    ImGui::Separator();
+    ImGui::InputInt("recycle", (int *)&d->recycle);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheCertificateRelationships_draw_edit(edit_window *e) {
+    cacheCertificateRelationships*d = (cacheCertificateRelationships*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("relationshipID", (int *)&d->relationshipID);
+    ImGui::Separator();
+    ImGui::InputInt("parentID", (int *)&d->parentID);
+    ImGui::Separator();
+    ImGui::InputInt("parentTypeID", (int *)&d->parentTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("parentLevel", (int *)&d->parentLevel);
+    ImGui::Separator();
+    ImGui::InputInt("childID", (int *)&d->childID);
+    ImGui::Separator();
+    ImGui::InputInt("childTypeID", (int *)&d->childTypeID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheDogmaAttributes_draw_edit(edit_window *e) {
+    cacheDogmaAttributes*d = (cacheDogmaAttributes*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("attributeID", (int *)&d->attributeID);
+    ImGui::Separator();
+    ImGui::Text("attributeName:");
+    ImGui::Text(d->attributeName);
+    ImGui::Separator();
+    ImGui::InputInt("attributeCategory", (int *)&d->attributeCategory);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::InputInt("maxAttributeID", (int *)&d->maxAttributeID);
+    ImGui::Separator();
+    ImGui::InputInt("attributeIdx", (int *)&d->attributeIdx);
+    ImGui::Separator();
+    ImGui::InputInt("chargeRechargeTimeID", (int *)&d->chargeRechargeTimeID);
+    ImGui::Separator();
+    ImGui::InputFloat("defaultValue", &d->defaultValue);
+    ImGui::Separator();
+    ImGui::InputInt("published", (int *)&d->published);
+    ImGui::Separator();
+    ImGui::Text("displayName:");
+    ImGui::Text(d->displayName);
+    ImGui::Separator();
+    ImGui::InputInt("unitID", (int *)&d->unitID);
+    ImGui::Separator();
+    ImGui::InputInt("stackable", (int *)&d->stackable);
+    ImGui::Separator();
+    ImGui::InputInt("highIsGood", (int *)&d->highIsGood);
+    ImGui::Separator();
+    ImGui::InputInt("categoryID", (int *)&d->categoryID);
+    ImGui::Separator();
+    ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::Separator();
+    ImGui::InputInt("displayNameID", (int *)&d->displayNameID);
+    ImGui::Separator();
+    ImGui::InputInt("dataID", (int *)&d->dataID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheRamAssemblyLineTypes_draw_edit(edit_window *e) {
+    cacheRamAssemblyLineTypes*d = (cacheRamAssemblyLineTypes*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("assemblyLineTypeID", (int *)&d->assemblyLineTypeID);
+    ImGui::Separator();
+    ImGui::Text("assemblyLineTypeName:");
+    ImGui::Text(d->assemblyLineTypeName);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::InputFloat("baseTimeMultiplier", &d->baseTimeMultiplier);
+    ImGui::Separator();
+    ImGui::InputFloat("baseMaterialMultiplier", &d->baseMaterialMultiplier);
+    ImGui::Separator();
+    ImGui::InputFloat("volume", &d->volume);
+    ImGui::Separator();
+    ImGui::InputInt("activityID", (int *)&d->activityID);
+    ImGui::Separator();
+    ImGui::InputFloat("minCostPerHour", &d->minCostPerHour);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheStaStationsStatic_draw_edit(edit_window *e) {
+    cacheStaStationsStatic*d = (cacheStaStationsStatic*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("stationID", (int *)&d->stationID);
+    ImGui::Separator();
+    ImGui::Text("stationName:");
+    ImGui::Text(d->stationName);
+    ImGui::Separator();
+    ImGui::InputFloat("x", &d->x);
+    ImGui::Separator();
+    ImGui::InputFloat("y", &d->y);
+    ImGui::Separator();
+    ImGui::InputFloat("z", &d->z);
+    ImGui::Separator();
+    ImGui::InputInt("stationTypeID", (int *)&d->stationTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("solarSystemID", (int *)&d->solarSystemID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheInvGroups_draw_edit(edit_window *e) {
+    cacheInvGroups*d = (cacheInvGroups*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("groupID", (int *)&d->groupID);
+    ImGui::Separator();
+    ImGui::InputInt("categoryID", (int *)&d->categoryID);
+    ImGui::Separator();
+    ImGui::Text("groupName:");
+    ImGui::Text(d->groupName);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::InputInt("useBasePrice", (int *)&d->useBasePrice);
+    ImGui::Separator();
+    ImGui::InputInt("allowManufacture", (int *)&d->allowManufacture);
+    ImGui::Separator();
+    ImGui::InputInt("allowRecycler", (int *)&d->allowRecycler);
+    ImGui::Separator();
+    ImGui::InputInt("anchored", (int *)&d->anchored);
+    ImGui::Separator();
+    ImGui::InputInt("anchorable", (int *)&d->anchorable);
+    ImGui::Separator();
+    ImGui::InputInt("fittableNonSingleton", (int *)&d->fittableNonSingleton);
+    ImGui::Separator();
+    ImGui::InputInt("published", (int *)&d->published);
+    ImGui::Separator();
+    ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::Separator();
+    ImGui::InputInt("groupNameID", (int *)&d->groupNameID);
+    ImGui::Separator();
+    ImGui::InputInt("dataID", (int *)&d->dataID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheInvMetaTypes_draw_edit(edit_window *e) {
+    cacheInvMetaTypes*d = (cacheInvMetaTypes*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("typeID", (int *)&d->typeID);
+    ImGui::Separator();
+    ImGui::InputInt("parentTypeID", (int *)&d->parentTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("metaGroupID", (int *)&d->metaGroupID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheInvTypeReactions_draw_edit(edit_window *e) {
+    cacheInvTypeReactions*d = (cacheInvTypeReactions*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("reactionTypeID", (int *)&d->reactionTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("input", (int *)&d->input);
+    ImGui::Separator();
+    ImGui::InputInt("typeID", (int *)&d->typeID);
+    ImGui::Separator();
+    ImGui::InputInt("quantity", (int *)&d->quantity);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheDogmaTypeEffects_draw_edit(edit_window *e) {
+    cacheDogmaTypeEffects*d = (cacheDogmaTypeEffects*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("typeID", (int *)&d->typeID);
+    ImGui::Separator();
+    ImGui::InputInt("effectID", (int *)&d->effectID);
+    ImGui::Separator();
+    ImGui::InputInt("isDefault", (int *)&d->isDefault);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cachePlanetSchematics_draw_edit(edit_window *e) {
+    cachePlanetSchematics*d = (cachePlanetSchematics*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("schematicID", (int *)&d->schematicID);
+    ImGui::Separator();
+    ImGui::Text("schematicName:");
+    ImGui::Text(d->schematicName);
+    ImGui::Separator();
+    ImGui::InputInt("cycleTime", (int *)&d->cycleTime);
+    ImGui::Separator();
+    ImGui::InputInt("schematicNameID", (int *)&d->schematicNameID);
+    ImGui::Separator();
+    ImGui::InputInt("dataID", (int *)&d->dataID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheDogmaUnits_draw_edit(edit_window *e) {
+    cacheDogmaUnits*d = (cacheDogmaUnits*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("unitID", (int *)&d->unitID);
+    ImGui::Separator();
+    ImGui::Text("unitName:");
+    ImGui::Text(d->unitName);
+    ImGui::Separator();
+    ImGui::Text("displayName:");
+    ImGui::Text(d->displayName);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::InputInt("displayNameID", (int *)&d->displayNameID);
+    ImGui::Separator();
+    ImGui::InputInt("descriptionID", (int *)&d->descriptionID);
+    ImGui::Separator();
+    ImGui::InputInt("dataID", (int *)&d->dataID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cachePlanetSchematicsTypeMap_draw_edit(edit_window *e) {
+    cachePlanetSchematicsTypeMap*d = (cachePlanetSchematicsTypeMap*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("schematicID", (int *)&d->schematicID);
+    ImGui::Separator();
+    ImGui::InputInt("typeID", (int *)&d->typeID);
+    ImGui::Separator();
+    ImGui::InputInt("isInput", (int *)&d->isInput);
+    ImGui::Separator();
+    ImGui::InputInt("quantity", (int *)&d->quantity);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheDogmaTypeAttributes_draw_edit(edit_window *e) {
+    cacheDogmaTypeAttributes*d = (cacheDogmaTypeAttributes*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("typeID", (int *)&d->typeID);
+    ImGui::Separator();
+    ImGui::InputInt("attributeID", (int *)&d->attributeID);
+    ImGui::Separator();
+    ImGui::InputFloat("value", &d->value);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheDogmaExpressions_draw_edit(edit_window *e) {
+    cacheDogmaExpressions*d = (cacheDogmaExpressions*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("expressionID", (int *)&d->expressionID);
+    ImGui::Separator();
+    ImGui::InputInt("operandID", (int *)&d->operandID);
+    ImGui::Separator();
+    ImGui::InputInt("arg1", (int *)&d->arg1);
+    ImGui::Separator();
+    ImGui::InputInt("arg2", (int *)&d->arg2);
+    ImGui::Separator();
+    ImGui::Text("expressionValue:");
+    ImGui::Text(d->expressionValue);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::Text("expressionName:");
+    ImGui::Text(d->expressionName);
+    ImGui::Separator();
+    ImGui::InputInt("expressionTypeID", (int *)&d->expressionTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("expressionGroupID", (int *)&d->expressionGroupID);
+    ImGui::Separator();
+    ImGui::InputInt("expressionAttributeID", (int *)&d->expressionAttributeID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheRamAssemblyLineTypesGroup_draw_edit(edit_window *e) {
+    cacheRamAssemblyLineTypesGroup*d = (cacheRamAssemblyLineTypesGroup*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("assemblyLineTypeID", (int *)&d->assemblyLineTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("groupID", (int *)&d->groupID);
+    ImGui::Separator();
+    ImGui::InputFloat("timeMultiplier", &d->timeMultiplier);
+    ImGui::Separator();
+    ImGui::InputFloat("materialMultiplier", &d->materialMultiplier);
+    ImGui::Separator();
+    ImGui::Text("activityID:");
+    ImGui::Text(d->activityID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheResGraphics_draw_edit(edit_window *e) {
+    cacheResGraphics*d = (cacheResGraphics*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("graphicID", (int *)&d->graphicID);
+    ImGui::Separator();
+    ImGui::Text("graphicFile:");
+    ImGui::Text(d->graphicFile);
+    ImGui::Separator();
+    ImGui::Text("graphicName:");
+    ImGui::Text(d->graphicName);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::InputInt("obsolete", (int *)&d->obsolete);
+    ImGui::Separator();
+    ImGui::Text("graphicType:");
+    ImGui::Text(d->graphicType);
+    ImGui::Separator();
+    ImGui::Text("collisionFile:");
+    ImGui::Text(d->collisionFile);
+    ImGui::Separator();
+    ImGui::Text("paperdollFile:");
+    ImGui::Text(d->paperdollFile);
+    ImGui::Separator();
+    ImGui::InputInt("animationTemplate", (int *)&d->animationTemplate);
+    ImGui::Separator();
+    ImGui::InputInt("collidable", (int *)&d->collidable);
+    ImGui::Separator();
+    ImGui::InputInt("explosionID", (int *)&d->explosionID);
+    ImGui::Separator();
+    ImGui::InputInt("directoryID", (int *)&d->directoryID);
+    ImGui::Separator();
+    ImGui::InputFloat("graphicMinX", &d->graphicMinX);
+    ImGui::Separator();
+    ImGui::InputFloat("graphicMinY", &d->graphicMinY);
+    ImGui::Separator();
+    ImGui::InputFloat("graphicMinZ", &d->graphicMinZ);
+    ImGui::Separator();
+    ImGui::InputFloat("graphicMaxX", &d->graphicMaxX);
+    ImGui::Separator();
+    ImGui::InputFloat("graphicMaxY", &d->graphicMaxY);
+    ImGui::Separator();
+    ImGui::InputFloat("graphicMaxZ", &d->graphicMaxZ);
+    ImGui::Separator();
+    ImGui::InputInt("isPrototype", (int *)&d->isPrototype);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheInvTypes_draw_edit(edit_window *e) {
+    cacheInvTypes*d = (cacheInvTypes*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("typeID", (int *)&d->typeID);
+    ImGui::Separator();
+    ImGui::InputInt("groupID", (int *)&d->groupID);
+    ImGui::Separator();
+    ImGui::Text("typeName:");
+    ImGui::Text(d->typeName);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::InputInt("graphicID", (int *)&d->graphicID);
+    ImGui::Separator();
+    ImGui::InputFloat("radius", &d->radius);
+    ImGui::Separator();
+    ImGui::InputFloat("mass", &d->mass);
+    ImGui::Separator();
+    ImGui::InputFloat("volume", &d->volume);
+    ImGui::Separator();
+    ImGui::InputFloat("capacity", &d->capacity);
+    ImGui::Separator();
+    ImGui::InputInt("portionSize", (int *)&d->portionSize);
+    ImGui::Separator();
+    ImGui::InputInt("raceID", (int *)&d->raceID);
+    ImGui::Separator();
+    ImGui::InputFloat("basePrice", &d->basePrice);
+    ImGui::Separator();
+    ImGui::InputInt("published", (int *)&d->published);
+    ImGui::Separator();
+    ImGui::InputInt("marketGroupID", (int *)&d->marketGroupID);
+    ImGui::Separator();
+    ImGui::InputFloat("chanceOfDuplicating", &d->chanceOfDuplicating);
+    ImGui::Separator();
+    ImGui::InputInt("soundID", (int *)&d->soundID);
+    ImGui::Separator();
+    ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::Separator();
+    ImGui::InputInt("dataID", (int *)&d->dataID);
+    ImGui::Separator();
+    ImGui::InputInt("typeNameID", (int *)&d->typeNameID);
+    ImGui::Separator();
+    ImGui::InputInt("descriptionID", (int *)&d->descriptionID);
+    ImGui::Separator();
+    ImGui::InputInt("copyTypeID", (int *)&d->copyTypeID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheResIcons_draw_edit(edit_window *e) {
+    cacheResIcons*d = (cacheResIcons*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::Separator();
+    ImGui::Text("iconFile:");
+    ImGui::Text(d->iconFile);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::InputInt("obsolete", (int *)&d->obsolete);
+    ImGui::Separator();
+    ImGui::Text("iconType:");
+    ImGui::Text(d->iconType);
+    ImGui::Separator();
+    ImGui::InputInt("directoryID", (int *)&d->directoryID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheActBillTypes_draw_edit(edit_window *e) {
+    cacheActBillTypes*d = (cacheActBillTypes*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("billTypeID", (int *)&d->billTypeID);
+    ImGui::Separator();
+    ImGui::Text("billTypeName:");
+    ImGui::Text(d->billTypeName);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::InputInt("billTypeNameID", (int *)&d->billTypeNameID);
+    ImGui::Separator();
+    ImGui::InputInt("dataID", (int *)&d->dataID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cachePlanetSchematicsPinMap_draw_edit(edit_window *e) {
+    cachePlanetSchematicsPinMap*d = (cachePlanetSchematicsPinMap*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("schematicID", (int *)&d->schematicID);
+    ImGui::Separator();
+    ImGui::InputInt("pinTypeID", (int *)&d->pinTypeID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheInvContrabandTypes_draw_edit(edit_window *e) {
+    cacheInvContrabandTypes*d = (cacheInvContrabandTypes*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("factionID", (int *)&d->factionID);
+    ImGui::Separator();
+    ImGui::InputInt("typeID", (int *)&d->typeID);
+    ImGui::Separator();
+    ImGui::InputFloat("standingLoss", &d->standingLoss);
+    ImGui::Separator();
+    ImGui::InputFloat("confiscateMinSec", &d->confiscateMinSec);
+    ImGui::Separator();
+    ImGui::InputFloat("fineByValue", &d->fineByValue);
+    ImGui::Separator();
+    ImGui::InputFloat("attackMinSec", &d->attackMinSec);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheInvMetaGroups_draw_edit(edit_window *e) {
+    cacheInvMetaGroups*d = (cacheInvMetaGroups*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("metaGroupID", (int *)&d->metaGroupID);
+    ImGui::Separator();
+    ImGui::Text("metaGroupName:");
+    ImGui::Text(d->metaGroupName);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::Separator();
+    ImGui::InputInt("metaGroupNameID", (int *)&d->metaGroupNameID);
+    ImGui::Separator();
+    ImGui::InputInt("descriptionID", (int *)&d->descriptionID);
+    ImGui::Separator();
+    ImGui::InputInt("dataID", (int *)&d->dataID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheCertificates_draw_edit(edit_window *e) {
+    cacheCertificates*d = (cacheCertificates*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("certificateID", (int *)&d->certificateID);
+    ImGui::Separator();
+    ImGui::InputInt("categoryID", (int *)&d->categoryID);
+    ImGui::Separator();
+    ImGui::InputInt("classID", (int *)&d->classID);
+    ImGui::Separator();
+    ImGui::InputInt("grade", (int *)&d->grade);
+    ImGui::Separator();
+    ImGui::InputInt("corpID", (int *)&d->corpID);
+    ImGui::Separator();
+    ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::InputInt("descriptionID", (int *)&d->descriptionID);
+    ImGui::Separator();
+    ImGui::InputInt("dataID", (int *)&d->dataID);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheInvTypeMaterials_draw_edit(edit_window *e) {
+    cacheInvTypeMaterials*d = (cacheInvTypeMaterials*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("typeID", (int *)&d->typeID);
+    ImGui::Separator();
+    ImGui::InputInt("materialTypeID", (int *)&d->materialTypeID);
+    ImGui::Separator();
+    ImGui::InputInt("quantity", (int *)&d->quantity);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheResSounds_draw_edit(edit_window *e) {
+    cacheResSounds*d = (cacheResSounds*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("soundID", (int *)&d->soundID);
+    ImGui::Separator();
+    ImGui::Text("soundFile:");
+    ImGui::Text(d->soundFile);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::InputInt("obsolete", (int *)&d->obsolete);
+    ImGui::Separator();
+    ImGui::End();
+}
+
+void cacheRamActivities_draw_edit(edit_window *e) {
+    cacheRamActivities*d = (cacheRamActivities*)e->data;
+
+    char title_buf[1024];
+    snprintf(title_buf, 1024, "Editing object: %p", d);
+    ImGui::Begin(title_buf, &e->show);
+    ImGui::InputInt("activityID", (int *)&d->activityID);
+    ImGui::Separator();
+    ImGui::Text("activityName:");
+    ImGui::Text(d->activityName);
+    ImGui::Separator();
+    ImGui::Text("iconNo:");
+    ImGui::Text(d->iconNo);
+    ImGui::Separator();
+    ImGui::Text("description:");
+    ImGui::Text(d->description);
+    ImGui::Separator();
+    ImGui::InputInt("published", (int *)&d->published);
+    ImGui::Separator();
+    ImGui::InputInt("activityNameID", (int *)&d->activityNameID);
+    ImGui::Separator();
+    ImGui::InputInt("descriptionID", (int *)&d->descriptionID);
+    ImGui::Separator();
+    ImGui::End();
 }
 

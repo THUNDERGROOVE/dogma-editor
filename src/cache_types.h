@@ -3,19 +3,24 @@
  */
 
 
+#ifndef __CACHE_TYPES__H__
+#define __CACHE_TYPES__H__
+
 #include <stdio.h>
+
+#include <vector>
 
 #include "bulkdata.h"
 
 struct bulkdata;
-#ifndef __CACHE_TYPES__H__
-#define __CACHE_TYPES__H__
-
+struct edit_window;
 struct cacheShipTypes {
     uint32_t shipTypeID;
     uint32_t weaponTypeID;
     uint32_t miningTypeID;
     uint32_t skillTypeID;
+
+    bool dirty;
 };
 
 struct cacheStaOperations {
@@ -36,6 +41,8 @@ struct cacheStaOperations {
     uint32_t operationNameID;
     uint32_t descriptionID;
     uint32_t serviceMask;
+
+    bool dirty;
 };
 
 struct cacheRamAssemblyLineTypesCategory {
@@ -44,6 +51,8 @@ struct cacheRamAssemblyLineTypesCategory {
     float timeMultiplier;
     float materialMultiplier;
     char *activityID;
+
+    bool dirty;
 };
 
 struct cacheInvCategories {
@@ -54,6 +63,8 @@ struct cacheInvCategories {
     uint32_t iconID;
     uint32_t categoryNameID;
     uint32_t dataID;
+
+    bool dirty;
 };
 
 struct cacheDogmaEffects {
@@ -87,6 +98,8 @@ struct cacheDogmaEffects {
     uint32_t displayNameID;
     uint32_t descriptionID;
     uint32_t dataID;
+
+    bool dirty;
 };
 
 struct cacheRamCompletedStatuses {
@@ -94,6 +107,8 @@ struct cacheRamCompletedStatuses {
     char *completedStatusText;
     char *description;
     uint32_t completedStatusTextID;
+
+    bool dirty;
 };
 
 struct cacheInvBlueprintTypes {
@@ -111,6 +126,8 @@ struct cacheInvBlueprintTypes {
     uint32_t wasteFactor;
     float chanceOfReverseEngineering;
     uint32_t maxProductionLimit;
+
+    bool dirty;
 };
 
 struct cacheRamTypeRequirements {
@@ -120,6 +137,8 @@ struct cacheRamTypeRequirements {
     uint32_t quantity;
     float damagePerJob;
     uint32_t recycle;
+
+    bool dirty;
 };
 
 struct cacheCertificateRelationships {
@@ -129,6 +148,8 @@ struct cacheCertificateRelationships {
     uint32_t parentLevel;
     uint32_t childID;
     uint32_t childTypeID;
+
+    bool dirty;
 };
 
 struct cacheDogmaAttributes {
@@ -149,6 +170,8 @@ struct cacheDogmaAttributes {
     uint32_t iconID;
     uint32_t displayNameID;
     uint32_t dataID;
+
+    bool dirty;
 };
 
 struct cacheRamAssemblyLineTypes {
@@ -160,6 +183,8 @@ struct cacheRamAssemblyLineTypes {
     float volume;
     uint32_t activityID;
     float minCostPerHour;
+
+    bool dirty;
 };
 
 struct cacheStaStationsStatic {
@@ -170,6 +195,8 @@ struct cacheStaStationsStatic {
     float z;
     uint32_t stationTypeID;
     uint32_t solarSystemID;
+
+    bool dirty;
 };
 
 struct cacheInvGroups {
@@ -187,12 +214,16 @@ struct cacheInvGroups {
     uint32_t iconID;
     uint32_t groupNameID;
     uint32_t dataID;
+
+    bool dirty;
 };
 
 struct cacheInvMetaTypes {
     uint32_t typeID;
     uint32_t parentTypeID;
     uint32_t metaGroupID;
+
+    bool dirty;
 };
 
 struct cacheInvTypeReactions {
@@ -200,12 +231,16 @@ struct cacheInvTypeReactions {
     uint32_t input;
     uint32_t typeID;
     uint32_t quantity;
+
+    bool dirty;
 };
 
 struct cacheDogmaTypeEffects {
     uint32_t typeID;
     uint32_t effectID;
     uint32_t isDefault;
+
+    bool dirty;
 };
 
 struct cachePlanetSchematics {
@@ -214,6 +249,8 @@ struct cachePlanetSchematics {
     uint32_t cycleTime;
     uint32_t schematicNameID;
     uint32_t dataID;
+
+    bool dirty;
 };
 
 struct cacheDogmaUnits {
@@ -224,6 +261,8 @@ struct cacheDogmaUnits {
     uint32_t displayNameID;
     uint32_t descriptionID;
     uint32_t dataID;
+
+    bool dirty;
 };
 
 struct cachePlanetSchematicsTypeMap {
@@ -231,12 +270,16 @@ struct cachePlanetSchematicsTypeMap {
     uint32_t typeID;
     uint32_t isInput;
     uint32_t quantity;
+
+    bool dirty;
 };
 
 struct cacheDogmaTypeAttributes {
     uint32_t typeID;
     uint32_t attributeID;
     float value;
+
+    bool dirty;
 };
 
 struct cacheDogmaExpressions {
@@ -250,6 +293,8 @@ struct cacheDogmaExpressions {
     uint32_t expressionTypeID;
     uint32_t expressionGroupID;
     uint32_t expressionAttributeID;
+
+    bool dirty;
 };
 
 struct cacheRamAssemblyLineTypesGroup {
@@ -258,6 +303,8 @@ struct cacheRamAssemblyLineTypesGroup {
     float timeMultiplier;
     float materialMultiplier;
     char *activityID;
+
+    bool dirty;
 };
 
 struct cacheResGraphics {
@@ -280,6 +327,8 @@ struct cacheResGraphics {
     float graphicMaxY;
     float graphicMaxZ;
     uint32_t isPrototype;
+
+    bool dirty;
 };
 
 struct cacheInvTypes {
@@ -304,6 +353,8 @@ struct cacheInvTypes {
     uint32_t typeNameID;
     uint32_t descriptionID;
     uint32_t copyTypeID;
+
+    bool dirty;
 };
 
 struct cacheResIcons {
@@ -313,6 +364,8 @@ struct cacheResIcons {
     uint32_t obsolete;
     char *iconType;
     uint32_t directoryID;
+
+    bool dirty;
 };
 
 struct cacheActBillTypes {
@@ -321,11 +374,15 @@ struct cacheActBillTypes {
     char *description;
     uint32_t billTypeNameID;
     uint32_t dataID;
+
+    bool dirty;
 };
 
 struct cachePlanetSchematicsPinMap {
     uint32_t schematicID;
     uint32_t pinTypeID;
+
+    bool dirty;
 };
 
 struct cacheInvContrabandTypes {
@@ -335,6 +392,8 @@ struct cacheInvContrabandTypes {
     float confiscateMinSec;
     float fineByValue;
     float attackMinSec;
+
+    bool dirty;
 };
 
 struct cacheInvMetaGroups {
@@ -345,6 +404,8 @@ struct cacheInvMetaGroups {
     uint32_t metaGroupNameID;
     uint32_t descriptionID;
     uint32_t dataID;
+
+    bool dirty;
 };
 
 struct cacheCertificates {
@@ -357,6 +418,8 @@ struct cacheCertificates {
     char *description;
     uint32_t descriptionID;
     uint32_t dataID;
+
+    bool dirty;
 };
 
 struct cacheEveMessages {
@@ -369,12 +432,16 @@ struct cacheEveMessages {
     uint32_t bodyID;
     uint32_t titleID;
     uint32_t suppressable;
+
+    bool dirty;
 };
 
 struct cacheInvTypeMaterials {
     uint32_t typeID;
     uint32_t materialTypeID;
     uint32_t quantity;
+
+    bool dirty;
 };
 
 struct cacheResSounds {
@@ -382,6 +449,8 @@ struct cacheResSounds {
     char *soundFile;
     char *description;
     uint32_t obsolete;
+
+    bool dirty;
 };
 
 struct cacheRamActivities {
@@ -392,6 +461,8 @@ struct cacheRamActivities {
     uint32_t published;
     uint32_t activityNameID;
     uint32_t descriptionID;
+
+    bool dirty;
 };
 
 cacheShipTypes cacheShipTypes_load_by(bulkdata *b, uint32_t shipTypeID);
@@ -427,4 +498,110 @@ cacheCertificates cacheCertificates_load_by(bulkdata *b, uint32_t certificateID)
 cacheInvTypeMaterials cacheInvTypeMaterials_load_by(bulkdata *b, uint32_t typeID);
 cacheResSounds cacheResSounds_load_by(bulkdata *b, uint32_t soundID);
 cacheRamActivities cacheRamActivities_load_by(bulkdata *b, uint32_t activityID);
+std::vector<cacheShipTypes> cacheShipTypes_load_all(bulkdata *b);
+std::vector<cacheStaOperations> cacheStaOperations_load_all(bulkdata *b);
+std::vector<cacheRamAssemblyLineTypesCategory> cacheRamAssemblyLineTypesCategory_load_all(bulkdata *b);
+std::vector<cacheInvCategories> cacheInvCategories_load_all(bulkdata *b);
+std::vector<cacheDogmaEffects> cacheDogmaEffects_load_all(bulkdata *b);
+std::vector<cacheRamCompletedStatuses> cacheRamCompletedStatuses_load_all(bulkdata *b);
+std::vector<cacheInvBlueprintTypes> cacheInvBlueprintTypes_load_all(bulkdata *b);
+std::vector<cacheRamTypeRequirements> cacheRamTypeRequirements_load_all(bulkdata *b);
+std::vector<cacheCertificateRelationships> cacheCertificateRelationships_load_all(bulkdata *b);
+std::vector<cacheDogmaAttributes> cacheDogmaAttributes_load_all(bulkdata *b);
+std::vector<cacheRamAssemblyLineTypes> cacheRamAssemblyLineTypes_load_all(bulkdata *b);
+std::vector<cacheStaStationsStatic> cacheStaStationsStatic_load_all(bulkdata *b);
+std::vector<cacheInvGroups> cacheInvGroups_load_all(bulkdata *b);
+std::vector<cacheInvMetaTypes> cacheInvMetaTypes_load_all(bulkdata *b);
+std::vector<cacheInvTypeReactions> cacheInvTypeReactions_load_all(bulkdata *b);
+std::vector<cacheDogmaTypeEffects> cacheDogmaTypeEffects_load_all(bulkdata *b);
+std::vector<cachePlanetSchematics> cachePlanetSchematics_load_all(bulkdata *b);
+std::vector<cacheDogmaUnits> cacheDogmaUnits_load_all(bulkdata *b);
+std::vector<cachePlanetSchematicsTypeMap> cachePlanetSchematicsTypeMap_load_all(bulkdata *b);
+std::vector<cacheDogmaTypeAttributes> cacheDogmaTypeAttributes_load_all(bulkdata *b);
+std::vector<cacheDogmaExpressions> cacheDogmaExpressions_load_all(bulkdata *b);
+std::vector<cacheRamAssemblyLineTypesGroup> cacheRamAssemblyLineTypesGroup_load_all(bulkdata *b);
+std::vector<cacheResGraphics> cacheResGraphics_load_all(bulkdata *b);
+std::vector<cacheInvTypes> cacheInvTypes_load_all(bulkdata *b);
+std::vector<cacheResIcons> cacheResIcons_load_all(bulkdata *b);
+std::vector<cacheActBillTypes> cacheActBillTypes_load_all(bulkdata *b);
+std::vector<cachePlanetSchematicsPinMap> cachePlanetSchematicsPinMap_load_all(bulkdata *b);
+std::vector<cacheInvContrabandTypes> cacheInvContrabandTypes_load_all(bulkdata *b);
+std::vector<cacheInvMetaGroups> cacheInvMetaGroups_load_all(bulkdata *b);
+std::vector<cacheCertificates> cacheCertificates_load_all(bulkdata *b);
+std::vector<cacheInvTypeMaterials> cacheInvTypeMaterials_load_all(bulkdata *b);
+std::vector<cacheResSounds> cacheResSounds_load_all(bulkdata *b);
+std::vector<cacheRamActivities> cacheRamActivities_load_all(bulkdata *b);
+
+struct cache_collection {
+    std::vector<cacheShipTypes> cache_cacheShipTypes;
+    std::vector<cacheStaOperations> cache_cacheStaOperations;
+    std::vector<cacheRamAssemblyLineTypesCategory> cache_cacheRamAssemblyLineTypesCategory;
+    std::vector<cacheInvCategories> cache_cacheInvCategories;
+    std::vector<cacheDogmaEffects> cache_cacheDogmaEffects;
+    std::vector<cacheRamCompletedStatuses> cache_cacheRamCompletedStatuses;
+    std::vector<cacheInvBlueprintTypes> cache_cacheInvBlueprintTypes;
+    std::vector<cacheRamTypeRequirements> cache_cacheRamTypeRequirements;
+    std::vector<cacheCertificateRelationships> cache_cacheCertificateRelationships;
+    std::vector<cacheDogmaAttributes> cache_cacheDogmaAttributes;
+    std::vector<cacheRamAssemblyLineTypes> cache_cacheRamAssemblyLineTypes;
+    std::vector<cacheStaStationsStatic> cache_cacheStaStationsStatic;
+    std::vector<cacheInvGroups> cache_cacheInvGroups;
+    std::vector<cacheInvMetaTypes> cache_cacheInvMetaTypes;
+    std::vector<cacheInvTypeReactions> cache_cacheInvTypeReactions;
+    std::vector<cacheDogmaTypeEffects> cache_cacheDogmaTypeEffects;
+    std::vector<cachePlanetSchematics> cache_cachePlanetSchematics;
+    std::vector<cacheDogmaUnits> cache_cacheDogmaUnits;
+    std::vector<cachePlanetSchematicsTypeMap> cache_cachePlanetSchematicsTypeMap;
+    std::vector<cacheDogmaTypeAttributes> cache_cacheDogmaTypeAttributes;
+    std::vector<cacheDogmaExpressions> cache_cacheDogmaExpressions;
+    std::vector<cacheRamAssemblyLineTypesGroup> cache_cacheRamAssemblyLineTypesGroup;
+    std::vector<cacheResGraphics> cache_cacheResGraphics;
+    std::vector<cacheInvTypes> cache_cacheInvTypes;
+    std::vector<cacheResIcons> cache_cacheResIcons;
+    std::vector<cacheActBillTypes> cache_cacheActBillTypes;
+    std::vector<cachePlanetSchematicsPinMap> cache_cachePlanetSchematicsPinMap;
+    std::vector<cacheInvContrabandTypes> cache_cacheInvContrabandTypes;
+    std::vector<cacheInvMetaGroups> cache_cacheInvMetaGroups;
+    std::vector<cacheCertificates> cache_cacheCertificates;
+    std::vector<cacheInvTypeMaterials> cache_cacheInvTypeMaterials;
+    std::vector<cacheResSounds> cache_cacheResSounds;
+    std::vector<cacheRamActivities> cache_cacheRamActivities;
+};
+
+cache_collection cache_load_all(bulkdata *b);
+void cacheShipTypes_draw_edit(edit_window *e);
+void cacheStaOperations_draw_edit(edit_window *e);
+void cacheRamAssemblyLineTypesCategory_draw_edit(edit_window *e);
+void cacheInvCategories_draw_edit(edit_window *e);
+void cacheDogmaEffects_draw_edit(edit_window *e);
+void cacheRamCompletedStatuses_draw_edit(edit_window *e);
+void cacheInvBlueprintTypes_draw_edit(edit_window *e);
+void cacheRamTypeRequirements_draw_edit(edit_window *e);
+void cacheCertificateRelationships_draw_edit(edit_window *e);
+void cacheDogmaAttributes_draw_edit(edit_window *e);
+void cacheRamAssemblyLineTypes_draw_edit(edit_window *e);
+void cacheStaStationsStatic_draw_edit(edit_window *e);
+void cacheInvGroups_draw_edit(edit_window *e);
+void cacheInvMetaTypes_draw_edit(edit_window *e);
+void cacheInvTypeReactions_draw_edit(edit_window *e);
+void cacheDogmaTypeEffects_draw_edit(edit_window *e);
+void cachePlanetSchematics_draw_edit(edit_window *e);
+void cacheDogmaUnits_draw_edit(edit_window *e);
+void cachePlanetSchematicsTypeMap_draw_edit(edit_window *e);
+void cacheDogmaTypeAttributes_draw_edit(edit_window *e);
+void cacheDogmaExpressions_draw_edit(edit_window *e);
+void cacheRamAssemblyLineTypesGroup_draw_edit(edit_window *e);
+void cacheResGraphics_draw_edit(edit_window *e);
+void cacheInvTypes_draw_edit(edit_window *e);
+void cacheResIcons_draw_edit(edit_window *e);
+void cacheActBillTypes_draw_edit(edit_window *e);
+void cachePlanetSchematicsPinMap_draw_edit(edit_window *e);
+void cacheInvContrabandTypes_draw_edit(edit_window *e);
+void cacheInvMetaGroups_draw_edit(edit_window *e);
+void cacheCertificates_draw_edit(edit_window *e);
+void cacheInvTypeMaterials_draw_edit(edit_window *e);
+void cacheResSounds_draw_edit(edit_window *e);
+void cacheRamActivities_draw_edit(edit_window *e);
+
+
 #endif

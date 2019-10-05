@@ -7,9 +7,6 @@
 #include <stdio.h>
 #include "sqlite3.h"
 
-#include <vector>
-
-
 uint32_t bulkdata_init(bulkdata *b) {
     int ret = sqlite3_open("bulkdata.db", &b->db);
 
@@ -19,24 +16,58 @@ uint32_t bulkdata_init(bulkdata *b) {
     return 0;
 }
 
+void InvTypesCache::LoadCache(bulkdata *b) {
+    this->cache = cacheInvTypes_load_all(b);
+}
 
-std::vector<cacheInvTypes> search_invtype(bulkdata *b, const char *tn) {
-    char *stmt = "SELECT  from cacheInvTypes where typeName like %@tn%";
+std::vector<uint32_t > collect_typeids(bulkdata *b) {
+    std::vector<uint32_t> out;
+    const char *stmt = "SELECT typeID from cacheInvTypes";
+
     sqlite3_stmt *res;
     int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
-    if (rc == SQLITE_OK) {
-        int idx = sqlite3_bind_parameter_index(res, "@id");
-        sqlite3_bind_text(res, idx, tn, strlen(tn), NULL);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s", sqlite3_errmsg(b->db));
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(b->db));
     }
 
     int step = sqlite3_step(res);
-
-    if (step == SQLITE_ROW) {
-
-    
+    while (step != SQLITE_DONE && step != SQLITE_OK) {
+        if (step == SQLITE_ROW) {
+            uint32_t typeID = sqlite3_column_int(res, 0);
+            printf("Got typeid: %d\n", typeID);
+            out.push_back(typeID);
+        }
+        step = sqlite3_step(res);
     }
+
+    return out;
+}
+
+
+std::vector<cacheInvTypes> search_invtype(bulkdata *b, const char *tn) {
+    std::vector<cacheInvTypes> out;
+    const char *stmt = "SELECT typeID from cacheInvTypes where typeName like '%adaptive%'";
+    sqlite3_stmt *res;
+    int rc = sqlite3_prepare_v2(b->db, stmt, -1, &res, 0);
+    if (rc == SQLITE_OK) {
+        //int idx = sqlite3_bind_parameter_index(res, "@tn");
+        //sqlite3_bind_text(res, 0, tn, strlen(tn), NULL);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(b->db));
+    }
+
+
+    int step = sqlite3_step(res);
+    while (step != SQLITE_DONE && step != SQLITE_OK) {
+        if (step == SQLITE_ROW) {
+            uint32_t typeID = sqlite3_column_int(res, 0);
+            cacheInvTypes c = cacheInvTypes_load_by(b, typeID);
+            out.push_back(c);
+        }
+        step = sqlite3_step(res);
+    }
+    printf("%d\n", out.size());
+    return out;
 }
 /*
   cacheInvType tmp_load_invtype(bulkdata *b, uint32_t typeID) {
