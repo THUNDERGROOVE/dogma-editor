@@ -15,7 +15,7 @@ void newframe() {
 }
 
 void endframe() {
-    ImVec4 clear_color = ImVec4(0.45f, 0.45f, 0.45f, 1.00f);
+    ImVec4 clear_color = ImVec4(0.156862745098, 0.156862745098, 0.156862745098, 1.0f);
     // Rendering
     ImGui::Render();
     int display_w, display_h;
@@ -26,6 +26,17 @@ void endframe() {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     glfwSwapBuffers(window);
+
+    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+        GLFWwindow* backup_current_context = glfwGetCurrentContext();
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        glfwMakeContextCurrent(backup_current_context);
+    }
+}
+
+void close_window() {
+    glfwSetWindowShouldClose(window, true);
 }
 
 void shutdown_window() {
@@ -39,7 +50,7 @@ void shutdown_window() {
 }
 
 
-void init_window() {
+void init_window(bool viewports) {
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
         return;
@@ -67,8 +78,12 @@ void init_window() {
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    if (viewports) {
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+    }
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsDark();
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);

@@ -13,6 +13,8 @@
 
 #include "imgui.h"
 
+search_windows sw;
+
 cacheShipTypes cacheShipTypes_load_by(bulkdata *b, uint32_t shipTypeID) {
     char *err_msg = NULL;
     sqlite3_stmt *res;
@@ -2435,42 +2437,181 @@ std::vector<cacheRamActivities> cacheRamActivities_load_all(bulkdata *b) {
     return out;
     }
 
-cache_collection cache_load_all(bulkdata *b){
+#include <unistd.h>
+cache_collection cache_load_all(bulkdata *b, loading_status_t *t) {
     cache_collection out;
+    t->done = false;
+    t->label = "Loading cacheShipTypes";
     out.cache_cacheShipTypes = cacheShipTypes_load_all(b);
+    t->label = "Loading cacheStaOperations";
     out.cache_cacheStaOperations = cacheStaOperations_load_all(b);
+    t->label = "Loading cacheRamAssemblyLineTypesCategory";
     out.cache_cacheRamAssemblyLineTypesCategory = cacheRamAssemblyLineTypesCategory_load_all(b);
+    t->label = "Loading cacheInvCategories";
     out.cache_cacheInvCategories = cacheInvCategories_load_all(b);
+    t->label = "Loading cacheDogmaEffects";
     out.cache_cacheDogmaEffects = cacheDogmaEffects_load_all(b);
+    t->label = "Loading cacheRamCompletedStatuses";
     out.cache_cacheRamCompletedStatuses = cacheRamCompletedStatuses_load_all(b);
+    t->label = "Loading cacheInvBlueprintTypes";
     out.cache_cacheInvBlueprintTypes = cacheInvBlueprintTypes_load_all(b);
+    t->label = "Loading cacheRamTypeRequirements";
     out.cache_cacheRamTypeRequirements = cacheRamTypeRequirements_load_all(b);
+    t->label = "Loading cacheCertificateRelationships";
     out.cache_cacheCertificateRelationships = cacheCertificateRelationships_load_all(b);
+    t->label = "Loading cacheDogmaAttributes";
     out.cache_cacheDogmaAttributes = cacheDogmaAttributes_load_all(b);
+    t->label = "Loading cacheRamAssemblyLineTypes";
     out.cache_cacheRamAssemblyLineTypes = cacheRamAssemblyLineTypes_load_all(b);
+    t->label = "Loading cacheStaStationsStatic";
     out.cache_cacheStaStationsStatic = cacheStaStationsStatic_load_all(b);
+    t->label = "Loading cacheInvGroups";
     out.cache_cacheInvGroups = cacheInvGroups_load_all(b);
+    t->label = "Loading cacheInvMetaTypes";
     out.cache_cacheInvMetaTypes = cacheInvMetaTypes_load_all(b);
+    t->label = "Loading cacheInvTypeReactions";
     out.cache_cacheInvTypeReactions = cacheInvTypeReactions_load_all(b);
+    t->label = "Loading cacheDogmaTypeEffects";
     out.cache_cacheDogmaTypeEffects = cacheDogmaTypeEffects_load_all(b);
+    t->label = "Loading cachePlanetSchematics";
     out.cache_cachePlanetSchematics = cachePlanetSchematics_load_all(b);
+    t->label = "Loading cacheDogmaUnits";
     out.cache_cacheDogmaUnits = cacheDogmaUnits_load_all(b);
+    t->label = "Loading cachePlanetSchematicsTypeMap";
     out.cache_cachePlanetSchematicsTypeMap = cachePlanetSchematicsTypeMap_load_all(b);
+    t->label = "Loading cacheDogmaTypeAttributes";
     out.cache_cacheDogmaTypeAttributes = cacheDogmaTypeAttributes_load_all(b);
+    t->label = "Loading cacheDogmaExpressions";
     out.cache_cacheDogmaExpressions = cacheDogmaExpressions_load_all(b);
+    t->label = "Loading cacheRamAssemblyLineTypesGroup";
     out.cache_cacheRamAssemblyLineTypesGroup = cacheRamAssemblyLineTypesGroup_load_all(b);
+    t->label = "Loading cacheResGraphics";
     out.cache_cacheResGraphics = cacheResGraphics_load_all(b);
+    t->label = "Loading cacheInvTypes";
     out.cache_cacheInvTypes = cacheInvTypes_load_all(b);
+    t->label = "Loading cacheResIcons";
     out.cache_cacheResIcons = cacheResIcons_load_all(b);
+    t->label = "Loading cacheActBillTypes";
     out.cache_cacheActBillTypes = cacheActBillTypes_load_all(b);
+    t->label = "Loading cachePlanetSchematicsPinMap";
     out.cache_cachePlanetSchematicsPinMap = cachePlanetSchematicsPinMap_load_all(b);
+    t->label = "Loading cacheInvContrabandTypes";
     out.cache_cacheInvContrabandTypes = cacheInvContrabandTypes_load_all(b);
+    t->label = "Loading cacheInvMetaGroups";
     out.cache_cacheInvMetaGroups = cacheInvMetaGroups_load_all(b);
+    t->label = "Loading cacheCertificates";
     out.cache_cacheCertificates = cacheCertificates_load_all(b);
+    t->label = "Loading cacheInvTypeMaterials";
     out.cache_cacheInvTypeMaterials = cacheInvTypeMaterials_load_all(b);
+    t->label = "Loading cacheResSounds";
     out.cache_cacheResSounds = cacheResSounds_load_all(b);
+    t->label = "Loading cacheRamActivities";
     out.cache_cacheRamActivities = cacheRamActivities_load_all(b);
-    return out;
+    t->done = true;    return out;
+};
+
+uint32_t cache_count_dirty(cache_collection cc) {;
+    uint32_t c = 0;
+    for (uint32_t i = 0; i < cc.cache_cacheShipTypes.size(); i++) {
+        if (cc.cache_cacheShipTypes[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheStaOperations.size(); i++) {
+        if (cc.cache_cacheStaOperations[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheRamAssemblyLineTypesCategory.size(); i++) {
+        if (cc.cache_cacheRamAssemblyLineTypesCategory[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheInvCategories.size(); i++) {
+        if (cc.cache_cacheInvCategories[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheDogmaEffects.size(); i++) {
+        if (cc.cache_cacheDogmaEffects[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheRamCompletedStatuses.size(); i++) {
+        if (cc.cache_cacheRamCompletedStatuses[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheInvBlueprintTypes.size(); i++) {
+        if (cc.cache_cacheInvBlueprintTypes[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheRamTypeRequirements.size(); i++) {
+        if (cc.cache_cacheRamTypeRequirements[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheCertificateRelationships.size(); i++) {
+        if (cc.cache_cacheCertificateRelationships[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheDogmaAttributes.size(); i++) {
+        if (cc.cache_cacheDogmaAttributes[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheRamAssemblyLineTypes.size(); i++) {
+        if (cc.cache_cacheRamAssemblyLineTypes[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheStaStationsStatic.size(); i++) {
+        if (cc.cache_cacheStaStationsStatic[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheInvGroups.size(); i++) {
+        if (cc.cache_cacheInvGroups[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheInvMetaTypes.size(); i++) {
+        if (cc.cache_cacheInvMetaTypes[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheInvTypeReactions.size(); i++) {
+        if (cc.cache_cacheInvTypeReactions[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheDogmaTypeEffects.size(); i++) {
+        if (cc.cache_cacheDogmaTypeEffects[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cachePlanetSchematics.size(); i++) {
+        if (cc.cache_cachePlanetSchematics[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheDogmaUnits.size(); i++) {
+        if (cc.cache_cacheDogmaUnits[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cachePlanetSchematicsTypeMap.size(); i++) {
+        if (cc.cache_cachePlanetSchematicsTypeMap[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheDogmaTypeAttributes.size(); i++) {
+        if (cc.cache_cacheDogmaTypeAttributes[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheDogmaExpressions.size(); i++) {
+        if (cc.cache_cacheDogmaExpressions[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheRamAssemblyLineTypesGroup.size(); i++) {
+        if (cc.cache_cacheRamAssemblyLineTypesGroup[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheResGraphics.size(); i++) {
+        if (cc.cache_cacheResGraphics[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheInvTypes.size(); i++) {
+        if (cc.cache_cacheInvTypes[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheResIcons.size(); i++) {
+        if (cc.cache_cacheResIcons[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheActBillTypes.size(); i++) {
+        if (cc.cache_cacheActBillTypes[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cachePlanetSchematicsPinMap.size(); i++) {
+        if (cc.cache_cachePlanetSchematicsPinMap[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheInvContrabandTypes.size(); i++) {
+        if (cc.cache_cacheInvContrabandTypes[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheInvMetaGroups.size(); i++) {
+        if (cc.cache_cacheInvMetaGroups[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheCertificates.size(); i++) {
+        if (cc.cache_cacheCertificates[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheInvTypeMaterials.size(); i++) {
+        if (cc.cache_cacheInvTypeMaterials[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheResSounds.size(); i++) {
+        if (cc.cache_cacheResSounds[i].dirty) c += 1;
+    }
+    for (uint32_t i = 0; i < cc.cache_cacheRamActivities.size(); i++) {
+        if (cc.cache_cacheRamActivities[i].dirty) c += 1;
+    }
+    return c;
 };
 
 void cacheShipTypes_draw_edit(edit_window *e) {
@@ -2487,6 +2628,11 @@ void cacheShipTypes_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("skillTypeID", (int *)&d->skillTypeID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2532,6 +2678,11 @@ void cacheStaOperations_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("serviceMask", (int *)&d->serviceMask);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2552,6 +2703,11 @@ void cacheRamAssemblyLineTypesCategory_draw_edit(edit_window *e) {
     ImGui::Text("activityID:");
     ImGui::Text(d->activityID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2577,6 +2733,11 @@ void cacheInvCategories_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("dataID", (int *)&d->dataID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2651,6 +2812,11 @@ void cacheDogmaEffects_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("dataID", (int *)&d->dataID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2670,6 +2836,11 @@ void cacheRamCompletedStatuses_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("completedStatusTextID", (int *)&d->completedStatusTextID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2707,6 +2878,11 @@ void cacheInvBlueprintTypes_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("maxProductionLimit", (int *)&d->maxProductionLimit);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2728,6 +2904,11 @@ void cacheRamTypeRequirements_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("recycle", (int *)&d->recycle);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2749,6 +2930,11 @@ void cacheCertificateRelationships_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("childTypeID", (int *)&d->childTypeID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2795,6 +2981,11 @@ void cacheDogmaAttributes_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("dataID", (int *)&d->dataID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2822,6 +3013,11 @@ void cacheRamAssemblyLineTypes_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputFloat("minCostPerHour", &d->minCostPerHour);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2846,6 +3042,11 @@ void cacheStaStationsStatic_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("solarSystemID", (int *)&d->solarSystemID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2885,6 +3086,11 @@ void cacheInvGroups_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("dataID", (int *)&d->dataID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2900,6 +3106,11 @@ void cacheInvMetaTypes_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("metaGroupID", (int *)&d->metaGroupID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2917,6 +3128,11 @@ void cacheInvTypeReactions_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("quantity", (int *)&d->quantity);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2932,6 +3148,11 @@ void cacheDogmaTypeEffects_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("isDefault", (int *)&d->isDefault);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2952,6 +3173,11 @@ void cachePlanetSchematics_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("dataID", (int *)&d->dataID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2978,6 +3204,11 @@ void cacheDogmaUnits_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("dataID", (int *)&d->dataID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -2995,6 +3226,11 @@ void cachePlanetSchematicsTypeMap_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("quantity", (int *)&d->quantity);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -3010,6 +3246,11 @@ void cacheDogmaTypeAttributes_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputFloat("value", &d->value);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -3042,6 +3283,11 @@ void cacheDogmaExpressions_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("expressionAttributeID", (int *)&d->expressionAttributeID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -3062,6 +3308,11 @@ void cacheRamAssemblyLineTypesGroup_draw_edit(edit_window *e) {
     ImGui::Text("activityID:");
     ImGui::Text(d->activityID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -3115,6 +3366,11 @@ void cacheResGraphics_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("isPrototype", (int *)&d->isPrototype);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -3168,6 +3424,11 @@ void cacheInvTypes_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("copyTypeID", (int *)&d->copyTypeID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -3192,6 +3453,11 @@ void cacheResIcons_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("directoryID", (int *)&d->directoryID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -3213,6 +3479,11 @@ void cacheActBillTypes_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("dataID", (int *)&d->dataID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -3226,6 +3497,11 @@ void cachePlanetSchematicsPinMap_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("pinTypeID", (int *)&d->pinTypeID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -3247,6 +3523,11 @@ void cacheInvContrabandTypes_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputFloat("attackMinSec", &d->attackMinSec);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -3272,6 +3553,11 @@ void cacheInvMetaGroups_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("dataID", (int *)&d->dataID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -3300,6 +3586,11 @@ void cacheCertificates_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("dataID", (int *)&d->dataID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -3315,6 +3606,11 @@ void cacheInvTypeMaterials_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("quantity", (int *)&d->quantity);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -3334,6 +3630,11 @@ void cacheResSounds_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("obsolete", (int *)&d->obsolete);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
@@ -3360,6 +3661,3504 @@ void cacheRamActivities_draw_edit(edit_window *e) {
     ImGui::Separator();
     ImGui::InputInt("descriptionID", (int *)&d->descriptionID);
     ImGui::Separator();
+    ImGui::Checkbox("dirty", &d->dirty);
+    if (ImGui::Button("Mark Dirty")) {
+        d->dirty = true;
+    }
+
     ImGui::End();
 }
 
+void draw_main_window() {
+    bool tmp = true;    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheShipTypes")) {        sw.show_cacheShipTypes_search = !sw.show_cacheShipTypes_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheStaOperations")) {        sw.show_cacheStaOperations_search = !sw.show_cacheStaOperations_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheRamAssemblyLineTypesCategory")) {        sw.show_cacheRamAssemblyLineTypesCategory_search = !sw.show_cacheRamAssemblyLineTypesCategory_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheInvCategories")) {        sw.show_cacheInvCategories_search = !sw.show_cacheInvCategories_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheDogmaEffects")) {        sw.show_cacheDogmaEffects_search = !sw.show_cacheDogmaEffects_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheRamCompletedStatuses")) {        sw.show_cacheRamCompletedStatuses_search = !sw.show_cacheRamCompletedStatuses_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheInvBlueprintTypes")) {        sw.show_cacheInvBlueprintTypes_search = !sw.show_cacheInvBlueprintTypes_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheRamTypeRequirements")) {        sw.show_cacheRamTypeRequirements_search = !sw.show_cacheRamTypeRequirements_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheCertificateRelationships")) {        sw.show_cacheCertificateRelationships_search = !sw.show_cacheCertificateRelationships_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheDogmaAttributes")) {        sw.show_cacheDogmaAttributes_search = !sw.show_cacheDogmaAttributes_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheRamAssemblyLineTypes")) {        sw.show_cacheRamAssemblyLineTypes_search = !sw.show_cacheRamAssemblyLineTypes_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheStaStationsStatic")) {        sw.show_cacheStaStationsStatic_search = !sw.show_cacheStaStationsStatic_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheInvGroups")) {        sw.show_cacheInvGroups_search = !sw.show_cacheInvGroups_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheInvMetaTypes")) {        sw.show_cacheInvMetaTypes_search = !sw.show_cacheInvMetaTypes_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheInvTypeReactions")) {        sw.show_cacheInvTypeReactions_search = !sw.show_cacheInvTypeReactions_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheDogmaTypeEffects")) {        sw.show_cacheDogmaTypeEffects_search = !sw.show_cacheDogmaTypeEffects_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cachePlanetSchematics")) {        sw.show_cachePlanetSchematics_search = !sw.show_cachePlanetSchematics_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheDogmaUnits")) {        sw.show_cacheDogmaUnits_search = !sw.show_cacheDogmaUnits_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cachePlanetSchematicsTypeMap")) {        sw.show_cachePlanetSchematicsTypeMap_search = !sw.show_cachePlanetSchematicsTypeMap_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheDogmaTypeAttributes")) {        sw.show_cacheDogmaTypeAttributes_search = !sw.show_cacheDogmaTypeAttributes_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheDogmaExpressions")) {        sw.show_cacheDogmaExpressions_search = !sw.show_cacheDogmaExpressions_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheRamAssemblyLineTypesGroup")) {        sw.show_cacheRamAssemblyLineTypesGroup_search = !sw.show_cacheRamAssemblyLineTypesGroup_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheResGraphics")) {        sw.show_cacheResGraphics_search = !sw.show_cacheResGraphics_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheInvTypes")) {        sw.show_cacheInvTypes_search = !sw.show_cacheInvTypes_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheResIcons")) {        sw.show_cacheResIcons_search = !sw.show_cacheResIcons_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheActBillTypes")) {        sw.show_cacheActBillTypes_search = !sw.show_cacheActBillTypes_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cachePlanetSchematicsPinMap")) {        sw.show_cachePlanetSchematicsPinMap_search = !sw.show_cachePlanetSchematicsPinMap_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheInvContrabandTypes")) {        sw.show_cacheInvContrabandTypes_search = !sw.show_cacheInvContrabandTypes_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheInvMetaGroups")) {        sw.show_cacheInvMetaGroups_search = !sw.show_cacheInvMetaGroups_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheCertificates")) {        sw.show_cacheCertificates_search = !sw.show_cacheCertificates_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheInvTypeMaterials")) {        sw.show_cacheInvTypeMaterials_search = !sw.show_cacheInvTypeMaterials_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheResSounds")) {        sw.show_cacheResSounds_search = !sw.show_cacheResSounds_search;
+
+    }
+
+    ImGui::End();
+    ImGui::Begin("Bulkdata recordsets", &tmp);
+    if(ImGui::Button("Edit cacheRamActivities")) {        sw.show_cacheRamActivities_search = !sw.show_cacheRamActivities_search;
+
+    }
+
+    ImGui::End();
+}
+
+void draw_search_window_cacheShipTypes(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheShipTypes *> results;
+    ImGui::Begin("Search: cacheShipTypes");
+    ImGui::InputText("cacheShipTypes", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheShipTypes.size(); i++) {
+        cacheShipTypes *t = &cc->cache_cacheShipTypes[i];
+    }
+
+    ImGui::Text("This recordset is not searchable");
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheShipTypes *t = results[i];    ImGui::Text("Not Supported");
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheStaOperations(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheStaOperations *> results;
+    ImGui::Begin("Search: cacheStaOperations");
+    ImGui::InputText("cacheStaOperations", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheStaOperations.size(); i++) {
+        cacheStaOperations *t = &cc->cache_cacheStaOperations[i];
+        if (t->operationName != NULL) {
+        if (strstr(t->operationName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheStaOperations *t = results[i];    ImGui::Text("[%d] %s", t->activityID, t->operationName);
+    ImGui::SameLine();
+    if (t->operationName != NULL) {
+    if (ImGui::Button(t->operationName)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->activityID;
+        w->show = true;
+        w->tag = tag_cacheStaOperations;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheRamAssemblyLineTypesCategory(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheRamAssemblyLineTypesCategory *> results;
+    ImGui::Begin("Search: cacheRamAssemblyLineTypesCategory");
+    ImGui::InputText("cacheRamAssemblyLineTypesCategory", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheRamAssemblyLineTypesCategory.size(); i++) {
+        cacheRamAssemblyLineTypesCategory *t = &cc->cache_cacheRamAssemblyLineTypesCategory[i];
+        if (t->activityID != NULL) {
+        if (strstr(t->activityID, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheRamAssemblyLineTypesCategory *t = results[i];    ImGui::Text("[%d] %s", t->assemblyLineTypeID, t->activityID);
+    ImGui::SameLine();
+    if (t->activityID != NULL) {
+    if (ImGui::Button(t->activityID)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->assemblyLineTypeID;
+        w->show = true;
+        w->tag = tag_cacheRamAssemblyLineTypesCategory;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheInvCategories(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheInvCategories *> results;
+    ImGui::Begin("Search: cacheInvCategories");
+    ImGui::InputText("cacheInvCategories", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheInvCategories.size(); i++) {
+        cacheInvCategories *t = &cc->cache_cacheInvCategories[i];
+        if (t->categoryName != NULL) {
+        if (strstr(t->categoryName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheInvCategories *t = results[i];    ImGui::Text("[%d] %s", t->categoryID, t->categoryName);
+    ImGui::SameLine();
+    if (t->categoryName != NULL) {
+    if (ImGui::Button(t->categoryName)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->categoryID;
+        w->show = true;
+        w->tag = tag_cacheInvCategories;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheDogmaEffects(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheDogmaEffects *> results;
+    ImGui::Begin("Search: cacheDogmaEffects");
+    ImGui::InputText("cacheDogmaEffects", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheDogmaEffects.size(); i++) {
+        cacheDogmaEffects *t = &cc->cache_cacheDogmaEffects[i];
+        if (t->effectName != NULL) {
+        if (strstr(t->effectName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->guid != NULL) {
+        if (strstr(t->guid, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->displayName != NULL) {
+        if (strstr(t->displayName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->sfxName != NULL) {
+        if (strstr(t->sfxName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheDogmaEffects *t = results[i];    ImGui::Text("[%d] %s", t->effectID, t->effectName);
+    ImGui::SameLine();
+    if (t->effectName != NULL) {
+    if (ImGui::Button(t->effectName)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->effectID;
+        w->show = true;
+        w->tag = tag_cacheDogmaEffects;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheRamCompletedStatuses(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheRamCompletedStatuses *> results;
+    ImGui::Begin("Search: cacheRamCompletedStatuses");
+    ImGui::InputText("cacheRamCompletedStatuses", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheRamCompletedStatuses.size(); i++) {
+        cacheRamCompletedStatuses *t = &cc->cache_cacheRamCompletedStatuses[i];
+        if (t->completedStatusText != NULL) {
+        if (strstr(t->completedStatusText, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheRamCompletedStatuses *t = results[i];    ImGui::Text("[%d] %s", t->completedStatus, t->completedStatusText);
+    ImGui::SameLine();
+    if (t->completedStatusText != NULL) {
+    if (ImGui::Button(t->completedStatusText)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->completedStatus;
+        w->show = true;
+        w->tag = tag_cacheRamCompletedStatuses;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheInvBlueprintTypes(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheInvBlueprintTypes *> results;
+    ImGui::Begin("Search: cacheInvBlueprintTypes");
+    ImGui::InputText("cacheInvBlueprintTypes", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheInvBlueprintTypes.size(); i++) {
+        cacheInvBlueprintTypes *t = &cc->cache_cacheInvBlueprintTypes[i];
+    }
+
+    ImGui::Text("This recordset is not searchable");
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheInvBlueprintTypes *t = results[i];    ImGui::Text("Not Supported");
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheRamTypeRequirements(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheRamTypeRequirements *> results;
+    ImGui::Begin("Search: cacheRamTypeRequirements");
+    ImGui::InputText("cacheRamTypeRequirements", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheRamTypeRequirements.size(); i++) {
+        cacheRamTypeRequirements *t = &cc->cache_cacheRamTypeRequirements[i];
+    }
+
+    ImGui::Text("This recordset is not searchable");
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheRamTypeRequirements *t = results[i];    ImGui::Text("Not Supported");
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheCertificateRelationships(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheCertificateRelationships *> results;
+    ImGui::Begin("Search: cacheCertificateRelationships");
+    ImGui::InputText("cacheCertificateRelationships", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheCertificateRelationships.size(); i++) {
+        cacheCertificateRelationships *t = &cc->cache_cacheCertificateRelationships[i];
+    }
+
+    ImGui::Text("This recordset is not searchable");
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheCertificateRelationships *t = results[i];    ImGui::Text("Not Supported");
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheDogmaAttributes(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheDogmaAttributes *> results;
+    ImGui::Begin("Search: cacheDogmaAttributes");
+    ImGui::InputText("cacheDogmaAttributes", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheDogmaAttributes.size(); i++) {
+        cacheDogmaAttributes *t = &cc->cache_cacheDogmaAttributes[i];
+        if (t->attributeName != NULL) {
+        if (strstr(t->attributeName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->displayName != NULL) {
+        if (strstr(t->displayName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheDogmaAttributes *t = results[i];    ImGui::Text("[%d] %s", t->attributeID, t->attributeName);
+    ImGui::SameLine();
+    if (t->attributeName != NULL) {
+    if (ImGui::Button(t->attributeName)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->attributeID;
+        w->show = true;
+        w->tag = tag_cacheDogmaAttributes;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheRamAssemblyLineTypes(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheRamAssemblyLineTypes *> results;
+    ImGui::Begin("Search: cacheRamAssemblyLineTypes");
+    ImGui::InputText("cacheRamAssemblyLineTypes", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheRamAssemblyLineTypes.size(); i++) {
+        cacheRamAssemblyLineTypes *t = &cc->cache_cacheRamAssemblyLineTypes[i];
+        if (t->assemblyLineTypeName != NULL) {
+        if (strstr(t->assemblyLineTypeName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheRamAssemblyLineTypes *t = results[i];    ImGui::Text("[%d] %s", t->assemblyLineTypeID, t->assemblyLineTypeName);
+    ImGui::SameLine();
+    if (t->assemblyLineTypeName != NULL) {
+    if (ImGui::Button(t->assemblyLineTypeName)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->assemblyLineTypeID;
+        w->show = true;
+        w->tag = tag_cacheRamAssemblyLineTypes;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheStaStationsStatic(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheStaStationsStatic *> results;
+    ImGui::Begin("Search: cacheStaStationsStatic");
+    ImGui::InputText("cacheStaStationsStatic", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheStaStationsStatic.size(); i++) {
+        cacheStaStationsStatic *t = &cc->cache_cacheStaStationsStatic[i];
+        if (t->stationName != NULL) {
+        if (strstr(t->stationName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheStaStationsStatic *t = results[i];    ImGui::Text("[%d] %s", t->stationID, t->stationName);
+    ImGui::SameLine();
+    if (t->stationName != NULL) {
+    if (ImGui::Button(t->stationName)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->stationID;
+        w->show = true;
+        w->tag = tag_cacheStaStationsStatic;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheInvGroups(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheInvGroups *> results;
+    ImGui::Begin("Search: cacheInvGroups");
+    ImGui::InputText("cacheInvGroups", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheInvGroups.size(); i++) {
+        cacheInvGroups *t = &cc->cache_cacheInvGroups[i];
+        if (t->groupName != NULL) {
+        if (strstr(t->groupName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheInvGroups *t = results[i];    ImGui::Text("[%d] %s", t->groupID, t->groupName);
+    ImGui::SameLine();
+    if (t->groupName != NULL) {
+    if (ImGui::Button(t->groupName)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->groupID;
+        w->show = true;
+        w->tag = tag_cacheInvGroups;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheInvMetaTypes(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheInvMetaTypes *> results;
+    ImGui::Begin("Search: cacheInvMetaTypes");
+    ImGui::InputText("cacheInvMetaTypes", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheInvMetaTypes.size(); i++) {
+        cacheInvMetaTypes *t = &cc->cache_cacheInvMetaTypes[i];
+    }
+
+    ImGui::Text("This recordset is not searchable");
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheInvMetaTypes *t = results[i];    ImGui::Text("Not Supported");
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheInvTypeReactions(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheInvTypeReactions *> results;
+    ImGui::Begin("Search: cacheInvTypeReactions");
+    ImGui::InputText("cacheInvTypeReactions", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheInvTypeReactions.size(); i++) {
+        cacheInvTypeReactions *t = &cc->cache_cacheInvTypeReactions[i];
+    }
+
+    ImGui::Text("This recordset is not searchable");
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheInvTypeReactions *t = results[i];    ImGui::Text("Not Supported");
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheDogmaTypeEffects(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheDogmaTypeEffects *> results;
+    ImGui::Begin("Search: cacheDogmaTypeEffects");
+    ImGui::InputText("cacheDogmaTypeEffects", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheDogmaTypeEffects.size(); i++) {
+        cacheDogmaTypeEffects *t = &cc->cache_cacheDogmaTypeEffects[i];
+    }
+
+    ImGui::Text("This recordset is not searchable");
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheDogmaTypeEffects *t = results[i];    ImGui::Text("Not Supported");
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cachePlanetSchematics(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cachePlanetSchematics *> results;
+    ImGui::Begin("Search: cachePlanetSchematics");
+    ImGui::InputText("cachePlanetSchematics", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cachePlanetSchematics.size(); i++) {
+        cachePlanetSchematics *t = &cc->cache_cachePlanetSchematics[i];
+        if (t->schematicName != NULL) {
+        if (strstr(t->schematicName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cachePlanetSchematics *t = results[i];    ImGui::Text("[%d] %s", t->schematicID, t->schematicName);
+    ImGui::SameLine();
+    if (t->schematicName != NULL) {
+    if (ImGui::Button(t->schematicName)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->schematicID;
+        w->show = true;
+        w->tag = tag_cachePlanetSchematics;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheDogmaUnits(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheDogmaUnits *> results;
+    ImGui::Begin("Search: cacheDogmaUnits");
+    ImGui::InputText("cacheDogmaUnits", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheDogmaUnits.size(); i++) {
+        cacheDogmaUnits *t = &cc->cache_cacheDogmaUnits[i];
+        if (t->unitName != NULL) {
+        if (strstr(t->unitName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->displayName != NULL) {
+        if (strstr(t->displayName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheDogmaUnits *t = results[i];    ImGui::Text("[%d] %s", t->unitID, t->unitName);
+    ImGui::SameLine();
+    if (t->unitName != NULL) {
+    if (ImGui::Button(t->unitName)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->unitID;
+        w->show = true;
+        w->tag = tag_cacheDogmaUnits;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cachePlanetSchematicsTypeMap(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cachePlanetSchematicsTypeMap *> results;
+    ImGui::Begin("Search: cachePlanetSchematicsTypeMap");
+    ImGui::InputText("cachePlanetSchematicsTypeMap", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cachePlanetSchematicsTypeMap.size(); i++) {
+        cachePlanetSchematicsTypeMap *t = &cc->cache_cachePlanetSchematicsTypeMap[i];
+    }
+
+    ImGui::Text("This recordset is not searchable");
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cachePlanetSchematicsTypeMap *t = results[i];    ImGui::Text("Not Supported");
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheDogmaTypeAttributes(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheDogmaTypeAttributes *> results;
+    ImGui::Begin("Search: cacheDogmaTypeAttributes");
+    ImGui::InputText("cacheDogmaTypeAttributes", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheDogmaTypeAttributes.size(); i++) {
+        cacheDogmaTypeAttributes *t = &cc->cache_cacheDogmaTypeAttributes[i];
+    }
+
+    ImGui::Text("This recordset is not searchable");
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheDogmaTypeAttributes *t = results[i];    ImGui::Text("Not Supported");
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheDogmaExpressions(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheDogmaExpressions *> results;
+    ImGui::Begin("Search: cacheDogmaExpressions");
+    ImGui::InputText("cacheDogmaExpressions", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheDogmaExpressions.size(); i++) {
+        cacheDogmaExpressions *t = &cc->cache_cacheDogmaExpressions[i];
+        if (t->expressionValue != NULL) {
+        if (strstr(t->expressionValue, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->expressionName != NULL) {
+        if (strstr(t->expressionName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheDogmaExpressions *t = results[i];    ImGui::Text("[%d] %s", t->expressionID, t->expressionValue);
+    ImGui::SameLine();
+    if (t->expressionValue != NULL) {
+    if (ImGui::Button(t->expressionValue)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->expressionID;
+        w->show = true;
+        w->tag = tag_cacheDogmaExpressions;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheRamAssemblyLineTypesGroup(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheRamAssemblyLineTypesGroup *> results;
+    ImGui::Begin("Search: cacheRamAssemblyLineTypesGroup");
+    ImGui::InputText("cacheRamAssemblyLineTypesGroup", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheRamAssemblyLineTypesGroup.size(); i++) {
+        cacheRamAssemblyLineTypesGroup *t = &cc->cache_cacheRamAssemblyLineTypesGroup[i];
+        if (t->activityID != NULL) {
+        if (strstr(t->activityID, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheRamAssemblyLineTypesGroup *t = results[i];    ImGui::Text("[%d] %s", t->assemblyLineTypeID, t->activityID);
+    ImGui::SameLine();
+    if (t->activityID != NULL) {
+    if (ImGui::Button(t->activityID)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->assemblyLineTypeID;
+        w->show = true;
+        w->tag = tag_cacheRamAssemblyLineTypesGroup;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheResGraphics(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheResGraphics *> results;
+    ImGui::Begin("Search: cacheResGraphics");
+    ImGui::InputText("cacheResGraphics", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheResGraphics.size(); i++) {
+        cacheResGraphics *t = &cc->cache_cacheResGraphics[i];
+        if (t->graphicFile != NULL) {
+        if (strstr(t->graphicFile, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->graphicName != NULL) {
+        if (strstr(t->graphicName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->graphicType != NULL) {
+        if (strstr(t->graphicType, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->collisionFile != NULL) {
+        if (strstr(t->collisionFile, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->paperdollFile != NULL) {
+        if (strstr(t->paperdollFile, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheResGraphics *t = results[i];    ImGui::Text("[%d] %s", t->graphicID, t->graphicFile);
+    ImGui::SameLine();
+    if (t->graphicFile != NULL) {
+    if (ImGui::Button(t->graphicFile)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->graphicID;
+        w->show = true;
+        w->tag = tag_cacheResGraphics;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheInvTypes(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheInvTypes *> results;
+    ImGui::Begin("Search: cacheInvTypes");
+    ImGui::InputText("cacheInvTypes", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheInvTypes.size(); i++) {
+        cacheInvTypes *t = &cc->cache_cacheInvTypes[i];
+        if (t->typeName != NULL) {
+        if (strstr(t->typeName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheInvTypes *t = results[i];    ImGui::Text("[%d] %s", t->typeID, t->typeName);
+    ImGui::SameLine();
+    if (t->typeName != NULL) {
+    if (ImGui::Button(t->typeName)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->typeID;
+        w->show = true;
+        w->tag = tag_cacheInvTypes;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheResIcons(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheResIcons *> results;
+    ImGui::Begin("Search: cacheResIcons");
+    ImGui::InputText("cacheResIcons", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheResIcons.size(); i++) {
+        cacheResIcons *t = &cc->cache_cacheResIcons[i];
+        if (t->iconFile != NULL) {
+        if (strstr(t->iconFile, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->iconType != NULL) {
+        if (strstr(t->iconType, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheResIcons *t = results[i];    ImGui::Text("[%d] %s", t->iconID, t->iconFile);
+    ImGui::SameLine();
+    if (t->iconFile != NULL) {
+    if (ImGui::Button(t->iconFile)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->iconID;
+        w->show = true;
+        w->tag = tag_cacheResIcons;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheActBillTypes(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheActBillTypes *> results;
+    ImGui::Begin("Search: cacheActBillTypes");
+    ImGui::InputText("cacheActBillTypes", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheActBillTypes.size(); i++) {
+        cacheActBillTypes *t = &cc->cache_cacheActBillTypes[i];
+        if (t->billTypeName != NULL) {
+        if (strstr(t->billTypeName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheActBillTypes *t = results[i];    ImGui::Text("[%d] %s", t->billTypeID, t->billTypeName);
+    ImGui::SameLine();
+    if (t->billTypeName != NULL) {
+    if (ImGui::Button(t->billTypeName)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->billTypeID;
+        w->show = true;
+        w->tag = tag_cacheActBillTypes;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cachePlanetSchematicsPinMap(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cachePlanetSchematicsPinMap *> results;
+    ImGui::Begin("Search: cachePlanetSchematicsPinMap");
+    ImGui::InputText("cachePlanetSchematicsPinMap", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cachePlanetSchematicsPinMap.size(); i++) {
+        cachePlanetSchematicsPinMap *t = &cc->cache_cachePlanetSchematicsPinMap[i];
+    }
+
+    ImGui::Text("This recordset is not searchable");
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cachePlanetSchematicsPinMap *t = results[i];    ImGui::Text("Not Supported");
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheInvContrabandTypes(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheInvContrabandTypes *> results;
+    ImGui::Begin("Search: cacheInvContrabandTypes");
+    ImGui::InputText("cacheInvContrabandTypes", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheInvContrabandTypes.size(); i++) {
+        cacheInvContrabandTypes *t = &cc->cache_cacheInvContrabandTypes[i];
+    }
+
+    ImGui::Text("This recordset is not searchable");
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheInvContrabandTypes *t = results[i];    ImGui::Text("Not Supported");
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheInvMetaGroups(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheInvMetaGroups *> results;
+    ImGui::Begin("Search: cacheInvMetaGroups");
+    ImGui::InputText("cacheInvMetaGroups", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheInvMetaGroups.size(); i++) {
+        cacheInvMetaGroups *t = &cc->cache_cacheInvMetaGroups[i];
+        if (t->metaGroupName != NULL) {
+        if (strstr(t->metaGroupName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheInvMetaGroups *t = results[i];    ImGui::Text("[%d] %s", t->metaGroupID, t->metaGroupName);
+    ImGui::SameLine();
+    if (t->metaGroupName != NULL) {
+    if (ImGui::Button(t->metaGroupName)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->metaGroupID;
+        w->show = true;
+        w->tag = tag_cacheInvMetaGroups;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheCertificates(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheCertificates *> results;
+    ImGui::Begin("Search: cacheCertificates");
+    ImGui::InputText("cacheCertificates", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheCertificates.size(); i++) {
+        cacheCertificates *t = &cc->cache_cacheCertificates[i];
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheCertificates *t = results[i];    ImGui::Text("[%d] %s", t->certificateID, t->description);
+    ImGui::SameLine();
+    if (t->description != NULL) {
+    if (ImGui::Button(t->description)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->certificateID;
+        w->show = true;
+        w->tag = tag_cacheCertificates;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheInvTypeMaterials(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheInvTypeMaterials *> results;
+    ImGui::Begin("Search: cacheInvTypeMaterials");
+    ImGui::InputText("cacheInvTypeMaterials", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheInvTypeMaterials.size(); i++) {
+        cacheInvTypeMaterials *t = &cc->cache_cacheInvTypeMaterials[i];
+    }
+
+    ImGui::Text("This recordset is not searchable");
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheInvTypeMaterials *t = results[i];    ImGui::Text("Not Supported");
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheResSounds(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheResSounds *> results;
+    ImGui::Begin("Search: cacheResSounds");
+    ImGui::InputText("cacheResSounds", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheResSounds.size(); i++) {
+        cacheResSounds *t = &cc->cache_cacheResSounds[i];
+        if (t->soundFile != NULL) {
+        if (strstr(t->soundFile, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheResSounds *t = results[i];    ImGui::Text("[%d] %s", t->soundID, t->soundFile);
+    ImGui::SameLine();
+    if (t->soundFile != NULL) {
+    if (ImGui::Button(t->soundFile)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->soundID;
+        w->show = true;
+        w->tag = tag_cacheResSounds;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_window_cacheRamActivities(cache_collection *cc, std::list<edit_window *> *window_list) {
+    static char buffer[1024];
+    std::vector<cacheRamActivities *> results;
+    ImGui::Begin("Search: cacheRamActivities");
+    ImGui::InputText("cacheRamActivities", buffer, 1024);
+    if (strcmp(buffer, "") != 0) {
+
+    for (uint32_t i = 0; i < cc->cache_cacheRamActivities.size(); i++) {
+        cacheRamActivities *t = &cc->cache_cacheRamActivities[i];
+        if (t->activityName != NULL) {
+        if (strstr(t->activityName, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->iconNo != NULL) {
+        if (strstr(t->iconNo, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+        if (t->description != NULL) {
+        if (strstr(t->description, buffer) != NULL) {
+        results.push_back(t);
+        }
+
+        }
+
+    }
+
+    ImGui::Text("Results: %d", results.size());
+    ImGui::Separator();
+
+    for (uint32_t i = 0; i < results.size(); i++) {
+        cacheRamActivities *t = results[i];    ImGui::Text("[%d] %s", t->activityID, t->activityName);
+    ImGui::SameLine();
+    if (t->activityName != NULL) {
+    if (ImGui::Button(t->activityName)) {
+        printf("Opening window\n");
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = t;
+        w->typeID = t->activityID;
+        w->show = true;
+        w->tag = tag_cacheRamActivities;
+        window_list->push_back(w);
+    }
+
+    }
+
+    ImGui::Separator();
+
+    }
+    }
+    ImGui::End();
+}
+
+void draw_search_windows(cache_collection *cc, std::list<edit_window *> *window_list) {
+    if (sw.show_cacheShipTypes_search) {
+        draw_search_window_cacheShipTypes(cc, window_list);    }
+
+    if (sw.show_cacheStaOperations_search) {
+        draw_search_window_cacheStaOperations(cc, window_list);    }
+
+    if (sw.show_cacheRamAssemblyLineTypesCategory_search) {
+        draw_search_window_cacheRamAssemblyLineTypesCategory(cc, window_list);    }
+
+    if (sw.show_cacheInvCategories_search) {
+        draw_search_window_cacheInvCategories(cc, window_list);    }
+
+    if (sw.show_cacheDogmaEffects_search) {
+        draw_search_window_cacheDogmaEffects(cc, window_list);    }
+
+    if (sw.show_cacheRamCompletedStatuses_search) {
+        draw_search_window_cacheRamCompletedStatuses(cc, window_list);    }
+
+    if (sw.show_cacheInvBlueprintTypes_search) {
+        draw_search_window_cacheInvBlueprintTypes(cc, window_list);    }
+
+    if (sw.show_cacheRamTypeRequirements_search) {
+        draw_search_window_cacheRamTypeRequirements(cc, window_list);    }
+
+    if (sw.show_cacheCertificateRelationships_search) {
+        draw_search_window_cacheCertificateRelationships(cc, window_list);    }
+
+    if (sw.show_cacheDogmaAttributes_search) {
+        draw_search_window_cacheDogmaAttributes(cc, window_list);    }
+
+    if (sw.show_cacheRamAssemblyLineTypes_search) {
+        draw_search_window_cacheRamAssemblyLineTypes(cc, window_list);    }
+
+    if (sw.show_cacheStaStationsStatic_search) {
+        draw_search_window_cacheStaStationsStatic(cc, window_list);    }
+
+    if (sw.show_cacheInvGroups_search) {
+        draw_search_window_cacheInvGroups(cc, window_list);    }
+
+    if (sw.show_cacheInvMetaTypes_search) {
+        draw_search_window_cacheInvMetaTypes(cc, window_list);    }
+
+    if (sw.show_cacheInvTypeReactions_search) {
+        draw_search_window_cacheInvTypeReactions(cc, window_list);    }
+
+    if (sw.show_cacheDogmaTypeEffects_search) {
+        draw_search_window_cacheDogmaTypeEffects(cc, window_list);    }
+
+    if (sw.show_cachePlanetSchematics_search) {
+        draw_search_window_cachePlanetSchematics(cc, window_list);    }
+
+    if (sw.show_cacheDogmaUnits_search) {
+        draw_search_window_cacheDogmaUnits(cc, window_list);    }
+
+    if (sw.show_cachePlanetSchematicsTypeMap_search) {
+        draw_search_window_cachePlanetSchematicsTypeMap(cc, window_list);    }
+
+    if (sw.show_cacheDogmaTypeAttributes_search) {
+        draw_search_window_cacheDogmaTypeAttributes(cc, window_list);    }
+
+    if (sw.show_cacheDogmaExpressions_search) {
+        draw_search_window_cacheDogmaExpressions(cc, window_list);    }
+
+    if (sw.show_cacheRamAssemblyLineTypesGroup_search) {
+        draw_search_window_cacheRamAssemblyLineTypesGroup(cc, window_list);    }
+
+    if (sw.show_cacheResGraphics_search) {
+        draw_search_window_cacheResGraphics(cc, window_list);    }
+
+    if (sw.show_cacheInvTypes_search) {
+        draw_search_window_cacheInvTypes(cc, window_list);    }
+
+    if (sw.show_cacheResIcons_search) {
+        draw_search_window_cacheResIcons(cc, window_list);    }
+
+    if (sw.show_cacheActBillTypes_search) {
+        draw_search_window_cacheActBillTypes(cc, window_list);    }
+
+    if (sw.show_cachePlanetSchematicsPinMap_search) {
+        draw_search_window_cachePlanetSchematicsPinMap(cc, window_list);    }
+
+    if (sw.show_cacheInvContrabandTypes_search) {
+        draw_search_window_cacheInvContrabandTypes(cc, window_list);    }
+
+    if (sw.show_cacheInvMetaGroups_search) {
+        draw_search_window_cacheInvMetaGroups(cc, window_list);    }
+
+    if (sw.show_cacheCertificates_search) {
+        draw_search_window_cacheCertificates(cc, window_list);    }
+
+    if (sw.show_cacheInvTypeMaterials_search) {
+        draw_search_window_cacheInvTypeMaterials(cc, window_list);    }
+
+    if (sw.show_cacheResSounds_search) {
+        draw_search_window_cacheResSounds(cc, window_list);    }
+
+    if (sw.show_cacheRamActivities_search) {
+        draw_search_window_cacheRamActivities(cc, window_list);    }
+
+}
+
+void window_list_draw(std::list<edit_window *> *window_list) {
+for (auto it = window_list->begin(); it != window_list->end(); it++) {
+    edit_window *w = *it;
+    if (w->show == false) {
+        it = window_list->erase(it);
+        printf("Closing edit window\n");        continue;    }
+
+    switch (w->tag) {    case tag_cacheShipTypes: {
+        cacheShipTypes_draw_edit(w);
+    } break;    case tag_cacheStaOperations: {
+        cacheStaOperations_draw_edit(w);
+    } break;    case tag_cacheRamAssemblyLineTypesCategory: {
+        cacheRamAssemblyLineTypesCategory_draw_edit(w);
+    } break;    case tag_cacheInvCategories: {
+        cacheInvCategories_draw_edit(w);
+    } break;    case tag_cacheDogmaEffects: {
+        cacheDogmaEffects_draw_edit(w);
+    } break;    case tag_cacheRamCompletedStatuses: {
+        cacheRamCompletedStatuses_draw_edit(w);
+    } break;    case tag_cacheInvBlueprintTypes: {
+        cacheInvBlueprintTypes_draw_edit(w);
+    } break;    case tag_cacheRamTypeRequirements: {
+        cacheRamTypeRequirements_draw_edit(w);
+    } break;    case tag_cacheCertificateRelationships: {
+        cacheCertificateRelationships_draw_edit(w);
+    } break;    case tag_cacheDogmaAttributes: {
+        cacheDogmaAttributes_draw_edit(w);
+    } break;    case tag_cacheRamAssemblyLineTypes: {
+        cacheRamAssemblyLineTypes_draw_edit(w);
+    } break;    case tag_cacheStaStationsStatic: {
+        cacheStaStationsStatic_draw_edit(w);
+    } break;    case tag_cacheInvGroups: {
+        cacheInvGroups_draw_edit(w);
+    } break;    case tag_cacheInvMetaTypes: {
+        cacheInvMetaTypes_draw_edit(w);
+    } break;    case tag_cacheInvTypeReactions: {
+        cacheInvTypeReactions_draw_edit(w);
+    } break;    case tag_cacheDogmaTypeEffects: {
+        cacheDogmaTypeEffects_draw_edit(w);
+    } break;    case tag_cachePlanetSchematics: {
+        cachePlanetSchematics_draw_edit(w);
+    } break;    case tag_cacheDogmaUnits: {
+        cacheDogmaUnits_draw_edit(w);
+    } break;    case tag_cachePlanetSchematicsTypeMap: {
+        cachePlanetSchematicsTypeMap_draw_edit(w);
+    } break;    case tag_cacheDogmaTypeAttributes: {
+        cacheDogmaTypeAttributes_draw_edit(w);
+    } break;    case tag_cacheDogmaExpressions: {
+        cacheDogmaExpressions_draw_edit(w);
+    } break;    case tag_cacheRamAssemblyLineTypesGroup: {
+        cacheRamAssemblyLineTypesGroup_draw_edit(w);
+    } break;    case tag_cacheResGraphics: {
+        cacheResGraphics_draw_edit(w);
+    } break;    case tag_cacheInvTypes: {
+        cacheInvTypes_draw_edit(w);
+    } break;    case tag_cacheResIcons: {
+        cacheResIcons_draw_edit(w);
+    } break;    case tag_cacheActBillTypes: {
+        cacheActBillTypes_draw_edit(w);
+    } break;    case tag_cachePlanetSchematicsPinMap: {
+        cachePlanetSchematicsPinMap_draw_edit(w);
+    } break;    case tag_cacheInvContrabandTypes: {
+        cacheInvContrabandTypes_draw_edit(w);
+    } break;    case tag_cacheInvMetaGroups: {
+        cacheInvMetaGroups_draw_edit(w);
+    } break;    case tag_cacheCertificates: {
+        cacheCertificates_draw_edit(w);
+    } break;    case tag_cacheInvTypeMaterials: {
+        cacheInvTypeMaterials_draw_edit(w);
+    } break;    case tag_cacheResSounds: {
+        cacheResSounds_draw_edit(w);
+    } break;    case tag_cacheRamActivities: {
+        cacheRamActivities_draw_edit(w);
+    } break;    }
+
+}
+
+}
+
+#include <string>
+void cacheShipTypes_save(cacheShipTypes *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheShipTypes SET ");
+    sql.append("shipTypeID = ");
+sql.append(std::to_string(data->shipTypeID));
+sql.append(", ");
+    sql.append("weaponTypeID = ");
+sql.append(std::to_string(data->weaponTypeID));
+sql.append(", ");
+    sql.append("miningTypeID = ");
+sql.append(std::to_string(data->miningTypeID));
+sql.append(", ");
+    sql.append("skillTypeID = ");
+sql.append(std::to_string(data->skillTypeID));
+   sql.append(" WHERE shipTypeID = ");
+   sql.append(std::to_string(data->shipTypeID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheStaOperations_save(cacheStaOperations *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheStaOperations SET ");
+    sql.append("activityID = ");
+sql.append(std::to_string(data->activityID));
+sql.append(", ");
+    sql.append("operationID = ");
+sql.append(std::to_string(data->operationID));
+sql.append(", ");
+    sql.append("operationName = ");
+sql.append("'");
+sql.append(data->operationName);
+sql.append("'");
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("fringe = ");
+sql.append(std::to_string(data->fringe));
+sql.append(", ");
+    sql.append("corridor = ");
+sql.append(std::to_string(data->corridor));
+sql.append(", ");
+    sql.append("hub = ");
+sql.append(std::to_string(data->hub));
+sql.append(", ");
+    sql.append("border = ");
+sql.append(std::to_string(data->border));
+sql.append(", ");
+    sql.append("ratio = ");
+sql.append(std::to_string(data->ratio));
+sql.append(", ");
+    sql.append("caldariStationTypeID = ");
+sql.append(std::to_string(data->caldariStationTypeID));
+sql.append(", ");
+    sql.append("minmatarStationTypeID = ");
+sql.append(std::to_string(data->minmatarStationTypeID));
+sql.append(", ");
+    sql.append("amarrStationTypeID = ");
+sql.append(std::to_string(data->amarrStationTypeID));
+sql.append(", ");
+    sql.append("gallenteStationTypeID = ");
+sql.append(std::to_string(data->gallenteStationTypeID));
+sql.append(", ");
+    sql.append("joveStationTypeID = ");
+sql.append(std::to_string(data->joveStationTypeID));
+sql.append(", ");
+    sql.append("operationNameID = ");
+sql.append(std::to_string(data->operationNameID));
+sql.append(", ");
+    sql.append("descriptionID = ");
+sql.append(std::to_string(data->descriptionID));
+sql.append(", ");
+    sql.append("serviceMask = ");
+sql.append(std::to_string(data->serviceMask));
+   sql.append(" WHERE activityID = ");
+   sql.append(std::to_string(data->activityID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheRamAssemblyLineTypesCategory_save(cacheRamAssemblyLineTypesCategory *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheRamAssemblyLineTypesCategory SET ");
+    sql.append("assemblyLineTypeID = ");
+sql.append(std::to_string(data->assemblyLineTypeID));
+sql.append(", ");
+    sql.append("categoryID = ");
+sql.append(std::to_string(data->categoryID));
+sql.append(", ");
+    sql.append("timeMultiplier = ");
+sql.append(std::to_string(data->timeMultiplier));
+sql.append(", ");
+    sql.append("materialMultiplier = ");
+sql.append(std::to_string(data->materialMultiplier));
+sql.append(", ");
+    sql.append("activityID = ");
+sql.append(data->activityID);
+   sql.append(" WHERE assemblyLineTypeID = ");
+   sql.append(std::to_string(data->assemblyLineTypeID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheInvCategories_save(cacheInvCategories *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheInvCategories SET ");
+    sql.append("categoryID = ");
+sql.append(std::to_string(data->categoryID));
+sql.append(", ");
+    sql.append("categoryName = ");
+sql.append("'");
+sql.append(data->categoryName);
+sql.append("'");
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("published = ");
+sql.append(std::to_string(data->published));
+sql.append(", ");
+    sql.append("iconID = ");
+sql.append(std::to_string(data->iconID));
+sql.append(", ");
+    sql.append("categoryNameID = ");
+sql.append(std::to_string(data->categoryNameID));
+sql.append(", ");
+    sql.append("dataID = ");
+sql.append(std::to_string(data->dataID));
+   sql.append(" WHERE categoryID = ");
+   sql.append(std::to_string(data->categoryID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheDogmaEffects_save(cacheDogmaEffects *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheDogmaEffects SET ");
+    sql.append("effectID = ");
+sql.append(std::to_string(data->effectID));
+sql.append(", ");
+    sql.append("effectName = ");
+sql.append("'");
+sql.append(data->effectName);
+sql.append("'");
+sql.append(", ");
+    sql.append("effectCategory = ");
+sql.append(std::to_string(data->effectCategory));
+sql.append(", ");
+    sql.append("preExpression = ");
+sql.append(std::to_string(data->preExpression));
+sql.append(", ");
+    sql.append("postExpression = ");
+sql.append(std::to_string(data->postExpression));
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("guid = ");
+sql.append("'");
+sql.append(data->guid);
+sql.append("'");
+sql.append(", ");
+    sql.append("isOffensive = ");
+sql.append(std::to_string(data->isOffensive));
+sql.append(", ");
+    sql.append("isAssistance = ");
+sql.append(std::to_string(data->isAssistance));
+sql.append(", ");
+    sql.append("durationAttributeID = ");
+sql.append(std::to_string(data->durationAttributeID));
+sql.append(", ");
+    sql.append("trackingSpeedAttributeID = ");
+sql.append(std::to_string(data->trackingSpeedAttributeID));
+sql.append(", ");
+    sql.append("dischargeAttributeID = ");
+sql.append(std::to_string(data->dischargeAttributeID));
+sql.append(", ");
+    sql.append("rangeAttributeID = ");
+sql.append(std::to_string(data->rangeAttributeID));
+sql.append(", ");
+    sql.append("falloffAttributeID = ");
+sql.append(std::to_string(data->falloffAttributeID));
+sql.append(", ");
+    sql.append("disallowAutoRepeat = ");
+sql.append(std::to_string(data->disallowAutoRepeat));
+sql.append(", ");
+    sql.append("published = ");
+sql.append(std::to_string(data->published));
+sql.append(", ");
+    sql.append("displayName = ");
+sql.append("'");
+sql.append(data->displayName);
+sql.append("'");
+sql.append(", ");
+    sql.append("isWarpSafe = ");
+sql.append(std::to_string(data->isWarpSafe));
+sql.append(", ");
+    sql.append("rangeChance = ");
+sql.append(std::to_string(data->rangeChance));
+sql.append(", ");
+    sql.append("electronicChance = ");
+sql.append(std::to_string(data->electronicChance));
+sql.append(", ");
+    sql.append("propulsionChance = ");
+sql.append(std::to_string(data->propulsionChance));
+sql.append(", ");
+    sql.append("distribution = ");
+sql.append(std::to_string(data->distribution));
+sql.append(", ");
+    sql.append("sfxName = ");
+sql.append("'");
+sql.append(data->sfxName);
+sql.append("'");
+sql.append(", ");
+    sql.append("npcUsageChanceAttributeID = ");
+sql.append(std::to_string(data->npcUsageChanceAttributeID));
+sql.append(", ");
+    sql.append("npcActivationChanceAttributeID = ");
+sql.append(std::to_string(data->npcActivationChanceAttributeID));
+sql.append(", ");
+    sql.append("fittingUsageChanceAttributeID = ");
+sql.append(std::to_string(data->fittingUsageChanceAttributeID));
+sql.append(", ");
+    sql.append("iconID = ");
+sql.append(std::to_string(data->iconID));
+sql.append(", ");
+    sql.append("displayNameID = ");
+sql.append(std::to_string(data->displayNameID));
+sql.append(", ");
+    sql.append("descriptionID = ");
+sql.append(std::to_string(data->descriptionID));
+sql.append(", ");
+    sql.append("dataID = ");
+sql.append(std::to_string(data->dataID));
+   sql.append(" WHERE effectID = ");
+   sql.append(std::to_string(data->effectID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheRamCompletedStatuses_save(cacheRamCompletedStatuses *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheRamCompletedStatuses SET ");
+    sql.append("completedStatus = ");
+sql.append(std::to_string(data->completedStatus));
+sql.append(", ");
+    sql.append("completedStatusText = ");
+sql.append("'");
+sql.append(data->completedStatusText);
+sql.append("'");
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("completedStatusTextID = ");
+sql.append(std::to_string(data->completedStatusTextID));
+   sql.append(" WHERE completedStatus = ");
+   sql.append(std::to_string(data->completedStatus));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheInvBlueprintTypes_save(cacheInvBlueprintTypes *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheInvBlueprintTypes SET ");
+    sql.append("blueprintTypeID = ");
+sql.append(std::to_string(data->blueprintTypeID));
+sql.append(", ");
+    sql.append("parentBlueprintTypeID = ");
+sql.append(std::to_string(data->parentBlueprintTypeID));
+sql.append(", ");
+    sql.append("productTypeID = ");
+sql.append(std::to_string(data->productTypeID));
+sql.append(", ");
+    sql.append("productionTime = ");
+sql.append(std::to_string(data->productionTime));
+sql.append(", ");
+    sql.append("techLevel = ");
+sql.append(std::to_string(data->techLevel));
+sql.append(", ");
+    sql.append("researchProductivityTime = ");
+sql.append(std::to_string(data->researchProductivityTime));
+sql.append(", ");
+    sql.append("researchMaterialTime = ");
+sql.append(std::to_string(data->researchMaterialTime));
+sql.append(", ");
+    sql.append("researchCopyTime = ");
+sql.append(std::to_string(data->researchCopyTime));
+sql.append(", ");
+    sql.append("researchTechTime = ");
+sql.append(std::to_string(data->researchTechTime));
+sql.append(", ");
+    sql.append("productivityModifier = ");
+sql.append(std::to_string(data->productivityModifier));
+sql.append(", ");
+    sql.append("materialModifier = ");
+sql.append(std::to_string(data->materialModifier));
+sql.append(", ");
+    sql.append("wasteFactor = ");
+sql.append(std::to_string(data->wasteFactor));
+sql.append(", ");
+    sql.append("chanceOfReverseEngineering = ");
+sql.append(std::to_string(data->chanceOfReverseEngineering));
+sql.append(", ");
+    sql.append("maxProductionLimit = ");
+sql.append(std::to_string(data->maxProductionLimit));
+   sql.append(" WHERE blueprintTypeID = ");
+   sql.append(std::to_string(data->blueprintTypeID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheRamTypeRequirements_save(cacheRamTypeRequirements *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheRamTypeRequirements SET ");
+    sql.append("typeID = ");
+sql.append(std::to_string(data->typeID));
+sql.append(", ");
+    sql.append("activityID = ");
+sql.append(std::to_string(data->activityID));
+sql.append(", ");
+    sql.append("requiredTypeID = ");
+sql.append(std::to_string(data->requiredTypeID));
+sql.append(", ");
+    sql.append("quantity = ");
+sql.append(std::to_string(data->quantity));
+sql.append(", ");
+    sql.append("damagePerJob = ");
+sql.append(std::to_string(data->damagePerJob));
+sql.append(", ");
+    sql.append("recycle = ");
+sql.append(std::to_string(data->recycle));
+   sql.append(" WHERE typeID = ");
+   sql.append(std::to_string(data->typeID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheCertificateRelationships_save(cacheCertificateRelationships *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheCertificateRelationships SET ");
+    sql.append("relationshipID = ");
+sql.append(std::to_string(data->relationshipID));
+sql.append(", ");
+    sql.append("parentID = ");
+sql.append(std::to_string(data->parentID));
+sql.append(", ");
+    sql.append("parentTypeID = ");
+sql.append(std::to_string(data->parentTypeID));
+sql.append(", ");
+    sql.append("parentLevel = ");
+sql.append(std::to_string(data->parentLevel));
+sql.append(", ");
+    sql.append("childID = ");
+sql.append(std::to_string(data->childID));
+sql.append(", ");
+    sql.append("childTypeID = ");
+sql.append(std::to_string(data->childTypeID));
+   sql.append(" WHERE relationshipID = ");
+   sql.append(std::to_string(data->relationshipID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheDogmaAttributes_save(cacheDogmaAttributes *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheDogmaAttributes SET ");
+    sql.append("attributeID = ");
+sql.append(std::to_string(data->attributeID));
+sql.append(", ");
+    sql.append("attributeName = ");
+sql.append("'");
+sql.append(data->attributeName);
+sql.append("'");
+sql.append(", ");
+    sql.append("attributeCategory = ");
+sql.append(std::to_string(data->attributeCategory));
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("maxAttributeID = ");
+sql.append(std::to_string(data->maxAttributeID));
+sql.append(", ");
+    sql.append("attributeIdx = ");
+sql.append(std::to_string(data->attributeIdx));
+sql.append(", ");
+    sql.append("chargeRechargeTimeID = ");
+sql.append(std::to_string(data->chargeRechargeTimeID));
+sql.append(", ");
+    sql.append("defaultValue = ");
+sql.append(std::to_string(data->defaultValue));
+sql.append(", ");
+    sql.append("published = ");
+sql.append(std::to_string(data->published));
+sql.append(", ");
+    sql.append("displayName = ");
+sql.append("'");
+sql.append(data->displayName);
+sql.append("'");
+sql.append(", ");
+    sql.append("unitID = ");
+sql.append(std::to_string(data->unitID));
+sql.append(", ");
+    sql.append("stackable = ");
+sql.append(std::to_string(data->stackable));
+sql.append(", ");
+    sql.append("highIsGood = ");
+sql.append(std::to_string(data->highIsGood));
+sql.append(", ");
+    sql.append("categoryID = ");
+sql.append(std::to_string(data->categoryID));
+sql.append(", ");
+    sql.append("iconID = ");
+sql.append(std::to_string(data->iconID));
+sql.append(", ");
+    sql.append("displayNameID = ");
+sql.append(std::to_string(data->displayNameID));
+sql.append(", ");
+    sql.append("dataID = ");
+sql.append(std::to_string(data->dataID));
+   sql.append(" WHERE attributeID = ");
+   sql.append(std::to_string(data->attributeID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheRamAssemblyLineTypes_save(cacheRamAssemblyLineTypes *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheRamAssemblyLineTypes SET ");
+    sql.append("assemblyLineTypeID = ");
+sql.append(std::to_string(data->assemblyLineTypeID));
+sql.append(", ");
+    sql.append("assemblyLineTypeName = ");
+sql.append("'");
+sql.append(data->assemblyLineTypeName);
+sql.append("'");
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("baseTimeMultiplier = ");
+sql.append(std::to_string(data->baseTimeMultiplier));
+sql.append(", ");
+    sql.append("baseMaterialMultiplier = ");
+sql.append(std::to_string(data->baseMaterialMultiplier));
+sql.append(", ");
+    sql.append("volume = ");
+sql.append(std::to_string(data->volume));
+sql.append(", ");
+    sql.append("activityID = ");
+sql.append(std::to_string(data->activityID));
+sql.append(", ");
+    sql.append("minCostPerHour = ");
+sql.append(std::to_string(data->minCostPerHour));
+   sql.append(" WHERE assemblyLineTypeID = ");
+   sql.append(std::to_string(data->assemblyLineTypeID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheStaStationsStatic_save(cacheStaStationsStatic *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheStaStationsStatic SET ");
+    sql.append("stationID = ");
+sql.append(std::to_string(data->stationID));
+sql.append(", ");
+    sql.append("stationName = ");
+sql.append("'");
+sql.append(data->stationName);
+sql.append("'");
+sql.append(", ");
+    sql.append("x = ");
+sql.append(std::to_string(data->x));
+sql.append(", ");
+    sql.append("y = ");
+sql.append(std::to_string(data->y));
+sql.append(", ");
+    sql.append("z = ");
+sql.append(std::to_string(data->z));
+sql.append(", ");
+    sql.append("stationTypeID = ");
+sql.append(std::to_string(data->stationTypeID));
+sql.append(", ");
+    sql.append("solarSystemID = ");
+sql.append(std::to_string(data->solarSystemID));
+   sql.append(" WHERE stationID = ");
+   sql.append(std::to_string(data->stationID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheInvGroups_save(cacheInvGroups *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheInvGroups SET ");
+    sql.append("groupID = ");
+sql.append(std::to_string(data->groupID));
+sql.append(", ");
+    sql.append("categoryID = ");
+sql.append(std::to_string(data->categoryID));
+sql.append(", ");
+    sql.append("groupName = ");
+sql.append("'");
+sql.append(data->groupName);
+sql.append("'");
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("useBasePrice = ");
+sql.append(std::to_string(data->useBasePrice));
+sql.append(", ");
+    sql.append("allowManufacture = ");
+sql.append(std::to_string(data->allowManufacture));
+sql.append(", ");
+    sql.append("allowRecycler = ");
+sql.append(std::to_string(data->allowRecycler));
+sql.append(", ");
+    sql.append("anchored = ");
+sql.append(std::to_string(data->anchored));
+sql.append(", ");
+    sql.append("anchorable = ");
+sql.append(std::to_string(data->anchorable));
+sql.append(", ");
+    sql.append("fittableNonSingleton = ");
+sql.append(std::to_string(data->fittableNonSingleton));
+sql.append(", ");
+    sql.append("published = ");
+sql.append(std::to_string(data->published));
+sql.append(", ");
+    sql.append("iconID = ");
+sql.append(std::to_string(data->iconID));
+sql.append(", ");
+    sql.append("groupNameID = ");
+sql.append(std::to_string(data->groupNameID));
+sql.append(", ");
+    sql.append("dataID = ");
+sql.append(std::to_string(data->dataID));
+   sql.append(" WHERE groupID = ");
+   sql.append(std::to_string(data->groupID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheInvMetaTypes_save(cacheInvMetaTypes *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheInvMetaTypes SET ");
+    sql.append("typeID = ");
+sql.append(std::to_string(data->typeID));
+sql.append(", ");
+    sql.append("parentTypeID = ");
+sql.append(std::to_string(data->parentTypeID));
+sql.append(", ");
+    sql.append("metaGroupID = ");
+sql.append(std::to_string(data->metaGroupID));
+   sql.append(" WHERE typeID = ");
+   sql.append(std::to_string(data->typeID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheInvTypeReactions_save(cacheInvTypeReactions *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheInvTypeReactions SET ");
+    sql.append("reactionTypeID = ");
+sql.append(std::to_string(data->reactionTypeID));
+sql.append(", ");
+    sql.append("input = ");
+sql.append(std::to_string(data->input));
+sql.append(", ");
+    sql.append("typeID = ");
+sql.append(std::to_string(data->typeID));
+sql.append(", ");
+    sql.append("quantity = ");
+sql.append(std::to_string(data->quantity));
+   sql.append(" WHERE reactionTypeID = ");
+   sql.append(std::to_string(data->reactionTypeID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheDogmaTypeEffects_save(cacheDogmaTypeEffects *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheDogmaTypeEffects SET ");
+    sql.append("typeID = ");
+sql.append(std::to_string(data->typeID));
+sql.append(", ");
+    sql.append("effectID = ");
+sql.append(std::to_string(data->effectID));
+sql.append(", ");
+    sql.append("isDefault = ");
+sql.append(std::to_string(data->isDefault));
+   sql.append(" WHERE typeID = ");
+   sql.append(std::to_string(data->typeID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cachePlanetSchematics_save(cachePlanetSchematics *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cachePlanetSchematics SET ");
+    sql.append("schematicID = ");
+sql.append(std::to_string(data->schematicID));
+sql.append(", ");
+    sql.append("schematicName = ");
+sql.append("'");
+sql.append(data->schematicName);
+sql.append("'");
+sql.append(", ");
+    sql.append("cycleTime = ");
+sql.append(std::to_string(data->cycleTime));
+sql.append(", ");
+    sql.append("schematicNameID = ");
+sql.append(std::to_string(data->schematicNameID));
+sql.append(", ");
+    sql.append("dataID = ");
+sql.append(std::to_string(data->dataID));
+   sql.append(" WHERE schematicID = ");
+   sql.append(std::to_string(data->schematicID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheDogmaUnits_save(cacheDogmaUnits *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheDogmaUnits SET ");
+    sql.append("unitID = ");
+sql.append(std::to_string(data->unitID));
+sql.append(", ");
+    sql.append("unitName = ");
+sql.append("'");
+sql.append(data->unitName);
+sql.append("'");
+sql.append(", ");
+    sql.append("displayName = ");
+sql.append("'");
+sql.append(data->displayName);
+sql.append("'");
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("displayNameID = ");
+sql.append(std::to_string(data->displayNameID));
+sql.append(", ");
+    sql.append("descriptionID = ");
+sql.append(std::to_string(data->descriptionID));
+sql.append(", ");
+    sql.append("dataID = ");
+sql.append(std::to_string(data->dataID));
+   sql.append(" WHERE unitID = ");
+   sql.append(std::to_string(data->unitID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cachePlanetSchematicsTypeMap_save(cachePlanetSchematicsTypeMap *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cachePlanetSchematicsTypeMap SET ");
+    sql.append("schematicID = ");
+sql.append(std::to_string(data->schematicID));
+sql.append(", ");
+    sql.append("typeID = ");
+sql.append(std::to_string(data->typeID));
+sql.append(", ");
+    sql.append("isInput = ");
+sql.append(std::to_string(data->isInput));
+sql.append(", ");
+    sql.append("quantity = ");
+sql.append(std::to_string(data->quantity));
+   sql.append(" WHERE schematicID = ");
+   sql.append(std::to_string(data->schematicID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheDogmaTypeAttributes_save(cacheDogmaTypeAttributes *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheDogmaTypeAttributes SET ");
+    sql.append("typeID = ");
+sql.append(std::to_string(data->typeID));
+sql.append(", ");
+    sql.append("attributeID = ");
+sql.append(std::to_string(data->attributeID));
+sql.append(", ");
+    sql.append("value = ");
+sql.append(std::to_string(data->value));
+   sql.append(" WHERE typeID = ");
+   sql.append(std::to_string(data->typeID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheDogmaExpressions_save(cacheDogmaExpressions *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheDogmaExpressions SET ");
+    sql.append("expressionID = ");
+sql.append(std::to_string(data->expressionID));
+sql.append(", ");
+    sql.append("operandID = ");
+sql.append(std::to_string(data->operandID));
+sql.append(", ");
+    sql.append("arg1 = ");
+sql.append(std::to_string(data->arg1));
+sql.append(", ");
+    sql.append("arg2 = ");
+sql.append(std::to_string(data->arg2));
+sql.append(", ");
+    sql.append("expressionValue = ");
+sql.append("'");
+sql.append(data->expressionValue);
+sql.append("'");
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("expressionName = ");
+sql.append("'");
+sql.append(data->expressionName);
+sql.append("'");
+sql.append(", ");
+    sql.append("expressionTypeID = ");
+sql.append(std::to_string(data->expressionTypeID));
+sql.append(", ");
+    sql.append("expressionGroupID = ");
+sql.append(std::to_string(data->expressionGroupID));
+sql.append(", ");
+    sql.append("expressionAttributeID = ");
+sql.append(std::to_string(data->expressionAttributeID));
+   sql.append(" WHERE expressionID = ");
+   sql.append(std::to_string(data->expressionID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheRamAssemblyLineTypesGroup_save(cacheRamAssemblyLineTypesGroup *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheRamAssemblyLineTypesGroup SET ");
+    sql.append("assemblyLineTypeID = ");
+sql.append(std::to_string(data->assemblyLineTypeID));
+sql.append(", ");
+    sql.append("groupID = ");
+sql.append(std::to_string(data->groupID));
+sql.append(", ");
+    sql.append("timeMultiplier = ");
+sql.append(std::to_string(data->timeMultiplier));
+sql.append(", ");
+    sql.append("materialMultiplier = ");
+sql.append(std::to_string(data->materialMultiplier));
+sql.append(", ");
+    sql.append("activityID = ");
+sql.append(data->activityID);
+   sql.append(" WHERE assemblyLineTypeID = ");
+   sql.append(std::to_string(data->assemblyLineTypeID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheResGraphics_save(cacheResGraphics *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheResGraphics SET ");
+    sql.append("graphicID = ");
+sql.append(std::to_string(data->graphicID));
+sql.append(", ");
+    sql.append("graphicFile = ");
+sql.append("'");
+sql.append(data->graphicFile);
+sql.append("'");
+sql.append(", ");
+    sql.append("graphicName = ");
+sql.append("'");
+sql.append(data->graphicName);
+sql.append("'");
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("obsolete = ");
+sql.append(std::to_string(data->obsolete));
+sql.append(", ");
+    sql.append("graphicType = ");
+sql.append("'");
+sql.append(data->graphicType);
+sql.append("'");
+sql.append(", ");
+    sql.append("collisionFile = ");
+sql.append("'");
+sql.append(data->collisionFile);
+sql.append("'");
+sql.append(", ");
+    sql.append("paperdollFile = ");
+sql.append("'");
+sql.append(data->paperdollFile);
+sql.append("'");
+sql.append(", ");
+    sql.append("animationTemplate = ");
+sql.append(std::to_string(data->animationTemplate));
+sql.append(", ");
+    sql.append("collidable = ");
+sql.append(std::to_string(data->collidable));
+sql.append(", ");
+    sql.append("explosionID = ");
+sql.append(std::to_string(data->explosionID));
+sql.append(", ");
+    sql.append("directoryID = ");
+sql.append(std::to_string(data->directoryID));
+sql.append(", ");
+    sql.append("graphicMinX = ");
+sql.append(std::to_string(data->graphicMinX));
+sql.append(", ");
+    sql.append("graphicMinY = ");
+sql.append(std::to_string(data->graphicMinY));
+sql.append(", ");
+    sql.append("graphicMinZ = ");
+sql.append(std::to_string(data->graphicMinZ));
+sql.append(", ");
+    sql.append("graphicMaxX = ");
+sql.append(std::to_string(data->graphicMaxX));
+sql.append(", ");
+    sql.append("graphicMaxY = ");
+sql.append(std::to_string(data->graphicMaxY));
+sql.append(", ");
+    sql.append("graphicMaxZ = ");
+sql.append(std::to_string(data->graphicMaxZ));
+sql.append(", ");
+    sql.append("isPrototype = ");
+sql.append(std::to_string(data->isPrototype));
+   sql.append(" WHERE graphicID = ");
+   sql.append(std::to_string(data->graphicID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheInvTypes_save(cacheInvTypes *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheInvTypes SET ");
+    sql.append("typeID = ");
+sql.append(std::to_string(data->typeID));
+sql.append(", ");
+    sql.append("groupID = ");
+sql.append(std::to_string(data->groupID));
+sql.append(", ");
+    sql.append("typeName = ");
+sql.append("'");
+sql.append(data->typeName);
+sql.append("'");
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("graphicID = ");
+sql.append(std::to_string(data->graphicID));
+sql.append(", ");
+    sql.append("radius = ");
+sql.append(std::to_string(data->radius));
+sql.append(", ");
+    sql.append("mass = ");
+sql.append(std::to_string(data->mass));
+sql.append(", ");
+    sql.append("volume = ");
+sql.append(std::to_string(data->volume));
+sql.append(", ");
+    sql.append("capacity = ");
+sql.append(std::to_string(data->capacity));
+sql.append(", ");
+    sql.append("portionSize = ");
+sql.append(std::to_string(data->portionSize));
+sql.append(", ");
+    sql.append("raceID = ");
+sql.append(std::to_string(data->raceID));
+sql.append(", ");
+    sql.append("basePrice = ");
+sql.append(std::to_string(data->basePrice));
+sql.append(", ");
+    sql.append("published = ");
+sql.append(std::to_string(data->published));
+sql.append(", ");
+    sql.append("marketGroupID = ");
+sql.append(std::to_string(data->marketGroupID));
+sql.append(", ");
+    sql.append("chanceOfDuplicating = ");
+sql.append(std::to_string(data->chanceOfDuplicating));
+sql.append(", ");
+    sql.append("soundID = ");
+sql.append(std::to_string(data->soundID));
+sql.append(", ");
+    sql.append("iconID = ");
+sql.append(std::to_string(data->iconID));
+sql.append(", ");
+    sql.append("dataID = ");
+sql.append(std::to_string(data->dataID));
+sql.append(", ");
+    sql.append("typeNameID = ");
+sql.append(std::to_string(data->typeNameID));
+sql.append(", ");
+    sql.append("descriptionID = ");
+sql.append(std::to_string(data->descriptionID));
+sql.append(", ");
+    sql.append("copyTypeID = ");
+sql.append(std::to_string(data->copyTypeID));
+   sql.append(" WHERE typeID = ");
+   sql.append(std::to_string(data->typeID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheResIcons_save(cacheResIcons *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheResIcons SET ");
+    sql.append("iconID = ");
+sql.append(std::to_string(data->iconID));
+sql.append(", ");
+    sql.append("iconFile = ");
+sql.append("'");
+sql.append(data->iconFile);
+sql.append("'");
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("obsolete = ");
+sql.append(std::to_string(data->obsolete));
+sql.append(", ");
+    sql.append("iconType = ");
+sql.append("'");
+sql.append(data->iconType);
+sql.append("'");
+sql.append(", ");
+    sql.append("directoryID = ");
+sql.append(std::to_string(data->directoryID));
+   sql.append(" WHERE iconID = ");
+   sql.append(std::to_string(data->iconID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheActBillTypes_save(cacheActBillTypes *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheActBillTypes SET ");
+    sql.append("billTypeID = ");
+sql.append(std::to_string(data->billTypeID));
+sql.append(", ");
+    sql.append("billTypeName = ");
+sql.append("'");
+sql.append(data->billTypeName);
+sql.append("'");
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("billTypeNameID = ");
+sql.append(std::to_string(data->billTypeNameID));
+sql.append(", ");
+    sql.append("dataID = ");
+sql.append(std::to_string(data->dataID));
+   sql.append(" WHERE billTypeID = ");
+   sql.append(std::to_string(data->billTypeID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cachePlanetSchematicsPinMap_save(cachePlanetSchematicsPinMap *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cachePlanetSchematicsPinMap SET ");
+    sql.append("schematicID = ");
+sql.append(std::to_string(data->schematicID));
+sql.append(", ");
+    sql.append("pinTypeID = ");
+sql.append(std::to_string(data->pinTypeID));
+   sql.append(" WHERE schematicID = ");
+   sql.append(std::to_string(data->schematicID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheInvContrabandTypes_save(cacheInvContrabandTypes *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheInvContrabandTypes SET ");
+    sql.append("factionID = ");
+sql.append(std::to_string(data->factionID));
+sql.append(", ");
+    sql.append("typeID = ");
+sql.append(std::to_string(data->typeID));
+sql.append(", ");
+    sql.append("standingLoss = ");
+sql.append(std::to_string(data->standingLoss));
+sql.append(", ");
+    sql.append("confiscateMinSec = ");
+sql.append(std::to_string(data->confiscateMinSec));
+sql.append(", ");
+    sql.append("fineByValue = ");
+sql.append(std::to_string(data->fineByValue));
+sql.append(", ");
+    sql.append("attackMinSec = ");
+sql.append(std::to_string(data->attackMinSec));
+   sql.append(" WHERE factionID = ");
+   sql.append(std::to_string(data->factionID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheInvMetaGroups_save(cacheInvMetaGroups *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheInvMetaGroups SET ");
+    sql.append("metaGroupID = ");
+sql.append(std::to_string(data->metaGroupID));
+sql.append(", ");
+    sql.append("metaGroupName = ");
+sql.append("'");
+sql.append(data->metaGroupName);
+sql.append("'");
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("iconID = ");
+sql.append(std::to_string(data->iconID));
+sql.append(", ");
+    sql.append("metaGroupNameID = ");
+sql.append(std::to_string(data->metaGroupNameID));
+sql.append(", ");
+    sql.append("descriptionID = ");
+sql.append(std::to_string(data->descriptionID));
+sql.append(", ");
+    sql.append("dataID = ");
+sql.append(std::to_string(data->dataID));
+   sql.append(" WHERE metaGroupID = ");
+   sql.append(std::to_string(data->metaGroupID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheCertificates_save(cacheCertificates *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheCertificates SET ");
+    sql.append("certificateID = ");
+sql.append(std::to_string(data->certificateID));
+sql.append(", ");
+    sql.append("categoryID = ");
+sql.append(std::to_string(data->categoryID));
+sql.append(", ");
+    sql.append("classID = ");
+sql.append(std::to_string(data->classID));
+sql.append(", ");
+    sql.append("grade = ");
+sql.append(std::to_string(data->grade));
+sql.append(", ");
+    sql.append("corpID = ");
+sql.append(std::to_string(data->corpID));
+sql.append(", ");
+    sql.append("iconID = ");
+sql.append(std::to_string(data->iconID));
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("descriptionID = ");
+sql.append(std::to_string(data->descriptionID));
+sql.append(", ");
+    sql.append("dataID = ");
+sql.append(std::to_string(data->dataID));
+   sql.append(" WHERE certificateID = ");
+   sql.append(std::to_string(data->certificateID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheInvTypeMaterials_save(cacheInvTypeMaterials *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheInvTypeMaterials SET ");
+    sql.append("typeID = ");
+sql.append(std::to_string(data->typeID));
+sql.append(", ");
+    sql.append("materialTypeID = ");
+sql.append(std::to_string(data->materialTypeID));
+sql.append(", ");
+    sql.append("quantity = ");
+sql.append(std::to_string(data->quantity));
+   sql.append(" WHERE typeID = ");
+   sql.append(std::to_string(data->typeID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheResSounds_save(cacheResSounds *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheResSounds SET ");
+    sql.append("soundID = ");
+sql.append(std::to_string(data->soundID));
+sql.append(", ");
+    sql.append("soundFile = ");
+sql.append("'");
+sql.append(data->soundFile);
+sql.append("'");
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("obsolete = ");
+sql.append(std::to_string(data->obsolete));
+   sql.append(" WHERE soundID = ");
+   sql.append(std::to_string(data->soundID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void cacheRamActivities_save(cacheRamActivities *data, bulkdata *b) {
+    char *err_msg = NULL;
+    sqlite3_stmt *res;
+    std::string sql("update cacheRamActivities SET ");
+    sql.append("activityID = ");
+sql.append(std::to_string(data->activityID));
+sql.append(", ");
+    sql.append("activityName = ");
+sql.append("'");
+sql.append(data->activityName);
+sql.append("'");
+sql.append(", ");
+    sql.append("iconNo = ");
+sql.append("'");
+sql.append(data->iconNo);
+sql.append("'");
+sql.append(", ");
+    sql.append("description = ");
+sql.append("'");
+sql.append(data->description);
+sql.append("'");
+sql.append(", ");
+    sql.append("published = ");
+sql.append(std::to_string(data->published));
+sql.append(", ");
+    sql.append("activityNameID = ");
+sql.append(std::to_string(data->activityNameID));
+sql.append(", ");
+    sql.append("descriptionID = ");
+sql.append(std::to_string(data->descriptionID));
+   sql.append(" WHERE activityID = ");
+   sql.append(std::to_string(data->activityID));
+   sql.append(";");
+   printf("%s\n\n", sql.c_str());
+   printf("db handle %p\n", b->db);
+   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);
+   if (rc != SQLITE_OK) {
+       printf("err: %s\n", err_msg);
+   }
+   printf("err: %s %d\n", err_msg, rc);
+   data->dirty = false;
+}
+void save_all_dirty(cache_collection *cc, bulkdata *b) {
+    cacheShipTypes_save_dirty(cc, b);
+    cacheStaOperations_save_dirty(cc, b);
+    cacheRamAssemblyLineTypesCategory_save_dirty(cc, b);
+    cacheInvCategories_save_dirty(cc, b);
+    cacheDogmaEffects_save_dirty(cc, b);
+    cacheRamCompletedStatuses_save_dirty(cc, b);
+    cacheInvBlueprintTypes_save_dirty(cc, b);
+    cacheRamTypeRequirements_save_dirty(cc, b);
+    cacheCertificateRelationships_save_dirty(cc, b);
+    cacheDogmaAttributes_save_dirty(cc, b);
+    cacheRamAssemblyLineTypes_save_dirty(cc, b);
+    cacheStaStationsStatic_save_dirty(cc, b);
+    cacheInvGroups_save_dirty(cc, b);
+    cacheInvMetaTypes_save_dirty(cc, b);
+    cacheInvTypeReactions_save_dirty(cc, b);
+    cacheDogmaTypeEffects_save_dirty(cc, b);
+    cachePlanetSchematics_save_dirty(cc, b);
+    cacheDogmaUnits_save_dirty(cc, b);
+    cachePlanetSchematicsTypeMap_save_dirty(cc, b);
+    cacheDogmaTypeAttributes_save_dirty(cc, b);
+    cacheDogmaExpressions_save_dirty(cc, b);
+    cacheRamAssemblyLineTypesGroup_save_dirty(cc, b);
+    cacheResGraphics_save_dirty(cc, b);
+    cacheInvTypes_save_dirty(cc, b);
+    cacheResIcons_save_dirty(cc, b);
+    cacheActBillTypes_save_dirty(cc, b);
+    cachePlanetSchematicsPinMap_save_dirty(cc, b);
+    cacheInvContrabandTypes_save_dirty(cc, b);
+    cacheInvMetaGroups_save_dirty(cc, b);
+    cacheCertificates_save_dirty(cc, b);
+    cacheInvTypeMaterials_save_dirty(cc, b);
+    cacheResSounds_save_dirty(cc, b);
+    cacheRamActivities_save_dirty(cc, b);
+}
+
+void cacheShipTypes_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheShipTypes;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheShipTypes_save(di, b);
+            cc->cache_cacheShipTypes[i].dirty = false;
+        }
+    }
+}
+void cacheStaOperations_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheStaOperations;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheStaOperations_save(di, b);
+            cc->cache_cacheStaOperations[i].dirty = false;
+        }
+    }
+}
+void cacheRamAssemblyLineTypesCategory_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheRamAssemblyLineTypesCategory;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheRamAssemblyLineTypesCategory_save(di, b);
+            cc->cache_cacheRamAssemblyLineTypesCategory[i].dirty = false;
+        }
+    }
+}
+void cacheInvCategories_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheInvCategories;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheInvCategories_save(di, b);
+            cc->cache_cacheInvCategories[i].dirty = false;
+        }
+    }
+}
+void cacheDogmaEffects_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheDogmaEffects;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheDogmaEffects_save(di, b);
+            cc->cache_cacheDogmaEffects[i].dirty = false;
+        }
+    }
+}
+void cacheRamCompletedStatuses_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheRamCompletedStatuses;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheRamCompletedStatuses_save(di, b);
+            cc->cache_cacheRamCompletedStatuses[i].dirty = false;
+        }
+    }
+}
+void cacheInvBlueprintTypes_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheInvBlueprintTypes;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheInvBlueprintTypes_save(di, b);
+            cc->cache_cacheInvBlueprintTypes[i].dirty = false;
+        }
+    }
+}
+void cacheRamTypeRequirements_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheRamTypeRequirements;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheRamTypeRequirements_save(di, b);
+            cc->cache_cacheRamTypeRequirements[i].dirty = false;
+        }
+    }
+}
+void cacheCertificateRelationships_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheCertificateRelationships;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheCertificateRelationships_save(di, b);
+            cc->cache_cacheCertificateRelationships[i].dirty = false;
+        }
+    }
+}
+void cacheDogmaAttributes_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheDogmaAttributes;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheDogmaAttributes_save(di, b);
+            cc->cache_cacheDogmaAttributes[i].dirty = false;
+        }
+    }
+}
+void cacheRamAssemblyLineTypes_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheRamAssemblyLineTypes;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheRamAssemblyLineTypes_save(di, b);
+            cc->cache_cacheRamAssemblyLineTypes[i].dirty = false;
+        }
+    }
+}
+void cacheStaStationsStatic_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheStaStationsStatic;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheStaStationsStatic_save(di, b);
+            cc->cache_cacheStaStationsStatic[i].dirty = false;
+        }
+    }
+}
+void cacheInvGroups_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheInvGroups;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheInvGroups_save(di, b);
+            cc->cache_cacheInvGroups[i].dirty = false;
+        }
+    }
+}
+void cacheInvMetaTypes_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheInvMetaTypes;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheInvMetaTypes_save(di, b);
+            cc->cache_cacheInvMetaTypes[i].dirty = false;
+        }
+    }
+}
+void cacheInvTypeReactions_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheInvTypeReactions;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheInvTypeReactions_save(di, b);
+            cc->cache_cacheInvTypeReactions[i].dirty = false;
+        }
+    }
+}
+void cacheDogmaTypeEffects_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheDogmaTypeEffects;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheDogmaTypeEffects_save(di, b);
+            cc->cache_cacheDogmaTypeEffects[i].dirty = false;
+        }
+    }
+}
+void cachePlanetSchematics_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cachePlanetSchematics;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cachePlanetSchematics_save(di, b);
+            cc->cache_cachePlanetSchematics[i].dirty = false;
+        }
+    }
+}
+void cacheDogmaUnits_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheDogmaUnits;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheDogmaUnits_save(di, b);
+            cc->cache_cacheDogmaUnits[i].dirty = false;
+        }
+    }
+}
+void cachePlanetSchematicsTypeMap_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cachePlanetSchematicsTypeMap;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cachePlanetSchematicsTypeMap_save(di, b);
+            cc->cache_cachePlanetSchematicsTypeMap[i].dirty = false;
+        }
+    }
+}
+void cacheDogmaTypeAttributes_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheDogmaTypeAttributes;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheDogmaTypeAttributes_save(di, b);
+            cc->cache_cacheDogmaTypeAttributes[i].dirty = false;
+        }
+    }
+}
+void cacheDogmaExpressions_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheDogmaExpressions;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheDogmaExpressions_save(di, b);
+            cc->cache_cacheDogmaExpressions[i].dirty = false;
+        }
+    }
+}
+void cacheRamAssemblyLineTypesGroup_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheRamAssemblyLineTypesGroup;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheRamAssemblyLineTypesGroup_save(di, b);
+            cc->cache_cacheRamAssemblyLineTypesGroup[i].dirty = false;
+        }
+    }
+}
+void cacheResGraphics_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheResGraphics;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheResGraphics_save(di, b);
+            cc->cache_cacheResGraphics[i].dirty = false;
+        }
+    }
+}
+void cacheInvTypes_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheInvTypes;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheInvTypes_save(di, b);
+            cc->cache_cacheInvTypes[i].dirty = false;
+        }
+    }
+}
+void cacheResIcons_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheResIcons;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheResIcons_save(di, b);
+            cc->cache_cacheResIcons[i].dirty = false;
+        }
+    }
+}
+void cacheActBillTypes_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheActBillTypes;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheActBillTypes_save(di, b);
+            cc->cache_cacheActBillTypes[i].dirty = false;
+        }
+    }
+}
+void cachePlanetSchematicsPinMap_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cachePlanetSchematicsPinMap;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cachePlanetSchematicsPinMap_save(di, b);
+            cc->cache_cachePlanetSchematicsPinMap[i].dirty = false;
+        }
+    }
+}
+void cacheInvContrabandTypes_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheInvContrabandTypes;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheInvContrabandTypes_save(di, b);
+            cc->cache_cacheInvContrabandTypes[i].dirty = false;
+        }
+    }
+}
+void cacheInvMetaGroups_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheInvMetaGroups;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheInvMetaGroups_save(di, b);
+            cc->cache_cacheInvMetaGroups[i].dirty = false;
+        }
+    }
+}
+void cacheCertificates_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheCertificates;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheCertificates_save(di, b);
+            cc->cache_cacheCertificates[i].dirty = false;
+        }
+    }
+}
+void cacheInvTypeMaterials_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheInvTypeMaterials;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheInvTypeMaterials_save(di, b);
+            cc->cache_cacheInvTypeMaterials[i].dirty = false;
+        }
+    }
+}
+void cacheResSounds_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheResSounds;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheResSounds_save(di, b);
+            cc->cache_cacheResSounds[i].dirty = false;
+        }
+    }
+}
+void cacheRamActivities_save_dirty(cache_collection *cc, bulkdata *b) {
+    auto data = cc->cache_cacheRamActivities;
+    for (uint32_t i = 0; i < data.size(); i++) {        if (data[i].dirty) {            auto di = &data[i];
+            printf("Saving dirty record %p\n", di);
+            cacheRamActivities_save(di, b);
+            cc->cache_cacheRamActivities[i].dirty = false;
+        }
+    }
+}

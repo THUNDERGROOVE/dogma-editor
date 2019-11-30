@@ -1,11 +1,12 @@
 .DEFAULT_GOAL := dogma-editor
 
-CFLAGS = -g -fno-stack-protector -Iinclude -fpermissive -Isrc -lGL -lglfw -lm
+CFLAGS = -g -fno-stack-protector -Iinclude -fpermissive -Isrc -lGL -lm -Wno-write-strings
 
 #PY_CFLAGS  := $(shell python2-config --cflags)
 #PY_LDFLAGS := $(shell python2-config --ldflags)
 
 LDFLAGS := -lpthread -ldl
+LDFLAGS += $(shell pkg-config --static --libs glfw3)
 
 SRCFILES := $(wildcard src/*.cpp) 
 C_SRCFILES := $(wildcard src/*.c) 
@@ -24,4 +25,4 @@ obj/%.o: src/%.c
 	gcc -c $(CFLAGS) $< -o $@
 
 dogma-editor: $(OBJFILES)
-	g++ $(CFLAGS) $(LDFLAGS) $^ -o$@
+	g++ $(CFLAGS) $(LDFLAGS) external/glfw/build/src/libglfw3.a $^ -o$@

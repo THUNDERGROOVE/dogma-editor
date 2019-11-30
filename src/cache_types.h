@@ -8,12 +8,20 @@
 
 #include <stdio.h>
 
+#include <stdlib.h>
+
 #include <vector>
 
 #include "bulkdata.h"
 
+#include <list>
+
 struct bulkdata;
 struct edit_window;
+struct loading_status_t {
+    char *label;
+    bool done;
+};
 struct cacheShipTypes {
     uint32_t shipTypeID;
     uint32_t weaponTypeID;
@@ -568,7 +576,8 @@ struct cache_collection {
     std::vector<cacheRamActivities> cache_cacheRamActivities;
 };
 
-cache_collection cache_load_all(bulkdata *b);
+cache_collection cache_load_all(bulkdata *b, loading_status_t *t);
+uint32_t cache_count_dirty(cache_collection cc);
 void cacheShipTypes_draw_edit(edit_window *e);
 void cacheStaOperations_draw_edit(edit_window *e);
 void cacheRamAssemblyLineTypesCategory_draw_edit(edit_window *e);
@@ -604,4 +613,113 @@ void cacheResSounds_draw_edit(edit_window *e);
 void cacheRamActivities_draw_edit(edit_window *e);
 
 
+struct search_windows {
+bool show_cacheShipTypes_search;
+bool show_cacheStaOperations_search;
+bool show_cacheRamAssemblyLineTypesCategory_search;
+bool show_cacheInvCategories_search;
+bool show_cacheDogmaEffects_search;
+bool show_cacheRamCompletedStatuses_search;
+bool show_cacheInvBlueprintTypes_search;
+bool show_cacheRamTypeRequirements_search;
+bool show_cacheCertificateRelationships_search;
+bool show_cacheDogmaAttributes_search;
+bool show_cacheRamAssemblyLineTypes_search;
+bool show_cacheStaStationsStatic_search;
+bool show_cacheInvGroups_search;
+bool show_cacheInvMetaTypes_search;
+bool show_cacheInvTypeReactions_search;
+bool show_cacheDogmaTypeEffects_search;
+bool show_cachePlanetSchematics_search;
+bool show_cacheDogmaUnits_search;
+bool show_cachePlanetSchematicsTypeMap_search;
+bool show_cacheDogmaTypeAttributes_search;
+bool show_cacheDogmaExpressions_search;
+bool show_cacheRamAssemblyLineTypesGroup_search;
+bool show_cacheResGraphics_search;
+bool show_cacheInvTypes_search;
+bool show_cacheResIcons_search;
+bool show_cacheActBillTypes_search;
+bool show_cachePlanetSchematicsPinMap_search;
+bool show_cacheInvContrabandTypes_search;
+bool show_cacheInvMetaGroups_search;
+bool show_cacheCertificates_search;
+bool show_cacheInvTypeMaterials_search;
+bool show_cacheResSounds_search;
+bool show_cacheRamActivities_search;
+};
+
+extern search_windows sw;
+
+void draw_main_window();
+
+void draw_search_windows(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheShipTypes(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheStaOperations(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheRamAssemblyLineTypesCategory(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheInvCategories(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheDogmaEffects(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheRamCompletedStatuses(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheInvBlueprintTypes(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheRamTypeRequirements(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheCertificateRelationships(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheDogmaAttributes(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheRamAssemblyLineTypes(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheStaStationsStatic(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheInvGroups(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheInvMetaTypes(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheInvTypeReactions(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheDogmaTypeEffects(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cachePlanetSchematics(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheDogmaUnits(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cachePlanetSchematicsTypeMap(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheDogmaTypeAttributes(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheDogmaExpressions(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheRamAssemblyLineTypesGroup(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheResGraphics(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheInvTypes(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheResIcons(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheActBillTypes(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cachePlanetSchematicsPinMap(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheInvContrabandTypes(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheInvMetaGroups(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheCertificates(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheInvTypeMaterials(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheResSounds(cache_collection *cc, std::list<edit_window *> *window_list);
+void draw_search_window_cacheRamActivities(cache_collection *cc, std::list<edit_window *> *window_list);
+void window_list_draw(std::list<edit_window *> *window_list);
+void save_all_dirty(cache_collection *cc, bulkdata *b);
+void cacheShipTypes_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheStaOperations_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheRamAssemblyLineTypesCategory_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheInvCategories_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheDogmaEffects_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheRamCompletedStatuses_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheInvBlueprintTypes_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheRamTypeRequirements_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheCertificateRelationships_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheDogmaAttributes_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheRamAssemblyLineTypes_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheStaStationsStatic_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheInvGroups_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheInvMetaTypes_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheInvTypeReactions_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheDogmaTypeEffects_save_dirty(cache_collection *cc, bulkdata *b);
+void cachePlanetSchematics_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheDogmaUnits_save_dirty(cache_collection *cc, bulkdata *b);
+void cachePlanetSchematicsTypeMap_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheDogmaTypeAttributes_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheDogmaExpressions_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheRamAssemblyLineTypesGroup_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheResGraphics_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheInvTypes_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheResIcons_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheActBillTypes_save_dirty(cache_collection *cc, bulkdata *b);
+void cachePlanetSchematicsPinMap_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheInvContrabandTypes_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheInvMetaGroups_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheCertificates_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheInvTypeMaterials_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheResSounds_save_dirty(cache_collection *cc, bulkdata *b);
+void cacheRamActivities_save_dirty(cache_collection *cc, bulkdata *b);
 #endif

@@ -18,11 +18,15 @@ f.write("#ifndef __CACHE_TYPES__H__\n")
 f.write("#define __CACHE_TYPES__H__\n\n")
 
 f.write('#include <stdio.h>\n\n')
+f.write('#include <stdlib.h>\n\n')
 f.write('#include <vector>\n\n')
 f.write('#include "bulkdata.h"\n\n')
+f.write('#include <list>\n\n')
 
 f.write("struct bulkdata;\n")
 f.write("struct edit_window;\n")
+
+f.write("struct loading_status_t {\n    char *label;\n    bool done;\n};\n")
 
 
 cursor = db.cursor()
@@ -94,7 +98,8 @@ for k, v in tables.iteritems():
 
 f.write("};\n\n")
 
-f.write("cache_collection cache_load_all(bulkdata *b);\n")
+f.write("cache_collection cache_load_all(bulkdata *b, loading_status_t *t);\n")
+f.write("uint32_t cache_count_dirty(cache_collection cc);\n")
 
 for k, v in tables.iteritems():
     if v[0][1] != "INTEGER":
@@ -104,8 +109,43 @@ for k, v in tables.iteritems():
 
 f.write("\n\n")
 
+f.write("struct search_windows {\n")
+for k, v in tables.iteritems():
+    if v[0][1] != "INTEGER":
+        print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
+        continue
+    f.write("bool show_" + k + "_search;\n")
+
+f.write("};\n\n")
+
+f.write("extern search_windows sw;\n\n")
+
+f.write("void draw_main_window();\n\n")
+
+f.write("void draw_search_windows(cache_collection *cc, std::list<edit_window *> *window_list);\n")
+
+print "Generating individual draw search windows"
+for k, v in tables.iteritems():
+    if v[0][1] != "INTEGER":
+        print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
+        continue
+    f.write("void draw_search_window_" + k + "(cache_collection *cc, std::list<edit_window *> *window_list);\n")
+ 
+
+f.write("void window_list_draw(std::list<edit_window *> *window_list);\n")
+
+f.write("void save_all_dirty(cache_collection *cc, bulkdata *b);\n")
+
+for k, v in tables.iteritems():
+    if v[0][1] != "INTEGER":
+        print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
+        continue
+    f.write("void "+ k + "_save_dirty(cache_collection *cc, bulkdata *b);\n");
+
 
 f.write("#endif\n")
+
+########################### END HEADER ###########################################
 
 f.close()
 
@@ -117,6 +157,8 @@ f.write('#include <string.h>\n\n')
 f.write('#include "bulkdata.h"\n\n')
 f.write('#include <list>\n\n')
 f.write('#include "imgui.h"\n\n')
+
+f.write("search_windows sw;\n\n")
 
 
 for k, v in tables.iteritems():
@@ -224,18 +266,38 @@ for k, v in tables.iteritems():
 print "Generating cache_load_all"
 
 
-f.write("cache_collection cache_load_all(bulkdata *b){\n")
+f.write('#include <unistd.h>\n')
+
+f.write("cache_collection cache_load_all(bulkdata *b, loading_status_t *t) {\n")
 f.write("    cache_collection out;\n")
+f.write("    t->done = false;\n")
 
 for k, v in tables.iteritems():
     if v[0][1] != "INTEGER":
         print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
         continue
+    f.write('    t->label = "Loading ' + k + '";\n')
     f.write("    out.cache_" + k + " = " + k + "_load_all(b);\n")
+    #f.write("    sleep(1);")
 
 
+f.write("    t->done = true;")
 f.write("    return out;\n")
 f.write("};\n\n")
+
+f.write("uint32_t cache_count_dirty(cache_collection cc) {;\n")
+f.write("    uint32_t c = 0;\n")
+for k, v in tables.iteritems():
+    if v[0][1] != "INTEGER":
+        print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
+        continue
+    #f.write("    cc.cache_" + k)
+    f.write("    for (uint32_t i = 0; i < cc.cache_" + k + ".size(); i++) {\n")
+    f.write("        if (cc.cache_" + k + "[i].dirty) c += 1;\n")
+    f.write("    }\n")
+f.write("    return c;\n")
+f.write("};\n\n")
+
 
 print "Generating ImGui edit windows"
 
@@ -262,11 +324,217 @@ for k, v in tables.iteritems():
             f.write('    ImGui::Text(d->' + name + ');\n')
         f.write('    ImGui::Separator();\n')
 
+    f.write('    ImGui::Checkbox("dirty", &d->dirty);\n')
+
+    f.write('    if (ImGui::Button("Mark Dirty")) {\n');
+    f.write('        d->dirty = true;\n')
+    f.write("    }\n\n")
+
+
 
     f.write('    ImGui::End();\n')
     f.write("}\n\n")
+
+print "Generate main window"
+
+
+#f.write("bool show_" + k + "_search;\n")
+f.write("void draw_main_window() {\n")
+f.write('    bool tmp = true;')
+for k, v in tables.iteritems():
+    if v[0][1] != "INTEGER":
+        print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
+        continue
+    f.write('    ImGui::Begin("Bulkdata recordsets", &tmp);\n')
+    f.write('    if(ImGui::Button("Edit ' + k + '")) {')
+    f.write("        sw.show_" + k + "_search = !sw.show_" + k + "_search;\n\n")
+    f.write("    }\n\n")
+    f.write('    ImGui::End();\n')
+
+
+f.write("}\n\n")
+
+#f.write("void draw_search_windows(cache_collection *cc, std::list<edit_window *> *window_list) {\n")
+
+print "Generating individual draw search windows"
+for k, v in tables.iteritems():
+    if v[0][1] != "INTEGER":
+        print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
+        continue
+
+    text_name = None
+    for x in v:
+        name = x[0]
+        _type = x[1]
+        if _type == "TEXT":
+            if "name" or "Name" in name:
+                text_name = name
+                break
+        
+    f.write("void draw_search_window_" + k + "(cache_collection *cc, std::list<edit_window *> *window_list) {\n")
+    f.write('    static char buffer[1024];\n')
+    #f.write('    memset(buffer, 0, 1024);\n')
+    f.write('    std::vector<' + k + ' *> results;\n')
+    f.write('    ImGui::Begin("Search: ' + k + '");\n')
+    f.write('    ImGui::InputText("' + k + '", buffer, 1024);\n')
+    f.write('    if (strcmp(buffer, "") != 0) {\n\n')
+
+    f.write('    for (uint32_t i = 0; i < cc->cache_' + k + '.size(); i++) {\n')
+    f.write('        ' + k + ' *t = &cc->cache_' + k + '[i];\n')
+    can_search = False
+    for x in v:
+        name = x[0]
+        _type = x[1]
+        if _type == "TEXT":
+            if "name" or "Name" in name:
+                f.write('        if (t->' + name + ' != NULL) {\n')
+                f.write('        if (strstr(t->' + name + ', buffer) != NULL) {\n')
+                f.write('        results.push_back(t);\n')
+                f.write('        }\n\n')
+                f.write('        }\n\n')
+                can_search = True
+
+    f.write("    }\n\n")
+
+    if can_search:
+        f.write('    ImGui::Text("Results: %d", results.size());\n')
+    else:
+        f.write('    ImGui::Text("This recordset is not searchable");\n')
+
+    f.write("    ImGui::Separator();\n\n")
+
+    f.write('    for (uint32_t i = 0; i < results.size(); i++) {\n')
+    f.write('        ' + k + ' *t = results[i];')
+    if v[0][1] == "INTEGER" and text_name != None:
+        f.write('    ImGui::Text("[%d] %s", t->' + v[0][0] + ', t->' + text_name + ');\n')
+        f.write('    ImGui::SameLine();\n')
+        f.write('    if (t->' + text_name + ' != NULL) {\n')
+        f.write('    if (ImGui::Button(t->' + text_name + ')) {\n')
+        f.write('        printf("Opening window\\n");\n')
+        f.write('        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));\n')
+        f.write('        w->data = t;\n')
+        f.write('        w->typeID = t->' + v[0][0] + ";\n")
+        f.write('        w->show = true;\n')
+        f.write('        w->tag = tag_' + k + ';\n')
+        f.write('        window_list->push_back(w);\n')
+        f.write('    }\n\n')
+        f.write('    }\n\n')
+        f.write("    ImGui::Separator();\n\n")
+    else:
+        f.write('    ImGui::Text("Not Supported");\n')
+
+    f.write('    }\n')
+    f.write('    }\n')
+    f.write('    ImGui::End();\n')
+
+    
+    f.write("}\n\n")
+
+print "Generating draw_search_windows()"
+f.write("void draw_search_windows(cache_collection *cc, std::list<edit_window *> *window_list) {\n")
+for k, v in tables.iteritems():
+    if v[0][1] != "INTEGER":
+        print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
+        continue
+    f.write("    if (sw.show_" + k + "_search) {\n")
+    f.write("        draw_search_window_" + k + "(cc, window_list);")
+    f.write("    }\n\n")
+
+f.write("}\n\n")
+
+print "Generating window_list_draw()"
+f.write("void window_list_draw(std::list<edit_window *> *window_list) {\n")
+
+f.write("for (auto it = window_list->begin(); it != window_list->end(); it++) {\n")
+f.write("    edit_window *w = *it;\n")
+f.write("    if (w->show == false) {\n")
+f.write("        it = window_list->erase(it);\n")
+f.write('        printf("Closing edit window\\n");')
+f.write('        continue;')
+f.write("    }\n\n")
+f.write("    switch (w->tag) {")
+for k, v in tables.iteritems():
+    if v[0][1] != "INTEGER":
+        print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
+        continue
+    f.write("    case tag_" + k + ": {\n")
+    f.write("        " + k + "_draw_edit(w);\n")
+    f.write("    } break;")
+f.write("    }\n\n")
+f.write("}\n\n")
+
+f.write("}\n\n")
+
+f.write('#include <string>\n')
+############### WORKING ON BELOW ##################
+for k, v in tables.iteritems():
+    if v[0][1] != "INTEGER":
+        print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
+        continue
+    f.write("void " + k + "_save(" + k + " *data, bulkdata *b) {\n");
+    f.write("    char *err_msg = NULL;\n")
+    f.write("    sqlite3_stmt *res;\n")
+    f.write('    std::string sql("update ' + k + ' SET ");\n')
+    i = 0
+    for x in v[:-1]:
+        name = x[0]
+        _type = x[1];
+        f.write('    sql.append("' + name + ' = ");\n')
+        if _type == "INTEGER":
+            f.write("sql.append(std::to_string(data->" + name + "));\n")
+        elif _type == "REAL":
+            f.write("sql.append(std::to_string(data->" + name + "));\n")
+        elif _type == "TEXT":
+            f.write('sql.append("\'");\n')
+            f.write("sql.append(data->" + name + ");\n")
+            f.write('sql.append("\'");\n')
+        f.write('sql.append(", ");\n')
+    beef = v[-1]
+    name = beef[0]
+    _type = beef[1];
+    f.write('    sql.append("' + name + ' = ");\n')
+    if _type == "INTEGER":
+        f.write("sql.append(std::to_string(data->" + name + "));\n")
+    elif _type == "REAL":
+        f.write("sql.append(std::to_string(data->" + name + "));\n")
+    elif _type == "TEXT":
+        f.write("sql.append(data->" + name + ");\n")
+
+    f.write('   sql.append(" WHERE ' + v[0][0] + ' = ");\n')
+    f.write('   sql.append(std::to_string(data->' + v[0][0] + '));\n')
+    f.write('   sql.append(";");\n')
+    f.write('   printf("%s\\n\\n", sql.c_str());\n')
+    f.write('   printf("db handle %p\\n", b->db);\n')
+    f.write("   uint32_t rc = sqlite3_exec(b->db, sql.c_str(), NULL, NULL, &err_msg);\n")
+    f.write("   if (rc != SQLITE_OK) {\n")
+    f.write('       printf("err: %s\\n", err_msg);\n')
+    f.write("   }\n")
+    f.write('   printf("err: %s %d\\n", err_msg, rc);\n')
+
+    f.write("   data->dirty = false;\n")
+
+    f.write("}\n")
+
+f.write("void save_all_dirty(cache_collection *cc, bulkdata *b) {\n")
+for k, v in tables.iteritems():
+    if v[0][1] != "INTEGER":
+        print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
+        continue
+    f.write("    " + k + "_save_dirty(cc, b);\n")
+f.write("}\n\n")
 
 for k, v in tables.iteritems():
     if v[0][1] != "INTEGER":
         print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
         continue
+    f.write("void " + k + "_save_dirty(cache_collection *cc, bulkdata *b) {\n");
+    f.write("    auto data = cc->cache_" + k + ";\n");
+    f.write("    for (uint32_t i = 0; i < data.size(); i++) {")
+    f.write("        if (data[i].dirty) {")
+    f.write("            auto di = &data[i];\n")
+    f.write('            printf("Saving dirty record %p\\n", di);\n')
+    f.write("            " + k + "_save(di, b);\n")
+    f.write("            cc->cache_" + k + "[i].dirty = false;\n")
+    f.write("        }\n")
+    f.write("    }\n")
+    f.write("}\n")

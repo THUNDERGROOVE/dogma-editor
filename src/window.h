@@ -15,7 +15,8 @@ extern GLFWwindow *window;
 void newframe();
 void endframe();
 void shutdown_window();
-void init_window();
+void init_window(bool viewports);
+void close_window();
 
 #endif
 

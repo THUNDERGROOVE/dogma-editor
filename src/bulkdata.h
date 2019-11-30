@@ -8,6 +8,7 @@
 #include "cache_types.h"
 #include <vector>
 
+// @TODO: Find how to generate this, but use the enum in edit_window
 enum cache_tag {
     tag_cacheShipTypes,
     tag_cacheStaOperations,
@@ -56,5 +57,6 @@ struct bulkdata {
 };
 
 uint32_t bulkdata_init(bulkdata *b);
+uint32_t bulkdata_shutdown(bulkdata *b);
 
 #endif

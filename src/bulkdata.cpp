@@ -16,9 +16,12 @@ uint32_t bulkdata_init(bulkdata *b) {
     return 0;
 }
 
-void InvTypesCache::LoadCache(bulkdata *b) {
-    this->cache = cacheInvTypes_load_all(b);
+uint32_t bulkdata_shutdown(bulkdata *b) {
+    sqlite3_close(b->db);
+    b->db = NULL;
+    return 0;
 }
+
 
 std::vector<uint32_t > collect_typeids(bulkdata *b) {
     std::vector<uint32_t> out;
