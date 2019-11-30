@@ -83,6 +83,7 @@ void init_window(bool viewports) {
     }
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
+
     //ImGui::StyleColorsDark();
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);

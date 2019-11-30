@@ -25,7 +25,9 @@ void draw_dockspace(bool *p_open) {
     if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
       window_flags |= ImGuiWindowFlags_NoBackground;
 
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    ImGui::SetNextWindowPos(ImVec2(0.0f, 25.0f));
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(2.0f, 2.0f));
     ImGui::Begin("DockSpace Demo", p_open, window_flags);
     ImGui::PopStyleVar();
 
@@ -39,7 +41,7 @@ void draw_dockspace(bool *p_open) {
       dockspace_flags |= ImGuiDockNodeFlags_PassthruCentralNode;
       ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
     }
-
+#if 0
     if (ImGui::BeginMenuBar()) {
       if (ImGui::BeginMenu("Docking")) {
         if (ImGui::MenuItem("Flag: NoSplit", "",
@@ -70,6 +72,7 @@ void draw_dockspace(bool *p_open) {
 
       ImGui::EndMenuBar();
     }
+#endif
 
     ImGui::End();
   }
