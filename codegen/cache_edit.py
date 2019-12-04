@@ -12,6 +12,7 @@ f.write('#include <string.h>\n\n')
 f.write('#include "bulkdata.h"\n\n')
 f.write('#include <list>\n\n')
 f.write('#include "imgui.h"\n\n')
+f.write('#include "dogma-operand.h"\n\n')
 
 print "Generating ImGui edit windows"
 
@@ -31,6 +32,8 @@ for k, v in tables.iteritems():
         _type = x[1]
         if _type == "INTEGER":
             f.write('    ImGui::InputInt("' + name + '", (int *)&d->' + name + ');\n')
+            if name == "operandID":
+                f.write('    ImGui::Text("%s", operand_id_strings[d->operandID]);\n')
         elif _type == "REAL":
             f.write('    ImGui::InputFloat("' + name + '", &d->' + name + ');\n')
         elif _type == "TEXT":

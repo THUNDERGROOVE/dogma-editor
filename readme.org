@@ -3,24 +3,13 @@
 #+SINCE:   {replace with next tagged release version}
 #+STARTUP: inlineimages
 
-* Table of Contents :TOC_3:noexport:
+* Table of Contents :TOC_1:noexport:
 - [[#description][Description]]
-  - [[#module-flags][Module Flags]]
-  - [[#hacks][Hacks]]
-    -   [[#imgui-themer][ImGui Themer]]
 - [[#prerequisites][Prerequisites]]
 - [[#feature-matrix][Feature Matrix]]
-  - [[#viewing-bulkdata][Viewing bulkdata]]
-  - [[#searching-bulkdata][Searching bulkdata]]
-  - [[#editing-bulkdata][Editing bulkdata]]
 - [[#configuration][Configuration]]
 - [[#troubleshooting][Troubleshooting]]
 - [[#wip-05][WIP]]
-  - [[#cachedogmaexpressions][cacheDogmaExpressions]]
-  - [[#cachedogmatypeattributes][cacheDogmaTypeAttributes]]
-  - [[#export-to-mysql-dumps][Export to MySQL dumps...]]
-  - [[#clean-up-codegenpy][Clean up codegen.py]]
-  - [[#saving-objects-that-have-the-same-no-unique-keys-will-be-difficult][Saving objects that have the same no unique keys will be difficult.]]
 
 * Description
 dogma-editor is an editor for EVE Online cache2 bulkdata
@@ -35,7 +24,7 @@ This module provides no flags.
 
 ** Hacks
 ***   ImGui Themer
-Custom on-the-fly theme engine for ImGui, see src/imgui_themer.h
+Custom on-the-fly theme engine for ImGui, see [[src/imgui_themer.h]] and [[src/default_dark.cpp]]
 
 * Prerequisites
 To build dogma-editor you will need glfw installed system-wide
