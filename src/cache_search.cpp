@@ -11,6 +11,7 @@
 
 #include <list>
 
+#include "window.h"
 #include "imgui.h"
 
 void draw_search_window_cacheShipTypes(cache_collection *cc, std::list<edit_window *> *window_list) {
@@ -38,7 +39,7 @@ void draw_search_window_cacheShipTypes(cache_collection *cc, std::list<edit_wind
         w->typeID = t->shipTypeID;
         w->show = true;
         w->tag = tag_cacheShipTypes;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -86,7 +87,7 @@ void draw_search_window_cacheStaOperations(cache_collection *cc, std::list<edit_
         w->typeID = t->activityID;
         w->show = true;
         w->tag = tag_cacheStaOperations;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -129,7 +130,7 @@ void draw_search_window_cacheRamAssemblyLineTypesCategory(cache_collection *cc, 
         w->typeID = t->assemblyLineTypeID;
         w->show = true;
         w->tag = tag_cacheRamAssemblyLineTypesCategory;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -179,7 +180,7 @@ void draw_search_window_cacheInvCategories(cache_collection *cc, std::list<edit_
         w->typeID = t->categoryID;
         w->show = true;
         w->tag = tag_cacheInvCategories;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -250,7 +251,7 @@ void draw_search_window_cacheDogmaEffects(cache_collection *cc, std::list<edit_w
         w->typeID = t->effectID;
         w->show = true;
         w->tag = tag_cacheDogmaEffects;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -300,7 +301,7 @@ void draw_search_window_cacheRamCompletedStatuses(cache_collection *cc, std::lis
         w->typeID = t->completedStatus;
         w->show = true;
         w->tag = tag_cacheRamCompletedStatuses;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -338,7 +339,7 @@ void draw_search_window_cacheInvBlueprintTypes(cache_collection *cc, std::list<e
         w->typeID = t->blueprintTypeID;
         w->show = true;
         w->tag = tag_cacheInvBlueprintTypes;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -374,7 +375,7 @@ void draw_search_window_cacheRamTypeRequirements(cache_collection *cc, std::list
         w->typeID = t->typeID;
         w->show = true;
         w->tag = tag_cacheRamTypeRequirements;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -410,7 +411,7 @@ void draw_search_window_cacheCertificateRelationships(cache_collection *cc, std:
         w->typeID = t->relationshipID;
         w->show = true;
         w->tag = tag_cacheCertificateRelationships;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -465,7 +466,7 @@ void draw_search_window_cacheDogmaAttributes(cache_collection *cc, std::list<edi
         w->typeID = t->attributeID;
         w->show = true;
         w->tag = tag_cacheDogmaAttributes;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -515,7 +516,7 @@ void draw_search_window_cacheRamAssemblyLineTypes(cache_collection *cc, std::lis
         w->typeID = t->assemblyLineTypeID;
         w->show = true;
         w->tag = tag_cacheRamAssemblyLineTypes;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -558,7 +559,7 @@ void draw_search_window_cacheStaStationsStatic(cache_collection *cc, std::list<e
         w->typeID = t->stationID;
         w->show = true;
         w->tag = tag_cacheStaStationsStatic;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -608,7 +609,7 @@ void draw_search_window_cacheInvGroups(cache_collection *cc, std::list<edit_wind
         w->typeID = t->groupID;
         w->show = true;
         w->tag = tag_cacheInvGroups;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -646,7 +647,7 @@ void draw_search_window_cacheInvMetaTypes(cache_collection *cc, std::list<edit_w
         w->typeID = t->typeID;
         w->show = true;
         w->tag = tag_cacheInvMetaTypes;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -682,7 +683,7 @@ void draw_search_window_cacheInvTypeReactions(cache_collection *cc, std::list<ed
         w->typeID = t->reactionTypeID;
         w->show = true;
         w->tag = tag_cacheInvTypeReactions;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -718,7 +719,7 @@ void draw_search_window_cacheDogmaTypeEffects(cache_collection *cc, std::list<ed
         w->typeID = t->typeID;
         w->show = true;
         w->tag = tag_cacheDogmaTypeEffects;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -759,7 +760,7 @@ void draw_search_window_cachePlanetSchematics(cache_collection *cc, std::list<ed
         w->typeID = t->schematicID;
         w->show = true;
         w->tag = tag_cachePlanetSchematics;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -816,7 +817,7 @@ void draw_search_window_cacheDogmaUnits(cache_collection *cc, std::list<edit_win
         w->typeID = t->unitID;
         w->show = true;
         w->tag = tag_cacheDogmaUnits;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -854,7 +855,7 @@ void draw_search_window_cachePlanetSchematicsTypeMap(cache_collection *cc, std::
         w->typeID = t->schematicID;
         w->show = true;
         w->tag = tag_cachePlanetSchematicsTypeMap;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -890,7 +891,7 @@ void draw_search_window_cacheDogmaTypeAttributes(cache_collection *cc, std::list
         w->typeID = t->typeID;
         w->show = true;
         w->tag = tag_cacheDogmaTypeAttributes;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -945,7 +946,7 @@ void draw_search_window_cacheDogmaExpressions(cache_collection *cc, std::list<ed
         w->typeID = t->expressionID;
         w->show = true;
         w->tag = tag_cacheDogmaExpressions;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -988,7 +989,7 @@ void draw_search_window_cacheRamAssemblyLineTypesGroup(cache_collection *cc, std
         w->typeID = t->assemblyLineTypeID;
         w->show = true;
         w->tag = tag_cacheRamAssemblyLineTypesGroup;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -1066,7 +1067,7 @@ void draw_search_window_cacheResGraphics(cache_collection *cc, std::list<edit_wi
         w->typeID = t->graphicID;
         w->show = true;
         w->tag = tag_cacheResGraphics;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -1116,7 +1117,7 @@ void draw_search_window_cacheInvTypes(cache_collection *cc, std::list<edit_windo
         w->typeID = t->typeID;
         w->show = true;
         w->tag = tag_cacheInvTypes;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -1173,7 +1174,7 @@ void draw_search_window_cacheResIcons(cache_collection *cc, std::list<edit_windo
         w->typeID = t->iconID;
         w->show = true;
         w->tag = tag_cacheResIcons;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -1223,7 +1224,7 @@ void draw_search_window_cacheActBillTypes(cache_collection *cc, std::list<edit_w
         w->typeID = t->billTypeID;
         w->show = true;
         w->tag = tag_cacheActBillTypes;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -1261,7 +1262,7 @@ void draw_search_window_cachePlanetSchematicsPinMap(cache_collection *cc, std::l
         w->typeID = t->schematicID;
         w->show = true;
         w->tag = tag_cachePlanetSchematicsPinMap;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -1297,7 +1298,7 @@ void draw_search_window_cacheInvContrabandTypes(cache_collection *cc, std::list<
         w->typeID = t->factionID;
         w->show = true;
         w->tag = tag_cacheInvContrabandTypes;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -1345,7 +1346,7 @@ void draw_search_window_cacheInvMetaGroups(cache_collection *cc, std::list<edit_
         w->typeID = t->metaGroupID;
         w->show = true;
         w->tag = tag_cacheInvMetaGroups;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -1388,7 +1389,7 @@ void draw_search_window_cacheCertificates(cache_collection *cc, std::list<edit_w
         w->typeID = t->certificateID;
         w->show = true;
         w->tag = tag_cacheCertificates;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -1426,7 +1427,7 @@ void draw_search_window_cacheInvTypeMaterials(cache_collection *cc, std::list<ed
         w->typeID = t->typeID;
         w->show = true;
         w->tag = tag_cacheInvTypeMaterials;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -1474,7 +1475,7 @@ void draw_search_window_cacheResSounds(cache_collection *cc, std::list<edit_wind
         w->typeID = t->soundID;
         w->show = true;
         w->tag = tag_cacheResSounds;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();
@@ -1531,7 +1532,7 @@ void draw_search_window_cacheRamActivities(cache_collection *cc, std::list<edit_
         w->typeID = t->activityID;
         w->show = true;
         w->tag = tag_cacheRamActivities;
-        window_list->push_back(w);
+        window_list_push(window_list, w);
     }
 
     ImGui::SameLine();

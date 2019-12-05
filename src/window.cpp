@@ -1,5 +1,28 @@
 #include "window.h"
 
+#include "cache_types.h"
+
+
+bool check_window_open(window_list_t *window_list, edit_window *w) {
+    for (auto it = window_list->begin(); it != window_list->end(); it++) {
+        if ((*it)->typeID == w->typeID && (*it)->tag == w->tag) {
+            printf("Window already open.  TypeID and Tag are the same..\n");
+            return true;
+        }
+        if ((*it)->data == w->data) {
+            printf("Window already open.  Data pointer matches.\n");
+            return true;
+        }
+    }
+    return false;
+}
+
+void window_list_push(window_list_t *window_list, edit_window *w) {
+    if (!check_window_open(window_list, w)) {
+        window_list->push_back(w);
+    }
+}
+
 static void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
