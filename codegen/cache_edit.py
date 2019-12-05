@@ -13,6 +13,8 @@ f.write('#include "bulkdata.h"\n\n')
 f.write('#include <list>\n\n')
 f.write('#include "imgui.h"\n\n')
 f.write('#include "dogma-operand.h"\n\n')
+f.write('#include "images.h"\n\n')
+f.write('#include "ccp_stuff.h"\n\n')
 
 print "Generating ImGui edit windows"
 
@@ -52,6 +54,12 @@ for k, v in tables.iteritems():
         elif _type == "TEXT":
             f.write('    ImGui::Text("' + name + ':");\n')
             f.write('    ImGui::Text("%s", d->' + name + ');\n')
+            if name == "iconFile":
+                f.write('    img_t img_' + k + ' = load_or_get_img(__resui, d->' + name + ');\n')
+                f.write('    if (img_' + k + '.tex != 0) {')
+                f.write('        ImGui::Image((ImTextureID *)img_' + k +  '.tex, ImVec2(img_' + k + '.width, img_' + k + '.height));\n');
+                f.write('    }\n')
+
         f.write('    ImGui::Separator();\n')
 
     f.write('    ImGui::Checkbox("dirty", &d->dirty);\n')

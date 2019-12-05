@@ -21,10 +21,14 @@
 #include "dockspace.h"
 #include "imgui_themer.h"
 #include "parseargs.h"
+#include "ccp_stuff.h"
+#include "images.h"
 
 loading_status_t *loading_status = NULL;
 cache_collection cc;
 bulkdata b;
+
+stuff_package_t *resui = NULL;
 
 void load_thread() {
   loading_status = new loading_status_t;
@@ -34,11 +38,22 @@ void load_thread() {
   bulkdata_init(&b);
 
   cc = cache_load_all(&b, loading_status);
+  loading_status->done = false;
+  __resui = open_stuff("resui.stuff");
+  loading_status->label = "Loading resui.stuff...";
+  loading_status->done = true;
+
+    for (uint32_t i = 0; i < __resui->entry_num; i++) {
+        stuff_entry_t *e = &__resui->entries[i];
+        printf(" > %s\n", e->filename);
+    }
 };
 
 std::list<edit_window *> window_list;
 
 int main(int argc, char **argv) {
+    // TODO(np): load in thread...
+
 
   bool dockspace = true;
   bool viewports = false;
@@ -111,6 +126,8 @@ int main(int argc, char **argv) {
         save_all_dirty(&cc, &b);
       }
       ImGui::PopStyleColor();
+
+      //img_t img = load_or_get_img(resui, "73_16_11");
 
       ImGui::SameLine();
       ImGui::PushStyleColor(ImGuiCol_Button, red);
