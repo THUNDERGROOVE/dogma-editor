@@ -2908,3 +2908,300 @@ uint32_t cache_count_dirty(cache_collection cc) {;
     return c;
 };
 
+cacheShipTypes* cache_get_cacheShipTypes_by_shipTypeID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheShipTypes.size(); i++) {
+        if (cc->cache_cacheShipTypes[i].shipTypeID == ID) {
+            return &cc->cache_cacheShipTypes[i];
+        }
+    }
+    return NULL;
+};
+
+cacheStaOperations* cache_get_cacheStaOperations_by_activityID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheStaOperations.size(); i++) {
+        if (cc->cache_cacheStaOperations[i].activityID == ID) {
+            return &cc->cache_cacheStaOperations[i];
+        }
+    }
+    return NULL;
+};
+
+cacheRamAssemblyLineTypesCategory* cache_get_cacheRamAssemblyLineTypesCategory_by_assemblyLineTypeID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheRamAssemblyLineTypesCategory.size(); i++) {
+        if (cc->cache_cacheRamAssemblyLineTypesCategory[i].assemblyLineTypeID == ID) {
+            return &cc->cache_cacheRamAssemblyLineTypesCategory[i];
+        }
+    }
+    return NULL;
+};
+
+cacheInvCategories* cache_get_cacheInvCategories_by_categoryID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheInvCategories.size(); i++) {
+        if (cc->cache_cacheInvCategories[i].categoryID == ID) {
+            return &cc->cache_cacheInvCategories[i];
+        }
+    }
+    return NULL;
+};
+
+cacheDogmaEffects* cache_get_cacheDogmaEffects_by_effectID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheDogmaEffects.size(); i++) {
+        if (cc->cache_cacheDogmaEffects[i].effectID == ID) {
+            return &cc->cache_cacheDogmaEffects[i];
+        }
+    }
+    return NULL;
+};
+
+cacheRamCompletedStatuses* cache_get_cacheRamCompletedStatuses_by_completedStatus(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheRamCompletedStatuses.size(); i++) {
+        if (cc->cache_cacheRamCompletedStatuses[i].completedStatus == ID) {
+            return &cc->cache_cacheRamCompletedStatuses[i];
+        }
+    }
+    return NULL;
+};
+
+cacheInvBlueprintTypes* cache_get_cacheInvBlueprintTypes_by_blueprintTypeID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheInvBlueprintTypes.size(); i++) {
+        if (cc->cache_cacheInvBlueprintTypes[i].blueprintTypeID == ID) {
+            return &cc->cache_cacheInvBlueprintTypes[i];
+        }
+    }
+    return NULL;
+};
+
+cacheRamTypeRequirements* cache_get_cacheRamTypeRequirements_by_typeID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheRamTypeRequirements.size(); i++) {
+        if (cc->cache_cacheRamTypeRequirements[i].typeID == ID) {
+            return &cc->cache_cacheRamTypeRequirements[i];
+        }
+    }
+    return NULL;
+};
+
+cacheCertificateRelationships* cache_get_cacheCertificateRelationships_by_relationshipID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheCertificateRelationships.size(); i++) {
+        if (cc->cache_cacheCertificateRelationships[i].relationshipID == ID) {
+            return &cc->cache_cacheCertificateRelationships[i];
+        }
+    }
+    return NULL;
+};
+
+cacheDogmaAttributes* cache_get_cacheDogmaAttributes_by_attributeID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheDogmaAttributes.size(); i++) {
+        if (cc->cache_cacheDogmaAttributes[i].attributeID == ID) {
+            return &cc->cache_cacheDogmaAttributes[i];
+        }
+    }
+    return NULL;
+};
+
+cacheRamAssemblyLineTypes* cache_get_cacheRamAssemblyLineTypes_by_assemblyLineTypeID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheRamAssemblyLineTypes.size(); i++) {
+        if (cc->cache_cacheRamAssemblyLineTypes[i].assemblyLineTypeID == ID) {
+            return &cc->cache_cacheRamAssemblyLineTypes[i];
+        }
+    }
+    return NULL;
+};
+
+cacheStaStationsStatic* cache_get_cacheStaStationsStatic_by_stationID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheStaStationsStatic.size(); i++) {
+        if (cc->cache_cacheStaStationsStatic[i].stationID == ID) {
+            return &cc->cache_cacheStaStationsStatic[i];
+        }
+    }
+    return NULL;
+};
+
+cacheInvGroups* cache_get_cacheInvGroups_by_groupID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheInvGroups.size(); i++) {
+        if (cc->cache_cacheInvGroups[i].groupID == ID) {
+            return &cc->cache_cacheInvGroups[i];
+        }
+    }
+    return NULL;
+};
+
+cacheInvMetaTypes* cache_get_cacheInvMetaTypes_by_typeID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheInvMetaTypes.size(); i++) {
+        if (cc->cache_cacheInvMetaTypes[i].typeID == ID) {
+            return &cc->cache_cacheInvMetaTypes[i];
+        }
+    }
+    return NULL;
+};
+
+cacheInvTypeReactions* cache_get_cacheInvTypeReactions_by_reactionTypeID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheInvTypeReactions.size(); i++) {
+        if (cc->cache_cacheInvTypeReactions[i].reactionTypeID == ID) {
+            return &cc->cache_cacheInvTypeReactions[i];
+        }
+    }
+    return NULL;
+};
+
+cacheDogmaTypeEffects* cache_get_cacheDogmaTypeEffects_by_typeID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheDogmaTypeEffects.size(); i++) {
+        if (cc->cache_cacheDogmaTypeEffects[i].typeID == ID) {
+            return &cc->cache_cacheDogmaTypeEffects[i];
+        }
+    }
+    return NULL;
+};
+
+cachePlanetSchematics* cache_get_cachePlanetSchematics_by_schematicID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cachePlanetSchematics.size(); i++) {
+        if (cc->cache_cachePlanetSchematics[i].schematicID == ID) {
+            return &cc->cache_cachePlanetSchematics[i];
+        }
+    }
+    return NULL;
+};
+
+cacheDogmaUnits* cache_get_cacheDogmaUnits_by_unitID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheDogmaUnits.size(); i++) {
+        if (cc->cache_cacheDogmaUnits[i].unitID == ID) {
+            return &cc->cache_cacheDogmaUnits[i];
+        }
+    }
+    return NULL;
+};
+
+cachePlanetSchematicsTypeMap* cache_get_cachePlanetSchematicsTypeMap_by_schematicID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cachePlanetSchematicsTypeMap.size(); i++) {
+        if (cc->cache_cachePlanetSchematicsTypeMap[i].schematicID == ID) {
+            return &cc->cache_cachePlanetSchematicsTypeMap[i];
+        }
+    }
+    return NULL;
+};
+
+cacheDogmaTypeAttributes* cache_get_cacheDogmaTypeAttributes_by_typeID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheDogmaTypeAttributes.size(); i++) {
+        if (cc->cache_cacheDogmaTypeAttributes[i].typeID == ID) {
+            return &cc->cache_cacheDogmaTypeAttributes[i];
+        }
+    }
+    return NULL;
+};
+
+cacheDogmaExpressions* cache_get_cacheDogmaExpressions_by_expressionID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheDogmaExpressions.size(); i++) {
+        if (cc->cache_cacheDogmaExpressions[i].expressionID == ID) {
+            return &cc->cache_cacheDogmaExpressions[i];
+        }
+    }
+    return NULL;
+};
+
+cacheRamAssemblyLineTypesGroup* cache_get_cacheRamAssemblyLineTypesGroup_by_assemblyLineTypeID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheRamAssemblyLineTypesGroup.size(); i++) {
+        if (cc->cache_cacheRamAssemblyLineTypesGroup[i].assemblyLineTypeID == ID) {
+            return &cc->cache_cacheRamAssemblyLineTypesGroup[i];
+        }
+    }
+    return NULL;
+};
+
+cacheResGraphics* cache_get_cacheResGraphics_by_graphicID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheResGraphics.size(); i++) {
+        if (cc->cache_cacheResGraphics[i].graphicID == ID) {
+            return &cc->cache_cacheResGraphics[i];
+        }
+    }
+    return NULL;
+};
+
+cacheInvTypes* cache_get_cacheInvTypes_by_typeID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheInvTypes.size(); i++) {
+        if (cc->cache_cacheInvTypes[i].typeID == ID) {
+            return &cc->cache_cacheInvTypes[i];
+        }
+    }
+    return NULL;
+};
+
+cacheResIcons* cache_get_cacheResIcons_by_iconID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheResIcons.size(); i++) {
+        if (cc->cache_cacheResIcons[i].iconID == ID) {
+            return &cc->cache_cacheResIcons[i];
+        }
+    }
+    return NULL;
+};
+
+cacheActBillTypes* cache_get_cacheActBillTypes_by_billTypeID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheActBillTypes.size(); i++) {
+        if (cc->cache_cacheActBillTypes[i].billTypeID == ID) {
+            return &cc->cache_cacheActBillTypes[i];
+        }
+    }
+    return NULL;
+};
+
+cachePlanetSchematicsPinMap* cache_get_cachePlanetSchematicsPinMap_by_schematicID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cachePlanetSchematicsPinMap.size(); i++) {
+        if (cc->cache_cachePlanetSchematicsPinMap[i].schematicID == ID) {
+            return &cc->cache_cachePlanetSchematicsPinMap[i];
+        }
+    }
+    return NULL;
+};
+
+cacheInvContrabandTypes* cache_get_cacheInvContrabandTypes_by_factionID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheInvContrabandTypes.size(); i++) {
+        if (cc->cache_cacheInvContrabandTypes[i].factionID == ID) {
+            return &cc->cache_cacheInvContrabandTypes[i];
+        }
+    }
+    return NULL;
+};
+
+cacheInvMetaGroups* cache_get_cacheInvMetaGroups_by_metaGroupID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheInvMetaGroups.size(); i++) {
+        if (cc->cache_cacheInvMetaGroups[i].metaGroupID == ID) {
+            return &cc->cache_cacheInvMetaGroups[i];
+        }
+    }
+    return NULL;
+};
+
+cacheCertificates* cache_get_cacheCertificates_by_certificateID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheCertificates.size(); i++) {
+        if (cc->cache_cacheCertificates[i].certificateID == ID) {
+            return &cc->cache_cacheCertificates[i];
+        }
+    }
+    return NULL;
+};
+
+cacheInvTypeMaterials* cache_get_cacheInvTypeMaterials_by_typeID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheInvTypeMaterials.size(); i++) {
+        if (cc->cache_cacheInvTypeMaterials[i].typeID == ID) {
+            return &cc->cache_cacheInvTypeMaterials[i];
+        }
+    }
+    return NULL;
+};
+
+cacheResSounds* cache_get_cacheResSounds_by_soundID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheResSounds.size(); i++) {
+        if (cc->cache_cacheResSounds[i].soundID == ID) {
+            return &cc->cache_cacheResSounds[i];
+        }
+    }
+    return NULL;
+};
+
+cacheRamActivities* cache_get_cacheRamActivities_by_activityID(cache_collection *cc, uint32_t ID) {
+    for (uint32_t i = 0; i < cc->cache_cacheRamActivities.size(); i++) {
+        if (cc->cache_cacheRamActivities[i].activityID == ID) {
+            return &cc->cache_cacheRamActivities[i];
+        }
+    }
+    return NULL;
+};
+

@@ -129,7 +129,7 @@ int main(int argc, char **argv) {
     draw_main_window();
     draw_search_windows(&cc, &window_list);
 
-    window_list_draw(&window_list);
+    window_list_draw(&window_list, &cc);
 
     endframe();
   }

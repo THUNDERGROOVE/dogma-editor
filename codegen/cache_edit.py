@@ -20,7 +20,7 @@ for k, v in tables.iteritems():
     if v[0][1] != "INTEGER":
         print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
         continue
-    f.write("void " + k + "_draw_edit(edit_window *e) {\n")
+    f.write("void " + k + "_draw_edit(std::list<edit_window *> *window_list, edit_window *e, cache_collection *cc) {\n")
     f.write("    " + k + "*d = (" + k + "*)e->data;\n\n")
 
     f.write("    char title_buf[1024];\n")
@@ -34,6 +34,19 @@ for k, v in tables.iteritems():
             f.write('    ImGui::InputInt("' + name + '", (int *)&d->' + name + ');\n')
             if name == "operandID":
                 f.write('    ImGui::Text("%s", operand_id_strings[d->operandID]);\n')
+            if "TypeID" in name or "typeID" in name:
+                f.write('    ImGui::SameLine();\n')
+                f.write('    ImGui::PushID(1000000 + d->' + name + ');\n')
+                f.write('    if (ImGui::Button("Edit/Lookup")) {\n')
+                f.write('        cacheInvTypes *tt = cache_get_cacheInvTypes_by_typeID(cc, d->' + name + ');\n')
+                f.write('        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));\n')
+                f.write('        w->data = tt;\n')
+                f.write('        w->typeID = tt->typeID;\n')
+                f.write('        w->show = true;\n')
+                f.write('        w->tag = tag_cacheInvTypes;\n')
+                f.write('        window_list->push_back(w);\n')
+                f.write('    }\n')
+                f.write('    ImGui::PopID();\n')
         elif _type == "REAL":
             f.write('    ImGui::InputFloat("' + name + '", &d->' + name + ');\n')
         elif _type == "TEXT":

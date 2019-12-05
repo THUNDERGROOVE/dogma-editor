@@ -65,14 +65,17 @@ Common issues and their solution, or places to look for help.
 * WIP [0/5]
 ** TODO cacheDogmaExpressions
 OperandID needs to be named with stuff that can be user-readable.
-** TODO cacheDogmaTypeAttributes
+** STRT cacheDogmaTypeAttributes
 This recordset is not searchable.  In this case, should we just list out all
 records?
+This has been done, we should test searchablity so the user doesn't have to type
+into the search box
 ** TODO Export to MySQL dumps...
 Not sure of the best way to do this, it will definitely introduce some jank to
 our codegen
-** TODO Clean up codegen.py
-This script it getting out of hand.  Maybe we should package this up a bit
-neater to make working on it suck a tad less
 ** TODO Saving objects that have the same no unique keys will be difficult.
 See: cacheDogmaTypeEffects for an example
+Maybe when generating the database, we should determine if we need to create an
+index
+
+** TODO iconID picker

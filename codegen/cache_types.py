@@ -104,7 +104,7 @@ for k, v in tables.iteritems():
     if v[0][1] != "INTEGER":
         print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
         continue
-    f.write("void " + k + "_draw_edit(edit_window *e);\n")
+    f.write("void " + k + "_draw_edit(std::list<edit_window *> *w, edit_window *e, cache_collection *cc);\n")
 
 f.write("\n\n")
 
@@ -131,7 +131,7 @@ for k, v in tables.iteritems():
     f.write("void draw_search_window_" + k + "(cache_collection *cc, std::list<edit_window *> *window_list);\n")
 
 
-f.write("void window_list_draw(std::list<edit_window *> *window_list);\n")
+f.write("void window_list_draw(std::list<edit_window *> *window_list, cache_collection *cc);\n")
 
 f.write("void save_all_dirty(cache_collection *cc, bulkdata *b);\n")
 
@@ -141,6 +141,11 @@ for k, v in tables.iteritems():
         continue
     f.write("void "+ k + "_save_dirty(cache_collection *cc, bulkdata *b);\n");
 
+for k, v in tables.iteritems():
+    if v[0][1] != "INTEGER":
+        print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
+        continue
+    f.write(k + "* cache_get_" + k + "_by_" + v[0][0] + "(cache_collection *cc, uint32_t ID);\n")
 
 f.write("#endif\n")
 

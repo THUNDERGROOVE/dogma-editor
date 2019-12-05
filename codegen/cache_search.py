@@ -117,7 +117,7 @@ for k, v in tables.iteritems():
 f.write("}\n\n")
 
 print "Generating window_list_draw()"
-f.write("void window_list_draw(std::list<edit_window *> *window_list) {\n")
+f.write("void window_list_draw(std::list<edit_window *> *window_list, cache_collection *cc) {\n")
 
 f.write("for (auto it = window_list->begin(); it != window_list->end(); it++) {\n")
 f.write("    edit_window *w = *it;\n")
@@ -132,7 +132,7 @@ for k, v in tables.iteritems():
         print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
         continue
     f.write("    case tag_" + k + ": {\n")
-    f.write("        " + k + "_draw_edit(w);\n")
+    f.write("        " + k + "_draw_edit(window_list, w, cc);\n")
     f.write("    } break;")
 f.write("    }\n\n")
 f.write("}\n\n")

@@ -158,3 +158,16 @@ for k, v in tables.iteritems():
     f.write("    }\n")
 f.write("    return c;\n")
 f.write("};\n\n")
+
+for k, v in tables.iteritems():
+    if v[0][1] != "INTEGER":
+        print " >>>> WARN TABLE " + k + " IS NON INDEXABLE"
+        continue
+    f.write(k + "* cache_get_" + k + "_by_" + v[0][0] + "(cache_collection *cc, uint32_t ID) {\n")
+    f.write("    for (uint32_t i = 0; i < cc->cache_" + k + ".size(); i++) {\n")
+    f.write("        if (cc->cache_" + k + "[i]." + v[0][0] + " == ID) {\n")
+    f.write("            return &cc->cache_" + k + "[i];\n")
+    f.write("        }\n")
+    f.write("    }\n")
+    f.write("    return NULL;\n")
+    f.write("};\n\n")
