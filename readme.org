@@ -57,7 +57,16 @@ making changes mark the record as dirty.
 [[./img/dirty.png]]
 
 * Configuration
-How to configure this module, including common problems and how to address them.
+To start, make sure you have a clean set of `.cache2` files.  Edit dogma-dump.py
+to point to the path of your `.cache2` files.  This will generate your
+bulkdata.db.  Alternativly use the one provided in the git repo.
+
+To ensure icons render for applicable edit windows, make a folder `stuffs` in the same
+directory as the dogma-editor binary.  Copy the following `.stuff` files into
+the `stuffs` directory
+
+- resui.stuff
+- resui01.stuff
 
 * Troubleshooting
 Common issues and their solution, or places to look for help.
