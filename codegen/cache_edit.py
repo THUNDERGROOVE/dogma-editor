@@ -55,7 +55,7 @@ for k, v in tables.iteritems():
             f.write('    ImGui::Text("' + name + ':");\n')
             f.write('    ImGui::Text("%s", d->' + name + ');\n')
             if name == "iconFile":
-                f.write('    img_t img_' + k + ' = load_or_get_img(__resui, d->' + name + ');\n')
+                f.write('    img_t img_' + k + ' = load_or_get_img(d->' + name + ');\n')
                 f.write('    if (img_' + k + '.tex != 0) {')
                 f.write('        ImGui::Image((ImTextureID *)img_' + k +  '.tex, ImVec2(img_' + k + '.width, img_' + k + '.height));\n');
                 f.write('    }\n')

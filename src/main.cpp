@@ -18,11 +18,11 @@
 #include <list>
 #include <thread>
 
+#include "ccp_stuff.h"
 #include "dockspace.h"
+#include "images.h"
 #include "imgui_themer.h"
 #include "parseargs.h"
-#include "ccp_stuff.h"
-#include "images.h"
 
 loading_status_t *loading_status = NULL;
 cache_collection cc;
@@ -41,19 +41,20 @@ void load_thread() {
   loading_status->done = false;
   __resui = open_stuff("resui.stuff");
   loading_status->label = "Loading resui.stuff...";
-  loading_status->done = true;
 
-    for (uint32_t i = 0; i < __resui->entry_num; i++) {
-        stuff_entry_t *e = &__resui->entries[i];
-        printf(" > %s\n", e->filename);
-    }
+  for (uint32_t i = 0; i < __resui->entry_num; i++) {
+    stuff_entry_t *e = &__resui->entries[i];
+    printf(" > %s\n", e->filename);
+  }
+
+  __stuff = open_stuff_group("stuffs", loading_status);
+  loading_status->done = true;
 };
 
 std::list<edit_window *> window_list;
 
 int main(int argc, char **argv) {
-    // TODO(np): load in thread...
-
+  // TODO(np): load in thread...
 
   bool dockspace = true;
   bool viewports = false;
@@ -85,13 +86,13 @@ int main(int argc, char **argv) {
     newframe();
 
     if (!loading_status->done) {
+      ImGui::OpenPopup("loading_status");
       if (ImGui::BeginPopupModal("loading_status", NULL,
                                  ImGuiWindowFlags_AlwaysAutoResize |
                                      ImGuiWindowFlags_Modal)) {
         ImGui::Text("%s", loading_status->label);
         ImGui::EndPopup();
       }
-      ImGui::OpenPopup("loading_status");
       endframe();
       continue;
     }
@@ -100,6 +101,7 @@ int main(int argc, char **argv) {
     draw_dockspace(&dockspace);
     auto io = ImGui::GetIO();
     auto disp_size = io.DisplaySize;
+
 
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2(disp_size.x, 45));
@@ -112,7 +114,7 @@ int main(int argc, char **argv) {
                          ImGuiWindowFlags_NoResize |
                          ImGuiWindowFlags_NoDocking |
                          ImGuiWindowFlags_NoTitleBar)) {
-        ImGui::PopStyleVar(2);
+      ImGui::PopStyleVar(2);
 
       ImGui::Text("Dirty records %d", cache_count_dirty(cc));
       ImGui::SameLine();
@@ -127,7 +129,7 @@ int main(int argc, char **argv) {
       }
       ImGui::PopStyleColor();
 
-      //img_t img = load_or_get_img(resui, "73_16_11");
+      // img_t img = load_or_get_img(resui, "73_16_11");
 
       ImGui::SameLine();
       ImGui::PushStyleColor(ImGuiCol_Button, red);
@@ -141,12 +143,27 @@ int main(int argc, char **argv) {
       ImGui::End();
     }
 
-    //ImGui::ShowFontSelector("Fonts");
+    // ImGui::ShowFontSelector("Fonts");
 
     draw_main_window();
     draw_search_windows(&cc, &window_list);
 
     window_list_draw(&window_list, &cc);
+
+    if (ImGui::Begin("Stuff")) {
+
+        for (uint32_t i = 0; i < __stuff->package_count; i++) {
+            stuff_package_t *sp = &__stuff->packages[i];
+            for (uint32_t j = 0; j < sp->entry_num; j++) {
+                stuff_entry_t *se = &sp->entries[j];
+                ImGui::Text("%s", se->filename);
+                ImGui::Separator();
+            }
+        }
+
+        ImGui::End();
+    }
+
 
     endframe();
   }

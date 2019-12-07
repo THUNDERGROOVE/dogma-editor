@@ -17,6 +17,6 @@ struct img_t {
     int height;
 };
 
-img_t load_or_get_img(stuff_package_t *s, const char *iconID);
+img_t load_or_get_img(const char *iconID);
 
 #endif // __IMAGES_H_

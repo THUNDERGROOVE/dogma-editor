@@ -1208,7 +1208,7 @@ void cacheResIcons_draw_edit(std::list<edit_window *> *window_list, edit_window 
     ImGui::Separator();
     ImGui::Text("iconFile:");
     ImGui::Text("%s", d->iconFile);
-    img_t img_cacheResIcons = load_or_get_img(__resui, d->iconFile);
+    img_t img_cacheResIcons = load_or_get_img(d->iconFile);
     if (img_cacheResIcons.tex != 0) {        ImGui::Image((ImTextureID *)img_cacheResIcons.tex, ImVec2(img_cacheResIcons.width, img_cacheResIcons.height));
     }
     ImGui::Separator();
