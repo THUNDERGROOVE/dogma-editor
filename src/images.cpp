@@ -77,6 +77,7 @@ img_t load_or_get_img(const char *iconID) {
         bits[1] = std::string(&bits[1].c_str()[1]);
     }
 
+    // @TODO(NP): Can we optimize this??
     std::string _16(bits[0] + "_16_" + bits[1]);
     std::string _32(bits[0] + "_32_" + bits[1]);
     std::string _64(bits[0] + "_64_" + bits[1]);

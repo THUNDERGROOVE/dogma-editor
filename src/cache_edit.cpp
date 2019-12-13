@@ -253,6 +253,18 @@ void cacheInvCategories_draw_edit(std::list<edit_window *> *window_list, edit_wi
     ImGui::InputInt("published", (int *)&d->published);
     ImGui::Separator();
     ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::SameLine();
+    ImGui::PushID(2000000 + d->iconID);
+    if (ImGui::Button("Edit/Lookup")) {
+        cacheResIcons *tt = cache_get_cacheResIcons_by_iconID(cc, d->iconID);
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = tt;
+        w->typeID = tt->iconID;
+        w->show = true;
+        w->tag = tag_cacheResIcons;
+        window_list->push_back(w);
+    }
+    ImGui::PopID();
     ImGui::Separator();
     ImGui::InputInt("categoryNameID", (int *)&d->categoryNameID);
     ImGui::Separator();
@@ -330,6 +342,18 @@ void cacheDogmaEffects_draw_edit(std::list<edit_window *> *window_list, edit_win
     ImGui::InputInt("fittingUsageChanceAttributeID", (int *)&d->fittingUsageChanceAttributeID);
     ImGui::Separator();
     ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::SameLine();
+    ImGui::PushID(2000000 + d->iconID);
+    if (ImGui::Button("Edit/Lookup")) {
+        cacheResIcons *tt = cache_get_cacheResIcons_by_iconID(cc, d->iconID);
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = tt;
+        w->typeID = tt->iconID;
+        w->show = true;
+        w->tag = tag_cacheResIcons;
+        window_list->push_back(w);
+    }
+    ImGui::PopID();
     ImGui::Separator();
     ImGui::InputInt("displayNameID", (int *)&d->displayNameID);
     ImGui::Separator();
@@ -585,6 +609,18 @@ void cacheDogmaAttributes_draw_edit(std::list<edit_window *> *window_list, edit_
     ImGui::InputInt("categoryID", (int *)&d->categoryID);
     ImGui::Separator();
     ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::SameLine();
+    ImGui::PushID(2000000 + d->iconID);
+    if (ImGui::Button("Edit/Lookup")) {
+        cacheResIcons *tt = cache_get_cacheResIcons_by_iconID(cc, d->iconID);
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = tt;
+        w->typeID = tt->iconID;
+        w->show = true;
+        w->tag = tag_cacheResIcons;
+        window_list->push_back(w);
+    }
+    ImGui::PopID();
     ImGui::Separator();
     ImGui::InputInt("displayNameID", (int *)&d->displayNameID);
     ImGui::Separator();
@@ -714,6 +750,18 @@ void cacheInvGroups_draw_edit(std::list<edit_window *> *window_list, edit_window
     ImGui::InputInt("published", (int *)&d->published);
     ImGui::Separator();
     ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::SameLine();
+    ImGui::PushID(2000000 + d->iconID);
+    if (ImGui::Button("Edit/Lookup")) {
+        cacheResIcons *tt = cache_get_cacheResIcons_by_iconID(cc, d->iconID);
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = tt;
+        w->typeID = tt->iconID;
+        w->show = true;
+        w->tag = tag_cacheResIcons;
+        window_list->push_back(w);
+    }
+    ImGui::PopID();
     ImGui::Separator();
     ImGui::InputInt("groupNameID", (int *)&d->groupNameID);
     ImGui::Separator();
@@ -1169,6 +1217,18 @@ void cacheInvTypes_draw_edit(std::list<edit_window *> *window_list, edit_window 
     ImGui::InputInt("soundID", (int *)&d->soundID);
     ImGui::Separator();
     ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::SameLine();
+    ImGui::PushID(2000000 + d->iconID);
+    if (ImGui::Button("Edit/Lookup")) {
+        cacheResIcons *tt = cache_get_cacheResIcons_by_iconID(cc, d->iconID);
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = tt;
+        w->typeID = tt->iconID;
+        w->show = true;
+        w->tag = tag_cacheResIcons;
+        window_list->push_back(w);
+    }
+    ImGui::PopID();
     ImGui::Separator();
     ImGui::InputInt("dataID", (int *)&d->dataID);
     ImGui::Separator();
@@ -1205,6 +1265,18 @@ void cacheResIcons_draw_edit(std::list<edit_window *> *window_list, edit_window 
     snprintf(title_buf, 1024, "Editing object: %p", d);
     ImGui::Begin(title_buf, &e->show);
     ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::SameLine();
+    ImGui::PushID(2000000 + d->iconID);
+    if (ImGui::Button("Edit/Lookup")) {
+        cacheResIcons *tt = cache_get_cacheResIcons_by_iconID(cc, d->iconID);
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = tt;
+        w->typeID = tt->iconID;
+        w->show = true;
+        w->tag = tag_cacheResIcons;
+        window_list->push_back(w);
+    }
+    ImGui::PopID();
     ImGui::Separator();
     ImGui::Text("iconFile:");
     ImGui::Text("%s", d->iconFile);
@@ -1351,6 +1423,18 @@ void cacheInvMetaGroups_draw_edit(std::list<edit_window *> *window_list, edit_wi
     ImGui::Text("%s", d->description);
     ImGui::Separator();
     ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::SameLine();
+    ImGui::PushID(2000000 + d->iconID);
+    if (ImGui::Button("Edit/Lookup")) {
+        cacheResIcons *tt = cache_get_cacheResIcons_by_iconID(cc, d->iconID);
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = tt;
+        w->typeID = tt->iconID;
+        w->show = true;
+        w->tag = tag_cacheResIcons;
+        window_list->push_back(w);
+    }
+    ImGui::PopID();
     ImGui::Separator();
     ImGui::InputInt("metaGroupNameID", (int *)&d->metaGroupNameID);
     ImGui::Separator();
@@ -1383,6 +1467,18 @@ void cacheCertificates_draw_edit(std::list<edit_window *> *window_list, edit_win
     ImGui::InputInt("corpID", (int *)&d->corpID);
     ImGui::Separator();
     ImGui::InputInt("iconID", (int *)&d->iconID);
+    ImGui::SameLine();
+    ImGui::PushID(2000000 + d->iconID);
+    if (ImGui::Button("Edit/Lookup")) {
+        cacheResIcons *tt = cache_get_cacheResIcons_by_iconID(cc, d->iconID);
+        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));
+        w->data = tt;
+        w->typeID = tt->iconID;
+        w->show = true;
+        w->tag = tag_cacheResIcons;
+        window_list->push_back(w);
+    }
+    ImGui::PopID();
     ImGui::Separator();
     ImGui::Text("description:");
     ImGui::Text("%s", d->description);

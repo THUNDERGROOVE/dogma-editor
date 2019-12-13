@@ -36,6 +36,20 @@ for k, v in tables.iteritems():
             f.write('    ImGui::InputInt("' + name + '", (int *)&d->' + name + ');\n')
             if name == "operandID":
                 f.write('    ImGui::Text("%s", operand_id_strings[d->operandID]);\n')
+            if name == "iconID":
+                # @TODO(NP): maybe, we can display the cacheResIcon icon from here, open edit window instead for now...
+                f.write('    ImGui::SameLine();\n')
+                f.write('    ImGui::PushID(2000000 + d->' + name + ');\n')
+                f.write('    if (ImGui::Button("Edit/Lookup")) {\n')
+                f.write('        cacheResIcons *tt = cache_get_cacheResIcons_by_iconID(cc, d->' + name + ');\n')
+                f.write('        edit_window *w = (edit_window *)calloc(1, sizeof(edit_window));\n')
+                f.write('        w->data = tt;\n')
+                f.write('        w->typeID = tt->iconID;\n')
+                f.write('        w->show = true;\n')
+                f.write('        w->tag = tag_cacheResIcons;\n')
+                f.write('        window_list->push_back(w);\n')
+                f.write('    }\n')
+                f.write('    ImGui::PopID();\n')
             if "TypeID" in name or "typeID" in name:
                 f.write('    ImGui::SameLine();\n')
                 f.write('    ImGui::PushID(1000000 + d->' + name + ');\n')

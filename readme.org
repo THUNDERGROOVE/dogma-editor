@@ -94,5 +94,5 @@ need to scan for available sizes
 ** DONE If you open a window more than once it will draw the UI twice     :bug:
 We need to add a function when pushing edit windows
 
-- [ ] Check tag_*
-- [ ] Check TypeID
+- [x] Check tag_*
+- [x] Check TypeID
